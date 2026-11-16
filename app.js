@@ -107,7 +107,7 @@ const PRODUCTS = [
     price: 55,
     rate: 4.8,
     desc: "Espresso doble, leche vaporizada y caramelo artesanal.",
-    sleeve: "#E07A2E",
+    img: "assets/latte_duo.png",
     c1: "rgba(217,119,6,.28)",
     c2: "rgba(251,191,36,.10)",
     glow: "#FBBF24",
@@ -116,15 +116,14 @@ const PRODUCTS = [
   },
   {
     id: "cold_brew",
-    name: "Cold Brew",
-    ghost: "COLD BREW",
+    name: "Americano & Cold Brew",
+    ghost: "AMERICANO",
     cat: "Bebidas frías",
     menuGroup: "Bebidas frías",
     price: 57,
     rate: 4.6,
     desc: "Extracción en frío por 16 horas con notas de cacao tostado.",
-    sleeve: "#2F7FC1",
-    iced: true,
+    img: "assets/americano_duo.png",
     c1: "rgba(2,132,199,.28)",
     c2: "rgba(56,189,248,.10)",
     glow: "#38BDF8",
@@ -133,13 +132,13 @@ const PRODUCTS = [
   },
   {
     id: "mocha_blanco",
-    name: "Mocha blanco",
-    cat: "Cafés",
+    name: "Kfreeze Berry & Nuez",
+    cat: "Frappés",
     menuGroup: "Cafés",
-    price: 62,
-    rate: 4.7,
-    desc: "Espresso suave fundido con chocolate blanco y espuma sedosa.",
-    sleeve: "#8A2D4B",
+    price: 66,
+    rate: 4.8,
+    desc: "Helado suave artesanal con cobertura de frutos rojos o nuez.",
+    img: "assets/kfreeze_duo.png",
     c1: "rgba(190,24,93,.28)",
     c2: "rgba(244,114,182,.10)",
     glow: "#F472B6",
@@ -147,13 +146,13 @@ const PRODUCTS = [
   },
   {
     id: "capuchino",
-    name: "Capuchino clásico",
-    cat: "Cafés",
+    name: "Frappé Galleta & Fresa",
+    cat: "Frappés",
     menuGroup: "Cafés",
-    price: 49,
+    price: 62,
     rate: 4.9,
-    desc: "Proporción perfecta de espresso, leche cremosa y cacao espolvoreado.",
-    sleeve: "#C99312",
+    desc: "Dúo de frappé cremoso con galleta triturada y fresa natural.",
+    img: "assets/frappe_duo.png",
     c1: "rgba(202,138,4,.26)",
     c2: "rgba(250,204,21,.10)",
     glow: "#FACC15",
@@ -166,9 +165,8 @@ const PRODUCTS = [
     menuGroup: "Bebidas frías",
     price: 64,
     rate: 4.6,
-    desc: "Matcha ceremonial batido en frío sobre leche cremosa.",
-    sleeve: "#3E9A62",
-    iced: true,
+    desc: "Matcha ceremonial batido en frío o caliente sobre leche cremosa.",
+    img: "assets/matcha_duo.webp",
     c1: "rgba(5,150,105,.28)",
     c2: "rgba(52,211,153,.10)",
     glow: "#34D399",
@@ -176,17 +174,170 @@ const PRODUCTS = [
   },
   {
     id: "taro_frappe",
-    name: "Frappé de taro",
+    name: "Nieve Crunch & Berry",
     cat: "Frappés",
     menuGroup: "Bebidas frías",
-    price: 68,
-    rate: 4.5,
-    desc: "Crema dulce de taro con base frappé y toque de vainilla.",
-    sleeve: "#6A4FC9",
-    iced: true,
+    price: 59,
+    rate: 4.7,
+    desc: "Nieve cremosa con crumble de caramelo o coulis de frutos rojos.",
+    img: "assets/nieve_duo.png",
     c1: "rgba(124,58,237,.28)",
     c2: "rgba(167,139,250,.10)",
     glow: "#A78BFA",
+    customizable: true
+  },
+  {
+    id: "te_helado_rojo",
+    name: "Té rojo helado",
+    cat: "Bebidas frías",
+    menuGroup: "Bebidas frías",
+    price: 48,
+    rate: 4.7,
+    desc: "Infusión fría de frutos rojos y jamaica sobre hielo cristalino.",
+    img: "assets/te_rojo_helado.webp",
+    c1: "rgba(220,38,38,.28)",
+    c2: "rgba(248,113,113,.10)",
+    glow: "#EF4444",
+    customizable: true
+  },
+  {
+    id: "agua_purificada",
+    name: "Agua purificada",
+    cat: "Bebidas frías",
+    menuGroup: "Bebidas frías",
+    price: 22,
+    rate: 4.9,
+    desc: "Agua natural embotellada de 600 ml bien fría.",
+    img: "assets/agua_ciel.webp",
+    c1: "rgba(14,165,233,.24)",
+    c2: "rgba(125,211,252,.10)",
+    glow: "#38BDF8",
+    customizable: false
+  },
+  {
+    id: "capuchino_duo",
+    name: "Capuchino clásico",
+    cat: "Cafés",
+    menuGroup: "Cafés",
+    price: 52,
+    rate: 4.9,
+    desc: "Espresso doble con leche vaporizada, crema suave o versión con hielo.",
+    img: "assets/capuchino_duo.webp",
+    c1: "rgba(217,119,6,.26)",
+    c2: "rgba(251,191,36,.10)",
+    glow: "#F59E0B",
+    customizable: true
+  },
+  {
+    id: "flat_white",
+    name: "Flat White",
+    cat: "Cafés",
+    menuGroup: "Cafés",
+    price: 49,
+    rate: 4.8,
+    desc: "Taza caliente de espresso intenso con microespuma sedosa.",
+    img: "assets/latte_caliente.png",
+    c1: "rgba(180,83,9,.26)",
+    c2: "rgba(245,158,11,.10)",
+    glow: "#D97706",
+    customizable: true
+  },
+  {
+    id: "iced_latte",
+    name: "Iced Latte",
+    cat: "Cafés",
+    menuGroup: "Cafés",
+    price: 56,
+    rate: 4.9,
+    desc: "Leche fría con carga de espresso y hielos cristalinos.",
+    img: "assets/iced_latte.png",
+    c1: "rgba(234,88,12,.26)",
+    c2: "rgba(253,186,116,.10)",
+    glow: "#FB923C",
+    customizable: true
+  },
+  {
+    id: "chai_latte",
+    name: "Chai Latte",
+    cat: "Cafés",
+    menuGroup: "Cafés",
+    price: 58,
+    rate: 4.8,
+    desc: "Té negro especiado con canela, cardamomo y leche cremosa.",
+    img: "assets/chai_duo.webp",
+    c1: "rgba(202,138,4,.26)",
+    c2: "rgba(253,224,71,.10)",
+    glow: "#EAB308",
+    customizable: true
+  },
+  {
+    id: "chocolate_cacao",
+    name: "Chocolate de cacao",
+    cat: "Cafés",
+    menuGroup: "Cafés",
+    price: 54,
+    rate: 4.8,
+    desc: "Cacao artesanal caliente o frío en las rocas.",
+    img: "assets/chocolate_duo.webp",
+    c1: "rgba(154,52,18,.28)",
+    c2: "rgba(251,146,60,.10)",
+    glow: "#EA580C",
+    customizable: true
+  },
+  {
+    id: "te_durazno",
+    name: "Té de durazno",
+    cat: "Bebidas frías",
+    menuGroup: "Bebidas frías",
+    price: 46,
+    rate: 4.7,
+    desc: "Infusión dorada de durazno natural fría o caliente.",
+    img: "assets/te_durazno_duo.webp",
+    c1: "rgba(245,158,11,.26)",
+    c2: "rgba(253,224,71,.10)",
+    glow: "#F59E0B",
+    customizable: true
+  },
+  {
+    id: "tisana_frutos",
+    name: "Tisana frutos rojos",
+    cat: "Bebidas frías",
+    menuGroup: "Bebidas frías",
+    price: 56,
+    rate: 4.9,
+    desc: "Frutos deshidratados de arándano, fresa y jamaica.",
+    img: "assets/tisana_frutos.png",
+    c1: "rgba(190,18,60,.28)",
+    c2: "rgba(251,113,133,.10)",
+    glow: "#E11D48",
+    customizable: true
+  },
+  {
+    id: "refresher_fresa",
+    name: "Refresher Coco & Fresa",
+    cat: "Bebidas frías",
+    menuGroup: "Bebidas frías",
+    price: 60,
+    rate: 4.8,
+    desc: "Refrescantes bebidas de coco tropical o fresa silvestre.",
+    img: "assets/refresher_coco_fresa.png",
+    c1: "rgba(244,63,94,.26)",
+    c2: "rgba(253,164,175,.10)",
+    glow: "#FB7185",
+    customizable: true
+  },
+  {
+    id: "protea_frappe",
+    name: "Protea Frappé & Mango",
+    cat: "Frappés",
+    menuGroup: "Bebidas frías",
+    price: 68,
+    rate: 4.9,
+    desc: "Bebida proteica de café o smoothie tropical energizante.",
+    img: "assets/protea_duo.png",
+    c1: "rgba(234,88,12,.28)",
+    c2: "rgba(251,191,36,.10)",
+    glow: "#F97316",
     customizable: true
   },
   {
@@ -273,18 +424,18 @@ const SHEET_PAGES = [
     tab: "Cafés Calientes",
     title: "CAFÉ BARRA",
     sub: "Espresso recién molido al momento",
-    heroId: "latte_caramelo",
-    listIds: ["latte_caramelo", "mocha_blanco", "capuchino", "frappe_beancraft"],
-    tileIds: ["latte_caramelo", "mocha_blanco", "capuchino"]
+    heroId: "flat_white",
+    listIds: ["flat_white", "capuchino_duo", "iced_latte", "chai_latte", "chocolate_cacao"],
+    tileIds: ["flat_white", "capuchino_duo", "iced_latte"]
   },
   {
     id: "frias",
     tab: "Bebidas Frías",
-    title: "REFRESHER & COLD",
-    sub: "Frutas, cold brew y matcha frío",
+    title: "REFRESHER & TÉ",
+    sub: "Frutas, tisanas, matcha y cold brew",
     heroId: "refresher_duo",
-    listIds: ["refresher_duo", "cold_brew", "matcha_latte", "taro_frappe"],
-    tileIds: ["refresher_duo", "cold_brew", "matcha_latte"]
+    listIds: ["refresher_duo", "tisana_frutos", "refresher_fresa", "te_durazno", "matcha_latte"],
+    tileIds: ["refresher_duo", "tisana_frutos", "matcha_latte"]
   },
   {
     id: "reposteria",
@@ -397,24 +548,48 @@ function pushToast(title, msg) {
   toastTimer = setTimeout(() => { toast.hidden = true; }, 4500);
 }
 
-// ==================== CARRUSEL HERO (ESTILO LUMA BOBA SHOP) ====================
+// ==================== CARRUSEL HERO GIRATORIO 3D (ESTILO LUMA BOBA SHOP) ====================
+state.heroStep = 0;
+
+function positionHeroRing(dragDeltaSteps = 0) {
+  const total = HERO_IDS.length;
+  const ring = $("#heroRing");
+  const cups = [...ring.children];
+  const activeLogical = ((Math.round(state.heroStep) % total) + total) % total;
+
+  cups.forEach((cupBtn, i) => {
+    // Ángulo relativo más corto para giro continuo
+    let diff = i - (state.heroStep - dragDeltaSteps);
+    while (diff > total / 2) diff -= total;
+    while (diff < -total / 2) diff += total;
+
+    const rad = (diff * 2 * Math.PI) / total;
+    const cos = Math.cos(rad);
+    const sin = Math.sin(rad);
+    const x = sin * 126;
+    const y = (1 - cos) * 18;
+    const scale = 0.56 + (cos + 1) * 0.22; // 0.56 atrás -> 1.00 al frente
+    const tilt = sin * 8;
+    const opacity = 0.25 + (cos + 1) * 0.375;
+    const zIndex = Math.round((cos + 1) * 10);
+
+    cupBtn.classList.toggle("dragging", dragDeltaSteps !== 0);
+    cupBtn.classList.toggle("is-front", i === activeLogical && dragDeltaSteps === 0);
+    cupBtn.style.zIndex = String(zIndex);
+    cupBtn.style.opacity = opacity.toFixed(3);
+    cupBtn.style.transform = `translate3d(calc(-50% + ${x.toFixed(1)}px), ${-y.toFixed(1)}px, 0) scale(${scale.toFixed(3)}) rotate(${tilt.toFixed(1)}deg)`;
+  });
+}
+
 function renderHero() {
   const total = HERO_IDS.length;
-  const idx = (state.heroIdx + total) % total;
+  const idx = ((state.heroStep % total) + total) % total;
   state.heroIdx = idx;
-  const prevIdx = (idx - 1 + total) % total;
-  const nextIdx = (idx + 1) % total;
 
   const cur = productById(HERO_IDS[idx]);
-  const prev = productById(HERO_IDS[prevIdx]);
-  const next = productById(HERO_IDS[nextIdx]);
-
   $("#heroCarousel").style.setProperty("--tint", cur.tint || "rgba(200,16,46,.5)");
   $("#heroGhost").textContent = cur.ghost || cur.name.toUpperCase();
   $("#heroStage").setAttribute("aria-label", `${idx + 1} de ${total}`);
-  $("#heroPrevCup").innerHTML = renderProductArt(prev, 92);
-  $("#heroCenterCup").innerHTML = renderProductArt(cur, 128);
-  $("#heroNextCup").innerHTML = renderProductArt(next, 92);
   $("#heroCount").textContent = `${String(idx + 1).padStart(2, "0")} — ${String(total).padStart(2, "0")}`;
   $("#heroEyebrow").textContent = `— ${cur.cat.toUpperCase()} · SAN LUIS R.C.`;
   $("#heroTitle").textContent = cur.name;
@@ -434,36 +609,73 @@ function renderHero() {
   }).join("");
 
   $("#heroLive").textContent = `${cur.name}, ${cur.price} pesos (${idx + 1} de ${total})`;
+  positionHeroRing(0);
+}
+
+function spinHeroTo(targetIdx) {
+  const total = HERO_IDS.length;
+  const curIdx = ((state.heroStep % total) + total) % total;
+  let delta = targetIdx - curIdx;
+  if (delta > total / 2) delta -= total;
+  if (delta < -total / 2) delta += total;
+  state.heroStep += delta;
+  renderHero();
 }
 
 function initHero() {
+  const ring = $("#heroRing");
+  ring.innerHTML = HERO_IDS.map((id, i) => {
+    const p = productById(id);
+    return `<button type="button" class="lh-cup" data-ring-idx="${i}" aria-label="Elegir ${p.name}">${renderProductArt(p, 134)}</button>`;
+  }).join("");
+
   renderHero();
-  $("#heroPrevBtn").addEventListener("click", () => { state.heroIdx--; renderHero(); });
-  $("#heroNextBtn").addEventListener("click", () => { state.heroIdx++; renderHero(); });
-  $("#heroPrevCup").addEventListener("click", () => { state.heroIdx--; renderHero(); });
-  $("#heroNextCup").addEventListener("click", () => { state.heroIdx++; renderHero(); });
+  $("#heroPrevBtn").addEventListener("click", () => { state.heroStep--; renderHero(); });
+  $("#heroNextBtn").addEventListener("click", () => { state.heroStep++; renderHero(); });
+
+  ring.addEventListener("click", (e) => {
+    if (ring.dataset.moved === "1") return;
+    const cup = e.target.closest("[data-ring-idx]");
+    if (!cup) return;
+    const target = Number(cup.dataset.ringIdx);
+    if (target === state.heroIdx) openCustomizer(HERO_IDS[target]);
+    else spinHeroTo(target);
+  });
+
   $("#heroIndexList").addEventListener("click", (e) => {
     const btn = e.target.closest("[data-hero-idx]");
     if (!btn) return;
-    state.heroIdx = Number(btn.dataset.heroIdx);
-    renderHero();
+    spinHeroTo(Number(btn.dataset.heroIdx));
   });
   $("#heroOrderBtn").addEventListener("click", () => openCustomizer(HERO_IDS[state.heroIdx]));
   $("#heroMenuBtn").addEventListener("click", () => navigate("menu"));
 
-  // Soporte táctil para deslizar carrusel
+  // Arrastrar en vivo para girar el carrusel 3D
   let startX = null;
+  let lastDx = 0;
   const stage = $("#heroStage");
-  stage.addEventListener("pointerdown", (e) => { startX = e.clientX; });
-  stage.addEventListener("pointerup", (e) => {
-    if (startX === null) return;
-    const dx = e.clientX - startX;
-    startX = null;
-    if (Math.abs(dx) > 34) {
-      state.heroIdx += dx < 0 ? 1 : -1;
-      renderHero();
-    }
+  stage.addEventListener("pointerdown", (e) => {
+    startX = e.clientX;
+    lastDx = 0;
+    ring.dataset.moved = "0";
+    stage.setPointerCapture(e.pointerId);
   });
+  stage.addEventListener("pointermove", (e) => {
+    if (startX === null) return;
+    lastDx = e.clientX - startX;
+    if (Math.abs(lastDx) > 8) ring.dataset.moved = "1";
+    positionHeroRing(lastDx / 140);
+  });
+  const endDrag = () => {
+    if (startX === null) return;
+    startX = null;
+    const stepShift = Math.round(-lastDx / 75);
+    if (stepShift !== 0) state.heroStep += stepShift;
+    renderHero();
+    setTimeout(() => { ring.dataset.moved = "0"; }, 40);
+  };
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
 }
 
 // ==================== HOJA DE MENÚ SELECCIONABLE (INICIO, ESTILO LUMA) ====================
@@ -606,24 +818,23 @@ function renderCrystalMenu() {
     return `
       <article class="ccard" style="--c1:${p.c1};--c2:${p.c2};--cg:${p.glow}">
         ${crystalFacets(p.glow)}
-        <div class="cc-top">
-          <span class="cc-rate">★ ${p.rate.toFixed(1)}</span>
+        <div class="cc-head">
+          <div class="cc-title-col">
+            <h3 class="cc-name">${p.name}</h3>
+            <span class="cc-rate">★ ${p.rate.toFixed(1)}</span>
+          </div>
           <button type="button" class="cc-fav" data-fav-id="${p.id}" aria-pressed="${isFav}" aria-label="Favorito ${p.name}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
           </button>
         </div>
         <button type="button" class="cc-stage" data-open-id="${p.id}" aria-label="Personalizar ${p.name}">
-          ${renderProductArt(p, 114)}
+          ${renderProductArt(p, 130)}
         </button>
-        <div class="cc-glass">
-          <span class="cc-cat">${p.cat}</span>
-          <h3 class="cc-name">${p.name}</h3>
-          <div class="cc-foot">
-            <span class="cc-price">$${p.price}</span>
-            <button type="button" class="cc-add" data-open-id="${p.id}" aria-label="Agregar ${p.name}">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </button>
-          </div>
+        <div class="cc-glass-foot">
+          <span class="cc-price">$${p.price.toFixed(2)}</span>
+          <button type="button" class="cc-add" data-open-id="${p.id}" aria-label="Agregar ${p.name}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+          </button>
         </div>
       </article>`;
   }).join("");
@@ -894,11 +1105,17 @@ function renderCartView() {
           <button type="button" data-pay="tarjeta" aria-pressed="${state.payMethod === "tarjeta"}">Tarjeta en mostrador</button>
           <button type="button" data-pay="efectivo" aria-pressed="${state.payMethod === "efectivo"}">Efectivo</button>
         </div>
-        <button type="button" class="btn-primary full" id="placeOrderBtn" style="margin-top:4px">
-          Confirmar pedido · $${total.toFixed(2)}
-        </button>
+        <div class="slide-checkout" id="slideCheckout" data-total="${total.toFixed(2)}">
+          <div class="slide-fill" id="slideFill"></div>
+          <button type="button" class="slide-knob" id="slideKnob" aria-label="Desliza a la derecha o presiona Enter para confirmar pedido de ${total.toFixed(2)} pesos">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+          <span class="slide-label" id="slideLabel">Desliza para confirmar · $${total.toFixed(2)}</span>
+          <span class="slide-chevrons" aria-hidden="true">›››</span>
+        </div>
       </div>
     </div>`;
+  bindCheckoutSlider();
 }
 
 function tryApplyCoupon(raw) {
@@ -956,30 +1173,97 @@ function initCartEvents() {
     if (slotBtn) { state.scheduledHour = slotBtn.dataset.slot; renderCartView(); return; }
     const payBtn = e.target.closest("[data-pay]");
     if (payBtn) { state.payMethod = payBtn.dataset.pay; renderCartView(); return; }
-    if (e.target.id === "placeOrderBtn") {
-      if (!state.user) {
-        openAuthModal("Inicia sesión para confirmar tu pedido");
-        return;
-      }
-      const { total } = calcCartSummary();
-      if (state.appliedCoupon) state.usedCoupons.add(state.appliedCoupon.code);
-      state.activeOrder = {
-        id: Math.floor(1050 + Math.random() * 8900),
-        code: String(Math.floor(1000 + Math.random() * 8999)),
-        branchId: state.branchId,
-        statusIdx: 0,
-        items: state.cart.map((x) => ({ ...x, unit: calcUnitPrice(x) })),
-        total,
-        mode: state.checkoutMode,
-        scheduledHour: state.scheduledHour,
-        payMethod: state.payMethod,
-        rated: false
-      };
-      state.cart = [];
-      state.appliedCoupon = null;
-      updateBadges();
-      pushToast(`Pedido #${state.activeOrder.id} recibido`, `Sucursal ${branchById(state.branchId).name} ya recibió tu orden.`);
-      navigate("orders");
+  });
+}
+
+function confirmCheckoutOrder() {
+  if (!state.user) {
+    openAuthModal("Inicia sesión para confirmar tu pedido");
+    return false;
+  }
+  const { total } = calcCartSummary();
+  if (state.appliedCoupon) state.usedCoupons.add(state.appliedCoupon.code);
+  state.activeOrder = {
+    id: Math.floor(1050 + Math.random() * 8900),
+    code: String(Math.floor(1000 + Math.random() * 8999)),
+    branchId: state.branchId,
+    statusIdx: 0,
+    items: state.cart.map((x) => ({ ...x, unit: calcUnitPrice(x) })),
+    total,
+    mode: state.checkoutMode,
+    scheduledHour: state.scheduledHour,
+    payMethod: state.payMethod,
+    rated: false
+  };
+  state.cart = [];
+  state.appliedCoupon = null;
+  updateBadges();
+  pushToast(`Pedido #${state.activeOrder.id} recibido`, `Sucursal ${branchById(state.branchId).name} ya recibió tu orden.`);
+  navigate("orders");
+  return true;
+}
+
+function bindCheckoutSlider() {
+  const track = $("#slideCheckout");
+  const knob = $("#slideKnob");
+  const fill = $("#slideFill");
+  const label = $("#slideLabel");
+  if (!track || !knob) return;
+
+  let startX = null;
+  let maxDist = 0;
+  let currentX = 0;
+
+  const setPos = (x) => {
+    currentX = Math.max(0, Math.min(maxDist, x));
+    knob.style.transform = `translateX(${currentX}px)`;
+    fill.style.width = `${62 + currentX}px`;
+  };
+
+  const reset = () => {
+    knob.classList.remove("dragging");
+    track.classList.remove("confirmed");
+    setPos(0);
+    label.textContent = `Desliza para confirmar · $${track.dataset.total}`;
+  };
+
+  const complete = () => {
+    knob.classList.remove("dragging");
+    track.classList.add("confirmed");
+    setPos(maxDist);
+    label.textContent = "¡Pedido confirmado!";
+    setTimeout(() => {
+      if (!confirmCheckoutOrder()) reset();
+    }, 180);
+  };
+
+  knob.addEventListener("pointerdown", (e) => {
+    maxDist = track.clientWidth - knob.offsetWidth - 10;
+    startX = e.clientX - currentX;
+    knob.classList.add("dragging");
+    knob.setPointerCapture(e.pointerId);
+  });
+
+  knob.addEventListener("pointermove", (e) => {
+    if (startX === null) return;
+    setPos(e.clientX - startX);
+  });
+
+  const release = () => {
+    if (startX === null) return;
+    startX = null;
+    if (maxDist > 0 && currentX >= maxDist * 0.72) complete();
+    else reset();
+  };
+
+  knob.addEventListener("pointerup", release);
+  knob.addEventListener("pointercancel", release);
+
+  knob.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      maxDist = track.clientWidth - knob.offsetWidth - 10;
+      complete();
     }
   });
 }
