@@ -1,0 +1,10 @@
+{
+  "description": "An imported-project setup tool that prepares and verifies deployment configurations, helping developers get projects ready for production and preview releases.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
