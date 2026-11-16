@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2A1810">
+  <title>BeanCraft Coffee — App Móvil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <!-- SPLASH SCREEN -->
+    <section class="splash-overlay" id="splashScreen" aria-label="Pantalla de bienvenida">
+      <div class="splash-rings" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="splash-center">
+        <div class="brand-badge-lg" aria-hidden="true">
+          <svg width="88" height="88" viewBox="0 0 48 48">
+            <rect width="48" height="48" rx="15" fill="#C8102E"/>
+            <ellipse cx="24" cy="24" rx="10.5" ry="14" transform="rotate(32 24 24)" fill="#FFFFFF"/>
+            <path d="M30.5 12.8c-6.5 3.2-3.6 9.4-7.4 13.1-2.4 2.4-5.8 3-5.9 8.7" fill="none" stroke="#C8102E" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h1 class="splash-word">BeanCraft</h1>
+        <p class="splash-sub">COFFEE</p>
+      </div>
+      <div class="splash-foot">
+        <div class="loader" aria-hidden="true"><span></span></div>
+        <p>Tu café, a tu manera.<br>Pídelo y recógelo sin fila.</p>
+        <button type="button" class="splash-skip" id="skipSplashBtn">Entrar ahora</button>
+      </div>
+    </section>
+
+    <!-- TOAST / PUSH NOTIFICATION BANNER (RF-10) -->
+    <aside class="push-toast" id="pushToast" hidden aria-live="polite">
+      <div class="toast-ic" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 48 48">
+          <rect width="48" height="48" rx="14" fill="#C8102E"/>
+          <ellipse cx="24" cy="24" rx="10.5" ry="14" transform="rotate(32 24 24)" fill="#FFFFFF"/>
+          <path d="M30.5 12.8c-6.5 3.2-3.6 9.4-7.4 13.1-2.4 2.4-5.8 3-5.9 8.7" fill="none" stroke="#C8102E" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="toast-body">
+        <strong id="toastTitle">BeanCraft</strong>
+        <span id="toastMsg">Actualización de pedido</span>
+      </div>
+      <button type="button" class="toast-close" id="closeToastBtn" aria-label="Cerrar notificación">×</button>
+    </aside>
+
+    <!-- MAIN SCROLLABLE APP VIEWPORT -->
+    <main class="viewport" id="mainViewport">
+
+      <!-- ==================== VISTA 1: INICIO ==================== -->
+      <section class="view active" id="view-home" aria-label="Inicio">
+        <!-- Header Caffenio + Iniciar sesión arriba a la derecha -->
+        <header class="home-header">
+          <div class="home-topbar">
+            <div class="brand-lockup">
+              <svg width="32" height="32" viewBox="0 0 48 48" aria-hidden="true">
+                <rect width="48" height="48" rx="14" fill="#C8102E"/>
+                <ellipse cx="24" cy="24" rx="10.5" ry="14" transform="rotate(32 24 24)" fill="#FFFFFF"/>
+                <path d="M30.5 12.8c-6.5 3.2-3.6 9.4-7.4 13.1-2.4 2.4-5.8 3-5.9 8.7" fill="none" stroke="#C8102E" stroke-width="2.6" stroke-linecap="round"/>
+              </svg>
+              <span>BeanCraft</span>
+            </div>
+            <div class="home-actions">
+              <button type="button" class="icon-circle dark-glass" id="homeNotifBtn" aria-label="Notificaciones">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21h4"/></svg>
+                <span class="dot-badge" id="notifDot" hidden></span>
+              </button>
+              <button type="button" class="login-pill" id="homeAuthBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+                <span id="homeAuthLabel">Iniciar sesión</span>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="branch-bar" id="openBranchBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B7F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <span id="homeBranchText"><strong>BeanCraft Centro</strong> · 0.8 km · Abierto hasta 22:00</span>
+            <span class="branch-change">Cambiar</span>
+          </button>
+        </header>
+
+        <!-- CARRUSEL HERO ESTILO LUMA BOBA SHOP (Sin tarjeta, ancho completo, fondo difuminado, más grande) -->
+        <section class="luma-hero" id="heroCarousel" aria-roledescription="carousel" aria-label="Bebidas destacadas">
+          <div class="lh-bg-glow" id="heroGlow" aria-hidden="true"></div>
+          <div class="lh-ghost" id="heroGhost" aria-hidden="true">SUPREMO</div>
+
+          <div class="lh-stage" id="heroStage" role="group" aria-roledescription="slide" aria-label="2 de 5">
+            <button type="button" class="lh-cup side left" id="heroPrevCup" aria-label="Bebida anterior en carrusel"></button>
+            <div class="lh-spotlight" id="heroSpotlight" aria-hidden="true"></div>
+            <div class="lh-cup center" id="heroCenterCup"></div>
+            <button type="button" class="lh-cup side right" id="heroNextCup" aria-label="Siguiente bebida en carrusel"></button>
+          </div>
+
+          <div class="lh-drag">— DESLIZA O TOCA PARA GIRAR —</div>
+          <div class="lh-arrows">
+            <button type="button" class="lh-arr" id="heroPrevBtn" aria-label="Bebida anterior">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+            </button>
+            <span class="lh-count" id="heroCount">02 — 05</span>
+            <button type="button" class="lh-arr" id="heroNextBtn" aria-label="Siguiente bebida">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <div class="lh-info">
+            <div class="lh-eyebrow" id="heroEyebrow">— FRAPPÉS · SAN LUIS R.C.</div>
+            <div class="lh-title-row">
+              <h2 class="lh-title" id="heroTitle">Frappé Supremo</h2>
+              <span class="lh-price" id="heroPrice">$65</span>
+            </div>
+            <p class="lh-desc" id="heroDesc">Espresso doble frappeado con crema batida y caramelo de la casa.</p>
+            <div class="lh-ctas">
+              <button type="button" class="lh-cta primary" id="heroOrderBtn">Agregar al pedido</button>
+              <button type="button" class="lh-cta ghost" id="heroMenuBtn">Ver menú</button>
+            </div>
+            <div class="lh-idx" id="heroIndexList" role="tablist" aria-label="Elegir bebida destacada"></div>
+          </div>
+          <p class="visually-hidden" id="heroLive" role="status" aria-live="polite"></p>
+        </section>
+
+        <!-- HOJA DE MENÚ SELECCIONABLE ESTILO LUMA BOBA SHOP (Solo en Inicio, debajo del carrusel) -->
+        <section class="luma-sheet-section" id="homeMenuSheetSection" aria-roledescription="carousel" aria-label="Hoja de menú seleccionable">
+          <div class="ls-header">
+            <div>
+              <span class="ls-eyebrow">¡PÍCALE AL MENÚ Y ELIGE TU BEBIDA!</span>
+              <h2>Menú BeanCraft</h2>
+            </div>
+            <div class="ls-bubble" aria-hidden="true">
+              <span>Toca cualquier bebida</span>
+            </div>
+          </div>
+
+          <!-- Tabs de categorías de la hoja de menú -->
+          <div class="ls-tabs" id="sheetTabs" role="tablist" aria-label="Categorías de la hoja de menú"></div>
+
+          <!-- Hoja de menú interactiva estilo póster Luma (paleta Caffenio) -->
+          <div class="ls-book-wrap">
+            <div class="ls-book-track" id="sheetBookTrack"></div>
+          </div>
+
+          <!-- Controles de página <- 01 / 04 -> -->
+          <div class="ls-pager">
+            <button type="button" class="ls-arr" id="sheetPrevBtn" aria-label="Hoja anterior">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+            </button>
+            <span class="ls-page-count" id="sheetPageCount">01 / 04</span>
+            <button type="button" class="ls-arr" id="sheetNextBtn" aria-label="Siguiente hoja">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+            </button>
+          </div>
+
+          <!-- Chips "EN ESTA PÁGINA" -->
+          <div class="ls-chips-block">
+            <span class="ls-chips-label">EN ESTA PÁGINA</span>
+            <div class="ls-chips" id="sheetQuickChips"></div>
+          </div>
+          <p class="ls-footnote">Todas las bebidas calientes o frías pueden personalizarse con leche de avena o almendra (+$12 MXN).</p>
+        </section>
+      </section>
+
+      <!-- ==================== VISTA 2: MÓDULO MENÚ (TARJETAS CRISTALINAS DE COLORES) ==================== -->
+      <section class="view" id="view-menu" aria-label="Explorar menú" hidden>
+        <div class="menu-crystal-bg">
+          <div class="pad">
+            <header class="topbar">
+              <button type="button" class="rbtn" data-nav="home" aria-label="Volver a inicio">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+              </button>
+              <h1 class="t-center">Menú</h1>
+              <button type="button" class="avatar sm" id="menuAvatarBtn" aria-label="Mi cuenta">Inv</button>
+            </header>
+
+            <label class="search-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B7B73" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input type="search" id="menuSearchInput" placeholder="Buscar café, frappé, cold brew o pan...">
+            </label>
+
+            <div class="chips" id="menuFilterChips" role="tablist" aria-label="Filtrar menú por categoría"></div>
+
+            <div class="explore-bar">
+              <span class="count" id="menuCountLabel">12 productos</span>
+              <button type="button" class="filter-chip-btn" id="menuFavFilterBtn" aria-pressed="false">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
+                <span>Favoritos</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Grid de tarjetas cristalinas de colores con bebidas grandes -->
+          <div class="cgrid" id="crystalMenuGrid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== VISTA 3: CARRITO Y CHECKOUT (RF-05, RF-06, RF-07, RF-08) ==================== -->
+      <section class="view" id="view-cart" aria-label="Carrito de compras" hidden>
+        <div class="pad">
+          <header class="topbar">
+            <button type="button" class="rbtn" data-nav="menu" aria-label="Volver al menú">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+            </button>
+            <h1 class="t-center">Carrito</h1>
+            <button type="button" class="rbtn" id="openQrBtn" aria-label="Escanear cupón QR">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
+            </button>
+          </header>
+        </div>
+
+        <div id="cartContent"></div>
+      </section>
+
+      <!-- ==================== VISTA 4: SEGUIMIENTO Y PEDIDOS (RF-09, RF-10, RF-11) ==================== -->
+      <section class="view" id="view-orders" aria-label="Seguimiento de pedido" hidden>
+        <div class="pad">
+          <header class="topbar">
+            <button type="button" class="rbtn" data-nav="home" aria-label="Volver a inicio">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
+            </button>
+            <h1 class="t-center">Mi Pedido</h1>
+            <button type="button" class="rbtn" id="ordersNotifBtn" aria-label="Historial de notificaciones">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21h4"/></svg>
+            </button>
+          </header>
+          <div id="ordersContent"></div>
+        </div>
+      </section>
+
+      <!-- ==================== VISTA 5: PERFIL (RF-22) ==================== -->
+      <section class="view" id="view-profile" aria-label="Perfil de usuario" hidden>
+        <div id="profileContent"></div>
+      </section>
+
+    </main>
+
+    <!-- BARRA DE NAVEGACIÓN INFERIOR -->
+    <nav class="nav-wrap" aria-label="Navegación principal">
+      <div class="nav">
+        <button type="button" class="nav-item on" data-nav="home" aria-current="page">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+          <span>Inicio</span>
+        </button>
+        <button type="button" class="nav-item" data-nav="menu">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 2.5v2.5M12 2.5v2.5"/></svg>
+          <span>Menú</span>
+        </button>
+        <div class="nav-fab-slot">
+          <button type="button" class="nav-fab" id="fabQrBtn" aria-label="Escanear cupón QR">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
+          </button>
+          <span class="nav-fab-label">Cupón QR</span>
+        </div>
+        <button type="button" class="nav-item" data-nav="cart">
+          <span class="nav-badge" id="cartBadge" hidden>0</span>
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 11a1 1 0 0 0 1 .8h9.3a1 1 0 0 0 1-.8L20.5 8H6"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>
+          <span>Carrito</span>
+        </button>
+        <button type="button" class="nav-item" data-nav="orders">
+          <span class="nav-badge dot" id="orderBadge" hidden>!</span>
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
+          <span>Pedido</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ==================== MODALES NATIVOS (<dialog>) ==================== -->
+
+  <!-- MODAL: PERSONALIZAR BEBIDA (RF-03, RN-02, estilo Luma + BeanCraft) -->
+  <dialog id="customizerDialog" class="sheet-dialog" closedby="any" aria-labelledby="custTitle">
+    <div class="dialog-sheet" id="custBody"></div>
+  </dialog>
+
+  <!-- MODAL: LOGIN / REGISTRO (RF-01) -->
+  <dialog id="authDialog" class="sheet-dialog" closedby="any" aria-labelledby="authTitle">
+    <div class="dialog-sheet" id="authBody"></div>
+  </dialog>
+
+  <!-- MODAL: SUCURSALES (RF-04) -->
+  <dialog id="branchDialog" class="sheet-dialog" closedby="any" aria-labelledby="branchTitle">
+    <div class="dialog-sheet" id="branchBody"></div>
+  </dialog>
+
+  <!-- MODAL: ESCÁNER QR Y CUPONES (RF-06, RN-01) -->
+  <dialog id="qrDialog" class="sheet-dialog" closedby="any" aria-labelledby="qrTitle">
+    <div class="dialog-sheet" id="qrBody"></div>
+  </dialog>
+
+  <!-- MODAL: CALIFICAR PEDIDO (RF-11, RN-05) -->
+  <dialog id="ratingDialog" class="sheet-dialog" closedby="any" aria-labelledby="ratingTitle">
+    <div class="dialog-sheet" id="ratingBody"></div>
+  </dialog>
+
+  <!-- MODAL: NOTIFICACIONES (RF-10) -->
+  <dialog id="notifDialog" class="sheet-dialog" closedby="any" aria-labelledby="notifTitle">
+    <div class="dialog-sheet" id="notifBody"></div>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
