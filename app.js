@@ -2,7 +2,7 @@
 // Cumplimiento estricto de Guía de Diseño v1.0 + Carrusel 3D / Hoja Luma / Tarjetas cristalinas / Checkout deslizable
 // Flujos SRS: RF-01 a RF-11, RF-22 y RN-01 a RN-05
 
-import { renderMascota, MASCOTAS_INFO, MASCOTA_ESTADOS } from "./mascotas.js";
+import { renderMascota, MASCOTAS_INFO, MASCOTA_FAMILIA_SRC } from "./mascotas.js";
 
 const conchaSvg = (topToken = "var(--c-tostado)", size = 96) => {
   const h = Math.round(size * 0.8);
@@ -530,8 +530,7 @@ const state = {
   notifications: [
     { id: 1, title: "Hoy hay promo", msg: "Usa el código BIENVENIDA para -$30 MXN en tu pedido.", time: "hoy" }
   ],
-  cust: null,
-  designMood: "feliz"
+  cust: null
 };
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -545,7 +544,7 @@ function renderProductArt(p, size = 100) {
 
 // ==================== SPLASH ====================
 function initSplash() {
-  $("#splashMascot").innerHTML = renderMascota("grano", "feliz", { size: 92 });
+  $("#splashMascot").innerHTML = renderMascota("grano", "feliz", { size: 112, onDark: true });
   const splash = $("#splashScreen");
   const hide = () => splash.classList.add("done");
   $("#skipSplashBtn").addEventListener("click", hide);
@@ -588,7 +587,7 @@ let toastTimer;
 function pushToast(title, msg, mascota = "taza") {
   state.notifications.unshift({ id: Date.now(), title, msg, time: "ahora" });
   $("#notifDot").hidden = false;
-  $("#toastMascot").innerHTML = renderMascota(mascota, "feliz", { size: 36 });
+  $("#toastMascot").innerHTML = renderMascota(mascota, "feliz", { size: 44 });
   $("#toastTitle").textContent = title;
   $("#toastMsg").textContent = msg;
   const toast = $("#pushToast");
@@ -691,9 +690,9 @@ function spinHeroTo(targetIdx) {
 
 function initHero() {
   // Mascotas alrededor del Armador (Sección 6)
-  $("#heroMascotLeft").innerHTML = renderMascota("grano", "feliz", { size: 54, rotation: -2 });
-  $("#heroMascotRight").innerHTML = renderMascota("espuma", "guino", { size: 54, rotation: 2 });
-  $("#heroMascotTop").innerHTML = renderMascota("taza", "sorprendido", { size: 50, holo: true, rotation: 2 });
+  $("#heroMascotLeft").innerHTML = renderMascota("grano", "feliz", { size: 68, rotation: -2 });
+  $("#heroMascotRight").innerHTML = renderMascota("espuma", "guino", { size: 66, rotation: 2 });
+  $("#heroMascotTop").innerHTML = renderMascota("taza", "sorprendido", { size: 62, holo: true, rotation: 2 });
 
   const ring = $("#heroRing");
   ring.innerHTML = HERO_IDS.map((id, i) => {
@@ -834,7 +833,7 @@ function renderMenuSheetSection() {
           <button type="button" class="poster-hero-cup" data-pick-id="${heroProd.id}" aria-label="Armar ${heroProd.name}">
             ${renderProductArt(heroProd, 92)}
             <span>Toca para pedir</span>
-            <div style="margin-top:4px">${renderMascota(pg.mascota, "feliz", { size: 36 })}</div>
+            <div style="margin-top:4px">${renderMascota(pg.mascota, "feliz", { size: 46, onDark: true })}</div>
           </button>
         </div>
         <div class="poster-bottom">${tilesHtml}</div>
@@ -913,11 +912,11 @@ function renderQuiz() {
         <h2 class="titulo-mixto">El quiz de las <em>Bebidas</em></h2>
         <p style="font-size:16px">Descubre cuál eres en 5 preguntas rápidas.</p>
         <div class="quiz-collage">
-          ${renderMascota("grano", "feliz", { size: 46, rotation: -2 })}
-          ${renderMascota("espuma", "guino", { size: 46 })}
-          ${renderMascota("hielito", "feliz", { size: 52, holo: true, rotation: 2 })}
-          ${renderMascota("croissant", "feliz", { size: 46 })}
-          ${renderMascota("taza", "sorprendido", { size: 46, rotation: -1 })}
+          ${renderMascota("grano", "feliz", { size: 56, rotation: -2 })}
+          ${renderMascota("espuma", "guino", { size: 56 })}
+          ${renderMascota("hielito", "feliz", { size: 60, holo: true, rotation: 2 })}
+          ${renderMascota("croissant", "feliz", { size: 56 })}
+          ${renderMascota("taza", "sorprendido", { size: 56, rotation: -1 })}
         </div>
         <button type="button" class="btn-primary full" id="startQuizBtn">¡Llévame ya!</button>
       </div>`;
@@ -956,7 +955,7 @@ function renderQuiz() {
   box.innerHTML = `
     <div class="quiz-card">
       <div class="quiz-result-box">
-        ${renderMascota("hielito", "guino", { size: 64, label: "Hielito guiñando" })}
+        ${renderMascota("hielito", "guino", { size: 88, label: "Hielito" })}
         <div>
           <h3 class="titulo-mixto" style="font-size:22px">Eres un <em>${resProd.name}</em></h3>
           <p style="font-size:14px;margin-top:4px">${quote}</p>
@@ -1032,7 +1031,7 @@ function renderHomeOrderTimeline() {
     <div class="estado-steps">
       ${ORDER_META.map((m, i) => `
         <div class="estado-step ${i === curIdx ? "activo" : ""}">
-          ${renderMascota(m.mascota, i === curIdx ? "feliz" : "pensando", { size: 40 })}
+          ${renderMascota(m.mascota, i === curIdx ? "feliz" : "pensando", { size: 50 })}
           <span>${m.label}</span>
         </div>`).join("")}
     </div>
@@ -1179,7 +1178,7 @@ function renderCrystalMenu() {
   if (filtered.length === 0) {
     $("#crystalMenuGrid").innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:32px 12px;display:flex;flex-direction:column;align-items:center;gap:10px">
-        ${renderMascota("hielito", "pensando", { size: 72 })}
+        ${renderMascota("hielito", "pensando", { size: 96 })}
         <p style="font-size:16px;font-weight:700">No encontramos bebidas con ese filtro.</p>
         <button type="button" class="btn-secondary" id="clearMenuFilterBtn">Ver todas las bebidas</button>
       </div>`;
@@ -1208,7 +1207,7 @@ function renderCrystalMenu() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
           </button>
         </div>
-        <div class="cc-sticker">${renderMascota(p.mascota, "feliz", { size: 32, rotation: 2 })}</div>
+        <div class="cc-sticker">${renderMascota(p.mascota, "feliz", { size: 42, rotation: 2 })}</div>
         <button type="button" class="cc-stage" data-open-id="${p.id}" aria-label="Personalizar ${p.name}">
           ${renderProductArt(p, 130)}
         </button>
@@ -1330,7 +1329,7 @@ function renderCustomizer() {
         <span style="font-size:13px;font-weight:700;color:var(--c-verde)">${p.cat}</span>
         <p style="font-size:14px;margin-top:4px;line-height:1.4">${p.desc}</p>
       </div>
-      <div>${renderMascota(p.mascota, "feliz", { size: 42 })}</div>
+      <div>${renderMascota(p.mascota, "feliz", { size: 52 })}</div>
     </div>
     ${optsMarkup}
     <div class="qty-bar">
@@ -1404,7 +1403,7 @@ function renderCartView() {
   if (state.cart.length === 0) {
     host.innerHTML = `
       <div class="pad" style="text-align:center;padding-top:32px;display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("hielito", "pensando", { size: 80 })}
+        ${renderMascota("hielito", "pensando", { size: 96 })}
         <p style="font-size:18px;font-weight:800">Tu carrito está vacío</p>
         <p style="font-size:16px">Elige una bebida desde el Armador o el Menú completo.</p>
         <button type="button" class="btn-primary" id="emptyGoMenuBtn">Explorar menú</button>
@@ -1660,7 +1659,7 @@ function renderOrdersView() {
   if (!o) {
     host.innerHTML = `
       <div class="track-card" style="display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("hielito", "pensando", { size: 78 })}
+        ${renderMascota("hielito", "pensando", { size: 96 })}
         <p style="font-size:18px;font-weight:800">No tienes pedidos activos</p>
         <p style="font-size:16px">Arma tu bebida y desliza en el carrito para seguir tu pedido.</p>
         <button type="button" class="btn-primary full" id="ordersToMenuBtn">Ir al menú</button>
@@ -1693,7 +1692,7 @@ function renderOrdersView() {
   host.innerHTML = `
     <div class="track-card">
       <div style="display:flex;justify-content:center;margin-bottom:8px">
-        ${renderMascota(curMeta.mascota, "feliz", { size: 72, label: curMeta.label })}
+        ${renderMascota(curMeta.mascota, "feliz", { size: 88, label: curMeta.label })}
       </div>
       <span class="insignia-estado ${curMeta.key}">
         ${stateIconSvg(curMeta.key)}
@@ -1784,7 +1783,7 @@ function openAuthModal(subtitle = "Pide en la app y ahórrate la fila.") {
         <button type="button" class="dlg-close" data-close-dlg="authDialog" aria-label="Cerrar">×</button>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        ${renderMascota("grano", err ? "triste" : "feliz", { size: 48 })}
+        ${renderMascota("grano", err ? "triste" : "feliz", { size: 64 })}
         <p style="font-size:15px">${subtitle}</p>
       </div>
       <form id="authForm" style="display:flex;flex-direction:column;gap:10px" novalidate>
@@ -1844,7 +1843,7 @@ function renderProfileView() {
   if (!state.user) {
     host.innerHTML = `
       <div class="pad" style="padding-top:30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("taza", "guino", { size: 78 })}
+        ${renderMascota("taza", "guino", { size: 96 })}
         <h1 class="titulo-mixto" style="font-size:26px">Inicia sesión en <em>BeanCraft</em></h1>
         <p style="font-size:16px">Guarda tus bebidas favoritas, consulta pedidos y edita tu perfil.</p>
         <button type="button" class="btn-primary full" id="profLoginBtn">Iniciar sesión o registrarme</button>
@@ -1936,28 +1935,22 @@ function renderDesignView() {
       </div>
 
       <div>
-        <h2 class="titulo-mixto" style="font-size:24px">Las 5 <em>Mascotas</em> SVG</h2>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-          ${MASCOTA_ESTADOS.map((m) => `<button type="button" class="chip" aria-pressed="${state.designMood === m}" data-mood="${m}">${m === "guino" ? "guiño" : m}</button>`).join("")}
+        <h2 class="titulo-mixto" style="font-size:24px">Las 5 <em>Mascotas</em> oficiales</h2>
+        <div class="mascota-familia-card">
+          <img class="mascota-familia-img" src="${MASCOTA_FAMILIA_SRC}" alt="Familia oficial de las 5 mascotas de BeanCraft Coffee">
         </div>
         <div class="mascota-gallery">
           ${MASCOTAS_INFO.map((m, idx) => `
             <article class="mascota-card">
-              ${renderMascota(m.id, state.designMood, { size: 74, holo: idx === 2, label: `${m.nombre} ${state.designMood}` })}
-              <strong style="font-family:var(--font-display);font-size:16px">${m.nombre}</strong>
+              ${renderMascota(m.id, "feliz", { size: 96, accentBg: true, holo: idx === 2, label: m.nombre })}
+              <strong style="font-family:var(--font-display);font-size:17px">${m.nombre}</strong>
+              <span class="mascota-role">${m.rol}</span>
               <p style="font-size:13px">${m.base}</p>
+              <span class="mascota-usos">${m.usos}</span>
             </article>`).join("")}
         </div>
       </div>
     </div>`;
-
-  $("#designContent").onclick = (e) => {
-    const moodBtn = e.target.closest("[data-mood]");
-    if (moodBtn) {
-      state.designMood = moodBtn.dataset.mood;
-      renderDesignView();
-    }
-  };
 }
 
 // ==================== MODALES SUCURSALES, QR, NOTIFICACIONES ====================
@@ -2073,7 +2066,7 @@ function init() {
   initQuiz();
   renderHomeOrderTimeline();
   initBranchesSection();
-  $("#footerMascot").innerHTML = renderMascota("taza", "guino", { size: 60 });
+  $("#footerMascot").innerHTML = renderMascota("taza", "guino", { size: 68, onDark: true });
 
   initCrystalMenu();
   initCustomizerEvents();
