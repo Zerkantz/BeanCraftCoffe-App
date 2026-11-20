@@ -290,27 +290,63 @@ const PRODUCTS = [
     customizable: true
   },
   {
-    id: "concha_choco",
-    name: "Concha de chocolate",
+    id: "concha_vainilla",
+    name: "Concha de vainilla",
     cat: "Repostería",
     price: 35,
     rate: 4.9,
-    desc: "Pan artesanal recién horneado con costra crujiente de cacao.",
-    bakeryToken: "var(--c-tostado)",
+    desc: "Pan artesanal recién horneado con costra crujiente de vainilla.",
+    img: "assets/concha_vainilla.png",
     mascota: "croissant",
     crystalToken: "var(--c-miel)",
     customizable: false
   },
   {
-    id: "rol_canela",
-    name: "Rol de canela",
+    id: "dona_fresa",
+    name: "Dona glaseada de fresa",
     cat: "Repostería",
-    price: 42,
-    rate: 4.8,
-    desc: "Masa hojaldrada tibia con canela molida y glaseado de queso.",
-    bakeryToken: "var(--c-fresa)",
+    price: 38,
+    rate: 4.9,
+    desc: "Dona esponjosa con glaseado de fresa y chispas de colores.",
+    img: "assets/dona_fresa.png",
     mascota: "croissant",
     crystalToken: "var(--c-fresa)",
+    customizable: false
+  },
+  {
+    id: "croissant_mantequilla",
+    name: "Croissant de mantequilla",
+    cat: "Repostería",
+    price: 46,
+    rate: 5.0,
+    desc: "Hojaldre francés laminado con mantequilla, dorado y crujiente.",
+    img: "assets/croissant_mantequilla.png",
+    mascota: "croissant",
+    crystalToken: "var(--c-miel)",
+    customizable: false
+  },
+  {
+    id: "oreja_hojaldrada",
+    name: "Oreja hojaldrada",
+    cat: "Repostería",
+    price: 32,
+    rate: 4.8,
+    desc: "Hojaldre caramelizado y crujiente, ideal para acompañar espresso.",
+    img: "assets/oreja_hojaldrada.png",
+    mascota: "croissant",
+    crystalToken: "var(--c-limon)",
+    customizable: false
+  },
+  {
+    id: "cuernito_mantequilla",
+    name: "Cuernito horneado",
+    cat: "Repostería",
+    price: 40,
+    rate: 4.8,
+    desc: "Pan suave estilo cuernito recién horneado con toque de mantequilla.",
+    img: "assets/cuernito_mantequilla.png",
+    mascota: "croissant",
+    crystalToken: "var(--c-lila)",
     customizable: false
   }
 ];
@@ -429,11 +465,11 @@ const SHEET_PAGES = [
     tab: "Repostería",
     title: "Horno Artesanal",
     sub: "Recién horneado para tu café",
-    heroId: "concha_choco",
+    heroId: "croissant_mantequilla",
     mascota: "croissant",
     altVerde: true,
-    listIds: ["concha_choco", "rol_canela", "chocolate_cacao", "capuchino_duo"],
-    tileIds: ["concha_choco", "rol_canela", "chocolate_cacao"]
+    listIds: ["croissant_mantequilla", "concha_vainilla", "dona_fresa", "oreja_hojaldrada", "cuernito_mantequilla"],
+    tileIds: ["concha_vainilla", "dona_fresa", "oreja_hojaldrada"]
   }
 ];
 
@@ -479,7 +515,7 @@ const QUIZ_QUESTIONS = [
   {
     q: "¿Con qué acompañarías tu bebida?",
     opts: [
-      { label: "Concha de chocolate", pick: "latte_caramelo" },
+      { label: "Concha de vainilla", pick: "latte_caramelo" },
       { label: "Algo sin tanta azúcar", pick: "cold_brew" },
       { label: "Crema batida arriba", pick: "frappe_supremo" },
       { label: "Hielito extra", pick: "refresher_duo" }
@@ -544,7 +580,7 @@ function renderProductArt(p, size = 100) {
 
 // ==================== SPLASH ====================
 function initSplash() {
-  $("#splashMascot").innerHTML = renderMascota("grano", "feliz", { size: 112, onDark: true });
+  $("#splashMascot").innerHTML = renderMascota("grano", "feliz", { size: 136, onDark: true, holo: true });
   const splash = $("#splashScreen");
   const hide = () => splash.classList.add("done");
   $("#skipSplashBtn").addEventListener("click", hide);
@@ -644,6 +680,21 @@ function renderHero() {
   const cur = productById(HERO_IDS[idx]);
   const liveTotal = calcBuilderPrice(cur.id, state.heroBuilder);
 
+  const heroSpeech = {
+    grano: ["Grano te recomienda", "Puro café de altura, listo para armar."],
+    taza: ["Taza en barra", "Recién molido y con espuma cremosa."],
+    espuma: ["Tip de Espuma", "Suave, fresco y con toque dulce."],
+    hielito: ["Aprobado por Hielito", "Bien helado, directo a tu vaso."],
+    croissant: ["Horno de Croissant", "Recién salido del horno para tu café."]
+  }[cur.mascota] || ["Tip BeanCraft", "Personaliza tamaño, leche y extras al instante."];
+
+  $("#heroMascotCallout").innerHTML = `
+    ${renderMascota(cur.mascota, "feliz", { size: 62, accentBg: true })}
+    <div>
+      <strong style="display:block;font-family:var(--font-display);font-size:15px">${heroSpeech[0]}</strong>
+      <span style="font-size:14px">${heroSpeech[1]}</span>
+    </div>`;
+
   $("#heroStage").setAttribute("aria-label", cur.name);
   $("#heroCategoryLabel").textContent = cur.cat;
   $("#heroTitle").textContent = cur.name;
@@ -690,9 +741,9 @@ function spinHeroTo(targetIdx) {
 
 function initHero() {
   // Mascotas alrededor del Armador (Sección 6)
-  $("#heroMascotLeft").innerHTML = renderMascota("grano", "feliz", { size: 68, rotation: -2 });
-  $("#heroMascotRight").innerHTML = renderMascota("espuma", "guino", { size: 66, rotation: 2 });
-  $("#heroMascotTop").innerHTML = renderMascota("taza", "sorprendido", { size: 62, holo: true, rotation: 2 });
+  $("#heroMascotLeft").innerHTML = renderMascota("grano", "feliz", { size: 96, rotation: -2 });
+  $("#heroMascotRight").innerHTML = renderMascota("espuma", "guino", { size: 90, rotation: 2 });
+  $("#heroMascotTop").innerHTML = renderMascota("taza", "sorprendido", { size: 76, holo: true, rotation: 2 });
 
   const ring = $("#heroRing");
   ring.innerHTML = HERO_IDS.map((id, i) => {
@@ -776,14 +827,19 @@ function initHero() {
 // ==================== 2. MOSAICO DE PROMOCIONES (CEREZA + LIMÓN) ====================
 function renderPromos() {
   const promos = [
-    { code: "BIENVENIDA", title: "Primer pedido -$30", desc: "Cupón de bienvenida aplicable en tu carrito.", vig: "Vigencia: una vez por cliente" },
-    { code: "OTONO2X1", title: "-20% en temporada", desc: "Aplica en frappés y bebidas calientes de la casa.", vig: "Hasta el 30 de noviembre" },
-    { code: "CAFE15", title: "-$15 en cafés", desc: "Descuento directo en latte, capuchino o americano.", vig: "Jueves, todo el mes" }
+    { code: "BIENVENIDA", mascota: "grano", title: "Primer pedido -$30", desc: "Cupón de bienvenida aplicable en tu carrito.", vig: "Vigencia: una vez por cliente" },
+    { code: "OTONO2X1", mascota: "hielito", title: "-20% en temporada", desc: "Aplica en frappés y bebidas calientes de la casa.", vig: "Hasta el 30 de noviembre" },
+    { code: "CAFE15", mascota: "taza", title: "-$15 en cafés", desc: "Descuento directo en latte, capuchino o americano.", vig: "Jueves, todo el mes" }
   ];
   $("#promoTrack").innerHTML = promos.map((pr) => `
     <button type="button" class="promo-card" data-promo-code="${pr.code}">
-      <span class="promo-card-title">${pr.title}</span>
-      <p class="promo-card-desc">${pr.desc}</p>
+      <div class="promo-card-top">
+        <div>
+          <span class="promo-card-title">${pr.title}</span>
+          <p class="promo-card-desc">${pr.desc}</p>
+        </div>
+        ${renderMascota(pr.mascota, "feliz", { size: 72, onDark: true })}
+      </div>
       <span class="promo-card-vig">${pr.vig} · Código ${pr.code}</span>
     </button>`).join("");
 
@@ -833,7 +889,7 @@ function renderMenuSheetSection() {
           <button type="button" class="poster-hero-cup" data-pick-id="${heroProd.id}" aria-label="Armar ${heroProd.name}">
             ${renderProductArt(heroProd, 92)}
             <span>Toca para pedir</span>
-            <div style="margin-top:4px">${renderMascota(pg.mascota, "feliz", { size: 46, onDark: true })}</div>
+            <div style="margin-top:4px">${renderMascota(pg.mascota, "feliz", { size: 64, onDark: true })}</div>
           </button>
         </div>
         <div class="poster-bottom">${tilesHtml}</div>
@@ -847,6 +903,19 @@ function syncSheetControls() {
   const idx = state.sheetIdx;
   const pg = SHEET_PAGES[idx];
   $("#sheetPageName").textContent = pg.tab;
+  const sheetMsgs = {
+    frappes: ["Hielito al mando", "Frappés cremosos y dulces para pedir con un toque."],
+    cafes: ["Taza te sugiere", "Espresso recién molido al momento, frío o caliente."],
+    frias: ["Espuma de turno", "Refrescantes frutales, matcha herbal y cold brew."],
+    reposteria: ["Horno de Croissant", "Pan recién horneado: concha, dona, croissant y más."]
+  };
+  const sm = sheetMsgs[pg.id] || ["Pícale al menú", "¡Toca la bebida o pan que más se te antoje!"];
+  $("#sheetMascotBanner").innerHTML = `
+    ${renderMascota(pg.mascota, "feliz", { size: 72, accentBg: true })}
+    <div class="mascot-speech-bubble">
+      <strong>${sm[0]}</strong>
+      <span>${sm[1]}</span>
+    </div>`;
   document.querySelectorAll("#sheetTabs .chip").forEach((tab, i) => {
     tab.setAttribute("aria-selected", String(i === idx));
     if (i === idx) tab.scrollIntoView({ block: "nearest", inline: "nearest" });
@@ -912,11 +981,11 @@ function renderQuiz() {
         <h2 class="titulo-mixto">El quiz de las <em>Bebidas</em></h2>
         <p style="font-size:16px">Descubre cuál eres en 5 preguntas rápidas.</p>
         <div class="quiz-collage">
-          ${renderMascota("grano", "feliz", { size: 56, rotation: -2 })}
-          ${renderMascota("espuma", "guino", { size: 56 })}
-          ${renderMascota("hielito", "feliz", { size: 60, holo: true, rotation: 2 })}
-          ${renderMascota("croissant", "feliz", { size: 56 })}
-          ${renderMascota("taza", "sorprendido", { size: 56, rotation: -1 })}
+          ${renderMascota("grano", "feliz", { size: 66, rotation: -2 })}
+          ${renderMascota("espuma", "guino", { size: 66 })}
+          ${renderMascota("hielito", "feliz", { size: 84, accentBg: true, holo: true, rotation: 2 })}
+          ${renderMascota("croissant", "feliz", { size: 66 })}
+          ${renderMascota("taza", "sorprendido", { size: 66, rotation: -1 })}
         </div>
         <button type="button" class="btn-primary full" id="startQuizBtn">¡Llévame ya!</button>
       </div>`;
@@ -926,6 +995,7 @@ function renderQuiz() {
   if (state.quizStep >= 0 && state.quizStep < QUIZ_QUESTIONS.length) {
     const q = QUIZ_QUESTIONS[state.quizStep];
     const pct = Math.round(((state.quizStep + 1) / QUIZ_QUESTIONS.length) * 100);
+    const hostMascot = ["grano", "hielito", "espuma", "croissant", "taza"][state.quizStep] || "grano";
     box.innerHTML = `
       <div class="quiz-card">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
@@ -935,7 +1005,10 @@ function renderQuiz() {
         <div class="quiz-progress" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
           <div class="quiz-progress-fill" style="width:${pct}%"></div>
         </div>
-        <h3 style="font-family:var(--font-display);font-size:22px;line-height:1.15">${q.q}</h3>
+        <div class="quiz-q-host">
+          ${renderMascota(hostMascot, "pensando", { size: 72, accentBg: true })}
+          <h3 style="font-family:var(--font-display);font-size:20px;line-height:1.15">${q.q}</h3>
+        </div>
         <div class="quiz-options" role="radiogroup" aria-label="${q.q}">
           ${q.opts.map((o, idx) => `<button type="button" class="quiz-opt" role="radio" aria-checked="false" data-qopt="${idx}">${o.label}</button>`).join("")}
         </div>
@@ -955,7 +1028,7 @@ function renderQuiz() {
   box.innerHTML = `
     <div class="quiz-card">
       <div class="quiz-result-box">
-        ${renderMascota("hielito", "guino", { size: 88, label: "Hielito" })}
+        ${renderMascota("hielito", "guino", { size: 112, accentBg: true, holo: true, label: "Hielito" })}
         <div>
           <h3 class="titulo-mixto" style="font-size:22px">Eres un <em>${resProd.name}</em></h3>
           <p style="font-size:14px;margin-top:4px">${quote}</p>
@@ -1031,7 +1104,7 @@ function renderHomeOrderTimeline() {
     <div class="estado-steps">
       ${ORDER_META.map((m, i) => `
         <div class="estado-step ${i === curIdx ? "activo" : ""}">
-          ${renderMascota(m.mascota, i === curIdx ? "feliz" : "pensando", { size: 50 })}
+          ${renderMascota(m.mascota, i === curIdx ? "feliz" : "pensando", { size: 64, accentBg: i === curIdx })}
           <span>${m.label}</span>
         </div>`).join("")}
     </div>
@@ -1165,6 +1238,21 @@ function renderCrystalMenu() {
     `<button type="button" class="chip" role="tab" aria-selected="${state.menuCat === c}" data-cat="${c}">${c}</button>`
   ).join("");
 
+  const catBannerMap = {
+    "Todo": ["grano", "Guía de Grano", "Toda la barra de bebidas y panadería artesanal lista para pedir."],
+    "Cafés": ["taza", "Barra caliente de Taza", "Espresso recién molido en frío o caliente al gusto."],
+    "Bebidas frías": ["hielito", "Selección fría", "Cold brew, refreshers frutales, tisanas y matcha."],
+    "Frappés": ["hielito", "Zona Frappé de Hielito", "Mezclas cremosas frappeadas con toppings de la casa."],
+    "Repostería": ["croissant", "Horno de Croissant", "Pan artesanal del día: concha, dona, croissant, oreja y cuernito."]
+  };
+  const [mId, mTitle, mCopy] = catBannerMap[state.menuCat] || catBannerMap["Todo"];
+  $("#menuMascotBanner").innerHTML = `
+    ${renderMascota(mId, "feliz", { size: 74, accentBg: true })}
+    <div class="mascot-speech-bubble">
+      <strong>${mTitle}</strong>
+      <span>${mCopy}</span>
+    </div>`;
+
   const q = state.menuQuery.trim().toLowerCase();
   const filtered = PRODUCTS.filter((p) => {
     if (state.menuCat !== "Todo" && p.cat !== state.menuCat) return false;
@@ -1178,7 +1266,7 @@ function renderCrystalMenu() {
   if (filtered.length === 0) {
     $("#crystalMenuGrid").innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:32px 12px;display:flex;flex-direction:column;align-items:center;gap:10px">
-        ${renderMascota("hielito", "pensando", { size: 96 })}
+        ${renderMascota("hielito", "pensando", { size: 120, accentBg: true })}
         <p style="font-size:16px;font-weight:700">No encontramos bebidas con ese filtro.</p>
         <button type="button" class="btn-secondary" id="clearMenuFilterBtn">Ver todas las bebidas</button>
       </div>`;
@@ -1207,7 +1295,7 @@ function renderCrystalMenu() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
           </button>
         </div>
-        <div class="cc-sticker">${renderMascota(p.mascota, "feliz", { size: 42, rotation: 2 })}</div>
+        <div class="cc-sticker">${renderMascota(p.mascota, "feliz", { size: 52, onDark: true, rotation: 2 })}</div>
         <button type="button" class="cc-stage" data-open-id="${p.id}" aria-label="Personalizar ${p.name}">
           ${renderProductArt(p, 130)}
         </button>
@@ -1329,7 +1417,7 @@ function renderCustomizer() {
         <span style="font-size:13px;font-weight:700;color:var(--c-verde)">${p.cat}</span>
         <p style="font-size:14px;margin-top:4px;line-height:1.4">${p.desc}</p>
       </div>
-      <div>${renderMascota(p.mascota, "feliz", { size: 52 })}</div>
+      <div>${renderMascota(p.mascota, "feliz", { size: 64, accentBg: true })}</div>
     </div>
     ${optsMarkup}
     <div class="qty-bar">
@@ -1403,7 +1491,7 @@ function renderCartView() {
   if (state.cart.length === 0) {
     host.innerHTML = `
       <div class="pad" style="text-align:center;padding-top:32px;display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("hielito", "pensando", { size: 96 })}
+        ${renderMascota("hielito", "pensando", { size: 120, accentBg: true })}
         <p style="font-size:18px;font-weight:800">Tu carrito está vacío</p>
         <p style="font-size:16px">Elige una bebida desde el Armador o el Menú completo.</p>
         <button type="button" class="btn-primary" id="emptyGoMenuBtn">Explorar menú</button>
@@ -1488,6 +1576,10 @@ function renderCartView() {
         <div class="seg">
           <button type="button" data-pay="tarjeta" aria-pressed="${state.payMethod === "tarjeta"}">Tarjeta en mostrador</button>
           <button type="button" data-pay="efectivo" aria-pressed="${state.payMethod === "efectivo"}">Efectivo</button>
+        </div>
+        <div class="checkout-mascot-tip">
+          ${renderMascota(state.cart.some((it) => productById(it.productId)?.cat === "Repostería") ? "croissant" : "taza", "feliz", { size: 64, accentBg: true })}
+          <span>¿Todo listo? Desliza abajo y empezamos a prepararlo.</span>
         </div>
         <div class="slide-checkout" id="slideCheckout" data-total="${total.toFixed(2)}">
           <div class="slide-fill" id="slideFill"></div>
@@ -1659,7 +1751,7 @@ function renderOrdersView() {
   if (!o) {
     host.innerHTML = `
       <div class="track-card" style="display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("hielito", "pensando", { size: 96 })}
+        ${renderMascota("hielito", "pensando", { size: 120, accentBg: true, holo: true })}
         <p style="font-size:18px;font-weight:800">No tienes pedidos activos</p>
         <p style="font-size:16px">Arma tu bebida y desliza en el carrito para seguir tu pedido.</p>
         <button type="button" class="btn-primary full" id="ordersToMenuBtn">Ir al menú</button>
@@ -1692,7 +1784,7 @@ function renderOrdersView() {
   host.innerHTML = `
     <div class="track-card">
       <div style="display:flex;justify-content:center;margin-bottom:8px">
-        ${renderMascota(curMeta.mascota, "feliz", { size: 88, label: curMeta.label })}
+        ${renderMascota(curMeta.mascota, "feliz", { size: 120, accentBg: true, holo: true, label: curMeta.label })}
       </div>
       <span class="insignia-estado ${curMeta.key}">
         ${stateIconSvg(curMeta.key)}
@@ -1783,7 +1875,7 @@ function openAuthModal(subtitle = "Pide en la app y ahórrate la fila.") {
         <button type="button" class="dlg-close" data-close-dlg="authDialog" aria-label="Cerrar">×</button>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        ${renderMascota("grano", err ? "triste" : "feliz", { size: 64 })}
+        ${renderMascota("grano", err ? "triste" : "feliz", { size: 72, accentBg: true })}
         <p style="font-size:15px">${subtitle}</p>
       </div>
       <form id="authForm" style="display:flex;flex-direction:column;gap:10px" novalidate>
@@ -1843,7 +1935,7 @@ function renderProfileView() {
   if (!state.user) {
     host.innerHTML = `
       <div class="pad" style="padding-top:30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("taza", "guino", { size: 96 })}
+        ${renderMascota("taza", "guino", { size: 124, accentBg: true, holo: true })}
         <h1 class="titulo-mixto" style="font-size:26px">Inicia sesión en <em>BeanCraft</em></h1>
         <p style="font-size:16px">Guarda tus bebidas favoritas, consulta pedidos y edita tu perfil.</p>
         <button type="button" class="btn-primary full" id="profLoginBtn">Iniciar sesión o registrarme</button>
@@ -2066,7 +2158,7 @@ function init() {
   initQuiz();
   renderHomeOrderTimeline();
   initBranchesSection();
-  $("#footerMascot").innerHTML = renderMascota("taza", "guino", { size: 68, onDark: true });
+  $("#footerMascot").innerHTML = renderMascota("taza", "guino", { size: 88, onDark: true });
 
   initCrystalMenu();
   initCustomizerEvents();
