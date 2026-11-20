@@ -4,8 +4,9 @@ set -euo pipefail
 build_dir=".figma/make/dist"
 rm -rf "$build_dir"
 mkdir -p "$build_dir"
-cp index.html styles.css app.js "$build_dir/"
+cp index.html styles.css tokens.css app.js mascotas.js "$build_dir/"
 cp -R assets "$build_dir/assets"
+cp -R fonts "$build_dir/fonts"
 
 [[ -d "$build_dir" ]] || {
   echo "Expected build output at $build_dir" >&2
