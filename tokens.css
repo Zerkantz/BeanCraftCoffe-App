@@ -1,0 +1,252 @@
+/* Fuente única de verdad: Guía de diseño front-end BeanCraft v1.0 */
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/instrument-serif-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/instrument-serif-latin-400-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/bricolage-grotesque-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/bricolage-grotesque-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('./fonts/bricolage-grotesque-latin-800-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/instrument-sans-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/instrument-sans-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/instrument-sans-latin-600-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Instrument Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/instrument-sans-latin-700-normal.woff2') format('woff2');
+}
+
+:root {
+  --c-tostado: #2A1A12;
+  --c-verde: #0B5C63;
+  --c-espuma: #FAFAF7;
+  --c-menta: #DCEBE6;
+  --c-miel: #F2B134;
+  --c-fresa: #FF6B9D;
+  --c-lila: #B8A1FF;
+  --c-limon: #E8E56A;
+  --c-cereza: #C8102E;
+  --c-blanco: #FFFFFF;
+
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+
+  --r-campo: 10px;
+  --r-tarjeta: 16px;
+  --r-pildora: 999px;
+  --r-etiqueta: 4px;
+  --borde: 2px solid var(--c-tostado);
+  --sombra-dura: 4px 4px 0 var(--c-tostado);
+
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  --dur-rapida: 120ms;
+  --dur-normal: 220ms;
+  --dur-lenta: 420ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: var(--sp-2);
+  z-index: 200;
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--c-tostado);
+  color: var(--c-espuma);
+  border: var(--borde);
+  border-radius: var(--r-pildora);
+  font-family: var(--font-body);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: var(--sp-3);
+}
+
+.titulo-mixto {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.titulo-mixto em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.marcatextos {
+  display: inline-block;
+  padding: 2px var(--sp-2);
+  background: var(--c-limon);
+  color: var(--c-tostado);
+  clip-path: polygon(1% 8%, 99% 0%, 98% 92%, 0% 100%);
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.etiqueta-desc {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: 3px var(--sp-2);
+  border-radius: var(--r-etiqueta);
+  background: var(--c-cereza);
+  color: var(--c-espuma);
+  border: var(--borde);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.etiqueta-desc.rot-pos {
+  transform: rotate(2deg);
+}
+
+.etiqueta-desc.rot-neg {
+  transform: rotate(-2deg);
+}
+
+.etiqueta-nueva {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px var(--sp-2);
+  border-radius: var(--r-etiqueta);
+  background: var(--c-espuma);
+  color: var(--c-tostado);
+  border: var(--borde);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  transform: rotate(2deg);
+}
+
+/* Insignias de estado (Sección 5 / RN-04) */
+.insignia-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--r-pildora);
+  border: var(--borde);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.insignia-estado.recibido {
+  background: var(--c-menta);
+  color: var(--c-tostado);
+}
+
+.insignia-estado.preparando {
+  background: var(--c-miel);
+  color: var(--c-tostado);
+}
+
+.insignia-estado.listo {
+  background: var(--c-verde);
+  color: var(--c-espuma);
+}
+
+.insignia-estado.entregado {
+  background: var(--c-tostado);
+  color: var(--c-espuma);
+}
+
+.insignia-estado.cancelado {
+  background: var(--c-cereza);
+  color: var(--c-espuma);
+}

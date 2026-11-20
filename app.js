@@ -1,389 +1,370 @@
-// BeanCraft Coffee — App Móvil Interactiva (ES Module)
-// Implementa flujos RF-01 a RF-11, RF-22 y reglas RN-01 a RN-05 del SRS v1.3
+// BeanCraft Coffee — App Móvil Híbrida (ES Module)
+// Cumplimiento estricto de Guía de Diseño v1.0 + Carrusel 3D / Hoja Luma / Tarjetas cristalinas / Checkout deslizable
+// Flujos SRS: RF-01 a RF-11, RF-22 y RN-01 a RN-05
 
-const cupSvg = (sleeve, lid = "#3A2219", iced = false, size = 100) => {
-  const h = Math.round(size * 1.32);
-  const body = iced ? "#EAF4FB" : "#F7F3F0";
-  const straw = iced
-    ? `<rect x="70" y="-6" width="7" height="34" rx="3" fill="#2A1810" transform="rotate(12 73 10)"/>`
-    : "";
-  return `
-    <svg width="${size}" height="${h}" viewBox="0 0 120 160" aria-hidden="true">
-      <ellipse cx="60" cy="154" rx="38" ry="5" fill="#000" opacity=".12"/>
-      ${straw}
-      <path d="M16 34h88l-10 116a4 4 0 0 1-4 3.6H30a4 4 0 0 1-4-3.6z" fill="${body}"/>
-      <path d="M16 34h14l9 119.6H30a4 4 0 0 1-4-3.6z" fill="#FFFFFF" opacity=".72"/>
-      <path d="M19.8 64h80.4l-5 60H24.8z" fill="${sleeve}"/>
-      <path d="M19.8 64h16l3.5 60H24.8z" fill="#FFFFFF" opacity=".18"/>
-      <circle cx="60" cy="94" r="17" fill="none" stroke="#FFFFFF" stroke-width="2.4"/>
-      <ellipse cx="60" cy="94" rx="6.5" ry="9.5" transform="rotate(32 60 94)" fill="#FFFFFF"/>
-      <path d="M64.5 86c-4.2 2-2.4 6.1-4.8 8.5-1.6 1.6-3.8 2-3.9 5.7" fill="none" stroke="${sleeve}" stroke-width="1.8" stroke-linecap="round"/>
-      <rect x="10" y="22" width="100" height="14" rx="7" fill="${lid}"/>
-      <path d="M22 22l5-12a4 4 0 0 1 3.7-2.5h58.6A4 4 0 0 1 93 10l5 12z" fill="${lid}"/>
-    </svg>`;
-};
+import { renderMascota, MASCOTAS_INFO, MASCOTA_ESTADOS } from "./mascotas.js";
 
-const conchaSvg = (top = "#5A3324", size = 96) => {
+const conchaSvg = (topToken = "var(--c-tostado)", size = 96) => {
   const h = Math.round(size * 0.8);
   const lines = Array.from({ length: 7 }, (_, i) =>
-    `<path d="M${18 + i * 12} ${38 - Math.abs(3 - i) * 4}c4 6 4 14 0 22" fill="none" stroke="#3B1F15" stroke-opacity=".35" stroke-width="2"/>`
+    `<path d="M${18 + i * 12} ${38 - Math.abs(3 - i) * 4}c4 6 4 14 0 22" fill="none" stroke="var(--c-tostado)" stroke-opacity=".35" stroke-width="2"/>`
   ).join("");
   return `
     <svg width="${size}" height="${h}" viewBox="0 0 110 88" aria-hidden="true">
-      <ellipse cx="55" cy="80" rx="42" ry="5" fill="#000" opacity=".12"/>
-      <path d="M10 62c0-24 20-42 45-42s45 18 45 42c0 9-8 14-45 14S10 71 10 62z" fill="#E9B97E"/>
-      <path d="M14 56c0-20 18-34 41-34s41 14 41 34c-10 5-24 7-41 7s-31-2-41-7z" fill="${top}"/>
+      <path d="M10 62c0-24 20-42 45-42s45 18 45 42c0 9-8 14-45 14S10 71 10 62z" fill="var(--c-miel)" stroke="var(--c-tostado)" stroke-width="2.4"/>
+      <path d="M14 56c0-20 18-34 41-34s41 14 41 34c-10 5-24 7-41 7s-31-2-41-7z" fill="${topToken}" stroke="var(--c-tostado)" stroke-width="2"/>
       ${lines}
     </svg>`;
 };
 
-const crystalFacets = (glow) => `
+// Textura cristalina facetada 100% plana (cero degradados, cero blur) usando tokens de la guía
+const crystalFacets = (tintToken) => `
   <svg class="crystal-svg" viewBox="0 0 160 220" preserveAspectRatio="none" aria-hidden="true">
-    <polygon points="0,0 94,0 44,82 0,56" fill="#FFFFFF" fill-opacity="0.34"/>
-    <polygon points="94,0 160,0 160,72 108,96 44,82" fill="${glow}" fill-opacity="0.20"/>
-    <polygon points="0,56 44,82 18,148 0,132" fill="#FFFFFF" fill-opacity="0.18"/>
-    <polygon points="44,82 108,96 76,160 18,148" fill="#FFFFFF" fill-opacity="0.42"/>
-    <polygon points="108,96 160,72 160,154 76,160" fill="${glow}" fill-opacity="0.24"/>
-    <polygon points="0,132 76,160 160,154 160,220 0,220" fill="#FFFFFF" fill-opacity="0.24"/>
+    <polygon points="0,0 94,0 44,82 0,56" fill="${tintToken}" fill-opacity="0.34"/>
+    <polygon points="94,0 160,0 160,72 108,96 44,82" fill="${tintToken}" fill-opacity="0.18"/>
+    <polygon points="0,56 44,82 18,148 0,132" fill="${tintToken}" fill-opacity="0.24"/>
+    <polygon points="44,82 108,96 76,160 18,148" fill="var(--c-espuma)" fill-opacity="0.48"/>
+    <polygon points="108,96 160,72 160,154 76,160" fill="${tintToken}" fill-opacity="0.38"/>
+    <polygon points="0,132 76,160 160,154 160,220 0,220" fill="${tintToken}" fill-opacity="0.24"/>
     <polyline points="0,56 44,82 94,0 M44,82 108,96 160,72 M44,82 18,148 76,160 108,96 M76,160 160,154"
-      fill="none" stroke="#FFFFFF" stroke-opacity="0.62" stroke-width="1"/>
+      fill="none" stroke="var(--c-blanco)" stroke-opacity="0.88" stroke-width="1.4"/>
   </svg>`;
+
+const stateIconSvg = (key) => {
+  const map = {
+    recibido: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 13h16l-1.5 6h-13z"/><path d="M7 13V9a5 5 0 0 1 10 0v4"/></svg>`,
+    preparando: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 10h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3v3M12 3v3"/></svg>`,
+    listo: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7"/></svg>`,
+    entregado: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>`,
+    cancelado: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>`
+  };
+  return map[key] || map.recibido;
+};
+
+const ORDER_META = [
+  { key: "recibido", label: "Recibido", mascota: "grano", copy: "Ya lo tenemos." },
+  { key: "preparando", label: "Preparando", mascota: "taza", copy: "Manos a la obra." },
+  { key: "listo", label: "Listo", mascota: "espuma", copy: "Pasa por él." },
+  { key: "entregado", label: "Entregado", mascota: "croissant", copy: "Buen provecho." }
+];
 
 const PRODUCTS = [
   {
     id: "frappe_supremo",
     name: "Frappé Supremo",
-    ghost: "SUPREMO",
     cat: "Frappés",
-    menuGroup: "Bebidas frías",
     price: 65,
     rate: 5.0,
     desc: "Espresso doble frappeado con crema batida y caramelo de la casa.",
     img: "assets/frappe_helado.png",
-    c1: "rgba(234,88,12,.30)",
-    c2: "rgba(251,146,60,.10)",
-    glow: "#FB923C",
-    tint: "rgba(200,16,46,.52)",
+    mascota: "hielito",
+    crystalToken: "var(--c-miel)",
     customizable: true
   },
   {
     id: "refresher_duo",
     name: "Refresher Dúo",
-    ghost: "REFRESHER",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 62,
     rate: 4.9,
     desc: "Infusión frutal de frutos rojos y moras azules con perlas explosivas.",
     img: "assets/refresher.png",
-    c1: "rgba(225,29,72,.30)",
-    c2: "rgba(251,113,133,.10)",
-    glow: "#FB7185",
-    tint: "rgba(225,29,72,.52)",
+    mascota: "hielito",
+    crystalToken: "var(--c-fresa)",
     customizable: true
   },
   {
     id: "frappe_beancraft",
     name: "Frappé BeanCraft",
-    ghost: "BEANCRAFT",
     cat: "Frappés",
-    menuGroup: "Bebidas frías",
     price: 58,
     rate: 4.9,
     desc: "Mezcla clásica de café de altura tostado oscuro con hielo frappeado.",
     img: "assets/frappe.png",
-    c1: "rgba(180,83,9,.28)",
-    c2: "rgba(245,158,11,.10)",
-    glow: "#F59E0B",
-    tint: "rgba(217,119,6,.50)",
+    mascota: "hielito",
+    crystalToken: "var(--c-miel)",
     customizable: true
   },
   {
     id: "latte_caramelo",
     name: "Latte de caramelo",
-    ghost: "CARAMELO",
     cat: "Cafés",
-    menuGroup: "Cafés",
     price: 55,
     rate: 4.8,
     desc: "Espresso doble, leche vaporizada y caramelo artesanal.",
     img: "assets/latte_duo.png",
-    c1: "rgba(217,119,6,.28)",
-    c2: "rgba(251,191,36,.10)",
-    glow: "#FBBF24",
-    tint: "rgba(224,122,46,.48)",
+    mascota: "taza",
+    crystalToken: "var(--c-miel)",
     customizable: true
   },
   {
     id: "cold_brew",
     name: "Americano & Cold Brew",
-    ghost: "AMERICANO",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 57,
     rate: 4.6,
-    desc: "Extracción en frío por 16 horas con notas de cacao tostado.",
+    desc: "Tranquilo, directo y con carácter. Extracción en frío de 16 horas.",
     img: "assets/americano_duo.png",
-    c1: "rgba(2,132,199,.28)",
-    c2: "rgba(56,189,248,.10)",
-    glow: "#38BDF8",
-    tint: "rgba(2,132,199,.48)",
+    mascota: "grano",
+    crystalToken: "var(--c-menta)",
     customizable: true
   },
   {
     id: "mocha_blanco",
     name: "Kfreeze Berry & Nuez",
     cat: "Frappés",
-    menuGroup: "Cafés",
     price: 66,
     rate: 4.8,
     desc: "Helado suave artesanal con cobertura de frutos rojos o nuez.",
     img: "assets/kfreeze_duo.png",
-    c1: "rgba(190,24,93,.28)",
-    c2: "rgba(244,114,182,.10)",
-    glow: "#F472B6",
+    mascota: "espuma",
+    crystalToken: "var(--c-fresa)",
     customizable: true
   },
   {
     id: "capuchino",
     name: "Frappé Galleta & Fresa",
     cat: "Frappés",
-    menuGroup: "Cafés",
     price: 62,
     rate: 4.9,
     desc: "Dúo de frappé cremoso con galleta triturada y fresa natural.",
     img: "assets/frappe_duo.png",
-    c1: "rgba(202,138,4,.26)",
-    c2: "rgba(250,204,21,.10)",
-    glow: "#FACC15",
+    mascota: "hielito",
+    crystalToken: "var(--c-fresa)",
     customizable: true
   },
   {
     id: "matcha_latte",
     name: "Matcha latte",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 64,
     rate: 4.6,
     desc: "Matcha ceremonial batido en frío o caliente sobre leche cremosa.",
     img: "assets/matcha_duo.webp",
-    c1: "rgba(5,150,105,.28)",
-    c2: "rgba(52,211,153,.10)",
-    glow: "#34D399",
+    mascota: "espuma",
+    crystalToken: "var(--c-menta)",
     customizable: true
   },
   {
     id: "taro_frappe",
     name: "Nieve Crunch & Berry",
     cat: "Frappés",
-    menuGroup: "Bebidas frías",
     price: 59,
     rate: 4.7,
     desc: "Nieve cremosa con crumble de caramelo o coulis de frutos rojos.",
     img: "assets/nieve_duo.png",
-    c1: "rgba(124,58,237,.28)",
-    c2: "rgba(167,139,250,.10)",
-    glow: "#A78BFA",
+    mascota: "hielito",
+    crystalToken: "var(--c-lila)",
     customizable: true
   },
   {
     id: "te_helado_rojo",
     name: "Té rojo helado",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 48,
     rate: 4.7,
     desc: "Infusión fría de frutos rojos y jamaica sobre hielo cristalino.",
     img: "assets/te_rojo_helado.webp",
-    c1: "rgba(220,38,38,.28)",
-    c2: "rgba(248,113,113,.10)",
-    glow: "#EF4444",
+    mascota: "hielito",
+    crystalToken: "var(--c-fresa)",
     customizable: true
   },
   {
     id: "agua_purificada",
     name: "Agua purificada",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 22,
     rate: 4.9,
     desc: "Agua natural embotellada de 600 ml bien fría.",
     img: "assets/agua_ciel.webp",
-    c1: "rgba(14,165,233,.24)",
-    c2: "rgba(125,211,252,.10)",
-    glow: "#38BDF8",
+    mascota: "hielito",
+    crystalToken: "var(--c-menta)",
     customizable: false
   },
   {
     id: "capuchino_duo",
     name: "Capuchino clásico",
     cat: "Cafés",
-    menuGroup: "Cafés",
     price: 52,
     rate: 4.9,
     desc: "Espresso doble con leche vaporizada, crema suave o versión con hielo.",
     img: "assets/capuchino_duo.webp",
-    c1: "rgba(217,119,6,.26)",
-    c2: "rgba(251,191,36,.10)",
-    glow: "#F59E0B",
+    mascota: "espuma",
+    crystalToken: "var(--c-limon)",
     customizable: true
   },
   {
     id: "flat_white",
     name: "Flat White",
     cat: "Cafés",
-    menuGroup: "Cafés",
     price: 49,
     rate: 4.8,
     desc: "Taza caliente de espresso intenso con microespuma sedosa.",
     img: "assets/latte_caliente.png",
-    c1: "rgba(180,83,9,.26)",
-    c2: "rgba(245,158,11,.10)",
-    glow: "#D97706",
+    mascota: "taza",
+    crystalToken: "var(--c-miel)",
     customizable: true
   },
   {
     id: "iced_latte",
     name: "Iced Latte",
     cat: "Cafés",
-    menuGroup: "Cafés",
     price: 56,
     rate: 4.9,
     desc: "Leche fría con carga de espresso y hielos cristalinos.",
     img: "assets/iced_latte.png",
-    c1: "rgba(234,88,12,.26)",
-    c2: "rgba(253,186,116,.10)",
-    glow: "#FB923C",
+    mascota: "taza",
+    crystalToken: "var(--c-limon)",
     customizable: true
   },
   {
     id: "chai_latte",
     name: "Chai Latte",
     cat: "Cafés",
-    menuGroup: "Cafés",
     price: 58,
     rate: 4.8,
     desc: "Té negro especiado con canela, cardamomo y leche cremosa.",
     img: "assets/chai_duo.webp",
-    c1: "rgba(202,138,4,.26)",
-    c2: "rgba(253,224,71,.10)",
-    glow: "#EAB308",
+    mascota: "taza",
+    crystalToken: "var(--c-miel)",
     customizable: true
   },
   {
     id: "chocolate_cacao",
     name: "Chocolate de cacao",
     cat: "Cafés",
-    menuGroup: "Cafés",
     price: 54,
     rate: 4.8,
     desc: "Cacao artesanal caliente o frío en las rocas.",
     img: "assets/chocolate_duo.webp",
-    c1: "rgba(154,52,18,.28)",
-    c2: "rgba(251,146,60,.10)",
-    glow: "#EA580C",
+    mascota: "grano",
+    crystalToken: "var(--c-lila)",
     customizable: true
   },
   {
     id: "te_durazno",
     name: "Té de durazno",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 46,
     rate: 4.7,
     desc: "Infusión dorada de durazno natural fría o caliente.",
     img: "assets/te_durazno_duo.webp",
-    c1: "rgba(245,158,11,.26)",
-    c2: "rgba(253,224,71,.10)",
-    glow: "#F59E0B",
+    mascota: "hielito",
+    crystalToken: "var(--c-limon)",
     customizable: true
   },
   {
     id: "tisana_frutos",
     name: "Tisana frutos rojos",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 56,
     rate: 4.9,
     desc: "Frutos deshidratados de arándano, fresa y jamaica.",
     img: "assets/tisana_frutos.png",
-    c1: "rgba(190,18,60,.28)",
-    c2: "rgba(251,113,133,.10)",
-    glow: "#E11D48",
+    mascota: "hielito",
+    crystalToken: "var(--c-fresa)",
     customizable: true
   },
   {
     id: "refresher_fresa",
     name: "Refresher Coco & Fresa",
     cat: "Bebidas frías",
-    menuGroup: "Bebidas frías",
     price: 60,
     rate: 4.8,
     desc: "Refrescantes bebidas de coco tropical o fresa silvestre.",
     img: "assets/refresher_coco_fresa.png",
-    c1: "rgba(244,63,94,.26)",
-    c2: "rgba(253,164,175,.10)",
-    glow: "#FB7185",
+    mascota: "espuma",
+    crystalToken: "var(--c-fresa)",
     customizable: true
   },
   {
     id: "protea_frappe",
     name: "Protea Frappé & Mango",
     cat: "Frappés",
-    menuGroup: "Bebidas frías",
     price: 68,
     rate: 4.9,
     desc: "Bebida proteica de café o smoothie tropical energizante.",
     img: "assets/protea_duo.png",
-    c1: "rgba(234,88,12,.28)",
-    c2: "rgba(251,191,36,.10)",
-    glow: "#F97316",
+    mascota: "hielito",
+    crystalToken: "var(--c-miel)",
     customizable: true
   },
   {
     id: "concha_choco",
     name: "Concha de chocolate",
     cat: "Repostería",
-    menuGroup: "Repostería",
     price: 35,
     rate: 4.9,
     desc: "Pan artesanal recién horneado con costra crujiente de cacao.",
-    bakery: "#5A3324",
-    c1: "rgba(146,64,14,.25)",
-    c2: "rgba(217,119,6,.10)",
-    glow: "#D97706",
+    bakeryToken: "var(--c-tostado)",
+    mascota: "croissant",
+    crystalToken: "var(--c-miel)",
     customizable: false
   },
   {
     id: "rol_canela",
     name: "Rol de canela",
     cat: "Repostería",
-    menuGroup: "Repostería",
     price: 42,
     rate: 4.8,
     desc: "Masa hojaldrada tibia con canela molida y glaseado de queso.",
-    bakery: "#8C4A27",
-    c1: "rgba(180,83,9,.24)",
-    c2: "rgba(251,191,36,.10)",
-    glow: "#F59E0B",
+    bakeryToken: "var(--c-fresa)",
+    mascota: "croissant",
+    crystalToken: "var(--c-fresa)",
     customizable: false
   }
 ];
 
 const BRANCHES = [
-  { id: "centro", name: "BeanCraft Centro", addr: "Av. Obregón y Calle 5, San Luis R.C.", dist: "0.8 km", open: 7, close: 22, hours: "07:00 – 22:00", suggested: true },
-  { id: "obregon", name: "BeanCraft Kino", addr: "Calz. Constitución y Calle 22, San Luis R.C.", dist: "2.3 km", open: 8, close: 21, hours: "08:00 – 21:00", suggested: false },
-  { id: "bosque", name: "BeanCraft Bosque", addr: "Av. Revolución #1420, San Luis R.C.", dist: "3.7 km", open: 7, close: 20, hours: "07:00 – 20:00", suggested: false }
+  {
+    id: "centro",
+    name: "BeanCraft Centro",
+    addr: "Av. Obregón y Calle 5, San Luis R.C.",
+    ref: "Junto a la plaza principal",
+    dist: "0.8 km",
+    open: 7,
+    close: 22,
+    hours: "Lun–Dom 7:00 am a 10:00 pm",
+    openNow: true,
+    suggested: true,
+    mapPos: { x: 86, y: 64 }
+  },
+  {
+    id: "universidad",
+    name: "BeanCraft Kino",
+    addr: "Calz. Constitución y Calle 22, San Luis R.C.",
+    ref: "Frente a la entrada principal del campus",
+    dist: "2.3 km",
+    open: 8,
+    close: 21,
+    hours: "Lun–Vie 8:00 am a 9:00 pm",
+    openNow: true,
+    suggested: false,
+    mapPos: { x: 198, y: 42 }
+  },
+  {
+    id: "plaza",
+    name: "BeanCraft Bosque",
+    addr: "Av. Revolución #1420, San Luis R.C.",
+    ref: "Segundo nivel, junto a las escaleras",
+    dist: "3.7 km",
+    open: 7,
+    close: 20,
+    hours: "Lun–Dom 7:00 am a 8:00 pm",
+    openNow: false,
+    suggested: false,
+    mapPos: { x: 282, y: 94 }
+  }
 ];
 
 const COUPONS = {
-  BIENVENIDA: { code: "BIENVENIDA", type: "fixed", value: 30, label: "$30 MXN de descuento", active: true, expires: "2027-03-31" },
-  OTONO2X1: { code: "OTONO2X1", type: "percent", value: 20, label: "20% de descuento temporada", active: true, expires: "2027-03-31" },
-  CAFE15: { code: "CAFE15", type: "fixed", value: 15, label: "$15 MXN de descuento", active: true, expires: "2027-03-31" },
-  VENCIDO25: { code: "VENCIDO25", type: "fixed", value: 25, label: "Cupón expirado", active: false, expires: "2025-12-31" }
+  BIENVENIDA: { code: "BIENVENIDA", type: "fixed", value: 30, label: "-$30 MXN en tu pedido", vig: "Una vez por cliente", active: true },
+  OTONO2X1: { code: "OTONO2X1", type: "percent", value: 20, label: "-20% en bebidas de temporada", vig: "Hasta el 30 de noviembre", active: true },
+  CAFE15: { code: "CAFE15", type: "fixed", value: 15, label: "-$15 MXN en cafés y lattes", vig: "Jueves, todo el mes", active: true },
+  VENCIDO25: { code: "VENCIDO25", type: "fixed", value: 25, label: "Cupón expirado", vig: "Vencido", active: false }
 };
 
-// Precios de referencia SRS (Sección 3.3 / RN-02)
+// Precios de referencia SRS v1.3 (RN-02)
 const OPTIONS = {
   size: [
     { id: "chico", label: "Chico", cost: 0 },
@@ -392,7 +373,7 @@ const OPTIONS = {
   ],
   milk: [
     { id: "entera", label: "Entera", cost: 0 },
-    { id: "deslac", label: "Deslac.", cost: 0 },
+    { id: "deslac", label: "Deslactosada", cost: 0 },
     { id: "avena", label: "Avena", cost: 12 },
     { id: "almendra", label: "Almendra", cost: 12 }
   ],
@@ -403,7 +384,7 @@ const OPTIONS = {
     { id: "miel", label: "Miel", cost: 5 }
   ],
   extras: [
-    { id: "shot", label: "Shot de espresso", cost: 15 },
+    { id: "shot", label: "Shot extra", cost: 15 },
     { id: "crema", label: "Crema batida", cost: 8 },
     { id: "caramelo", label: "Caramelo extra", cost: 8 }
   ]
@@ -413,54 +394,118 @@ const SHEET_PAGES = [
   {
     id: "frappes",
     tab: "Frappés y Especiales",
-    title: "FRAPPÉS HOUSE",
+    title: "Frappés House",
     sub: "Textura cremosa y café de altura",
     heroId: "frappe_supremo",
-    listIds: ["frappe_supremo", "frappe_beancraft", "taro_frappe", "latte_caramelo", "mocha_blanco"],
+    mascota: "hielito",
+    altVerde: false,
+    listIds: ["frappe_supremo", "frappe_beancraft", "taro_frappe", "protea_frappe", "mocha_blanco"],
     tileIds: ["frappe_supremo", "frappe_beancraft", "taro_frappe"]
   },
   {
     id: "cafes",
     tab: "Cafés Calientes",
-    title: "CAFÉ BARRA",
+    title: "Café Barra",
     sub: "Espresso recién molido al momento",
     heroId: "flat_white",
-    listIds: ["flat_white", "capuchino_duo", "iced_latte", "chai_latte", "chocolate_cacao"],
+    mascota: "taza",
+    altVerde: true,
+    listIds: ["flat_white", "latte_caramelo", "capuchino_duo", "iced_latte", "chai_latte"],
     tileIds: ["flat_white", "capuchino_duo", "iced_latte"]
   },
   {
     id: "frias",
     tab: "Bebidas Frías",
-    title: "REFRESHER & TÉ",
+    title: "Refresher & Té",
     sub: "Frutas, tisanas, matcha y cold brew",
     heroId: "refresher_duo",
-    listIds: ["refresher_duo", "tisana_frutos", "refresher_fresa", "te_durazno", "matcha_latte"],
+    mascota: "espuma",
+    altVerde: false,
+    listIds: ["refresher_duo", "cold_brew", "tisana_frutos", "matcha_latte", "te_durazno"],
     tileIds: ["refresher_duo", "tisana_frutos", "matcha_latte"]
   },
   {
     id: "reposteria",
     tab: "Repostería",
-    title: "HORNO ARTESANAL",
+    title: "Horno Artesanal",
     sub: "Recién horneado para tu café",
     heroId: "concha_choco",
-    listIds: ["concha_choco", "rol_canela", "capuchino", "latte_caramelo"],
-    tileIds: ["concha_choco", "rol_canela", "capuchino"]
+    mascota: "croissant",
+    altVerde: true,
+    listIds: ["concha_choco", "rol_canela", "chocolate_cacao", "capuchino_duo"],
+    tileIds: ["concha_choco", "rol_canela", "chocolate_cacao"]
   }
 ];
 
 const HERO_IDS = ["frappe_supremo", "refresher_duo", "frappe_beancraft", "latte_caramelo", "cold_brew"];
 
+const QUIZ_QUESTIONS = [
+  {
+    q: "¿Cómo es tu plan ideal de sábado?",
+    opts: [
+      { label: "Cine y palomitas", pick: "frappe_supremo" },
+      { label: "Salir a caminar", pick: "cold_brew" },
+      { label: "Maratón de series", pick: "latte_caramelo" },
+      { label: "Brunch con amigos", pick: "matcha_latte" }
+    ]
+  },
+  {
+    q: "¿Qué temperatura prefieres hoy?",
+    opts: [
+      { label: "Bien frío con hielo", pick: "cold_brew" },
+      { label: "Frappeado y cremoso", pick: "frappe_supremo" },
+      { label: "Calentito y suave", pick: "latte_caramelo" },
+      { label: "Frutal y ligero", pick: "refresher_duo" }
+    ]
+  },
+  {
+    q: "¿Qué sabor te llama más?",
+    opts: [
+      { label: "Café directo y tostado", pick: "cold_brew" },
+      { label: "Caramelo dulce", pick: "latte_caramelo" },
+      { label: "Matcha herbal", pick: "matcha_latte" },
+      { label: "Frutos rojos", pick: "refresher_duo" }
+    ]
+  },
+  {
+    q: "¿Cuánta energía necesitas?",
+    opts: [
+      { label: "Mucha, voy con prisa", pick: "cold_brew" },
+      { label: "Media, paso a paso", pick: "latte_caramelo" },
+      { label: "Tranquilo y balanceado", pick: "matcha_latte" },
+      { label: "Un antojo dulce", pick: "frappe_supremo" }
+    ]
+  },
+  {
+    q: "¿Con qué acompañarías tu bebida?",
+    opts: [
+      { label: "Concha de chocolate", pick: "latte_caramelo" },
+      { label: "Algo sin tanta azúcar", pick: "cold_brew" },
+      { label: "Crema batida arriba", pick: "frappe_supremo" },
+      { label: "Hielito extra", pick: "refresher_duo" }
+    ]
+  }
+];
+
 // ==================== ESTADO GLOBAL ====================
 const state = {
   view: "home",
+  heroStep: 0,
   heroIdx: 0,
+  heroBuilder: {
+    size: "mediano",
+    milk: "deslac",
+    extras: new Set()
+  },
   sheetIdx: 0,
   menuCat: "Todo",
   menuQuery: "",
   menuFavOnly: false,
   favorites: new Set(["frappe_supremo", "refresher_duo"]),
   branchId: "centro",
-  user: null, // { name, email, phone, password }
+  branchSearch: "",
+  branchGeoNote: "",
+  user: null,
   registeredEmails: new Set(["cliente@beancraft.mx"]),
   usedCoupons: new Set(),
   appliedCoupon: null,
@@ -475,17 +520,19 @@ const state = {
       qty: 1
     }
   ],
-  checkoutMode: "now", // 'now' | 'scheduled'
+  checkoutMode: "now",
   scheduledHour: "20:00",
-  payMethod: "tarjeta", // 'tarjeta' | 'efectivo'
-  activeOrder: null, // { id, code, branchId, statusIdx, items, total, mode, scheduledHour, payMethod, rated }
+  payMethod: "tarjeta",
+  activeOrder: null,
+  quizStep: -1, // -1 portada, 0..4 preguntas, 5 resultado
+  quizScores: {},
+  quizResultId: "cold_brew",
   notifications: [
-    { id: 1, title: "Bienvenido a BeanCraft", msg: "Usa el código BIENVENIDA para $30 de descuento.", time: "hoy" }
+    { id: 1, title: "Hoy hay promo", msg: "Usa el código BIENVENIDA para -$30 MXN en tu pedido.", time: "hoy" }
   ],
-  cust: null // { productId, size, milk, sweet, extras: Set, qty }
+  cust: null,
+  designMood: "feliz"
 };
-
-const ORDER_STATES = ["Recibido", "Preparando", "Listo para recoger", "Entregado"];
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const productById = (id) => PRODUCTS.find((p) => p.id === id);
@@ -493,19 +540,19 @@ const branchById = (id) => BRANCHES.find((b) => b.id === id);
 
 function renderProductArt(p, size = 100) {
   if (p.img) return `<img src="${p.img}" alt="${p.name}">`;
-  if (p.bakery) return conchaSvg(p.bakery, size);
-  return cupSvg(p.sleeve, "#3A2219", Boolean(p.iced), size);
+  return conchaSvg(p.bakeryToken || "var(--c-tostado)", size);
 }
 
 // ==================== SPLASH ====================
 function initSplash() {
+  $("#splashMascot").innerHTML = renderMascota("grano", "feliz", { size: 92 });
   const splash = $("#splashScreen");
   const hide = () => splash.classList.add("done");
   $("#skipSplashBtn").addEventListener("click", hide);
   setTimeout(hide, 1400);
 }
 
-// ==================== NAVEGACIÓN ENTRE VISTAS ====================
+// ==================== NAVEGACIÓN ====================
 function navigate(view) {
   state.view = view;
   document.querySelectorAll(".view").forEach((sec) => {
@@ -522,6 +569,7 @@ function navigate(view) {
   if (view === "cart") renderCartView();
   if (view === "orders") renderOrdersView();
   if (view === "profile") renderProfileView();
+  if (view === "design") renderDesignView();
   window.scrollTo({ top: 0, behavior: "instant" });
 }
 
@@ -535,11 +583,12 @@ function updateBadges() {
   ob.hidden = !state.activeOrder || state.activeOrder.statusIdx === 3;
 }
 
-// ==================== NOTIFICACIONES (RF-10) ====================
+// ==================== TOAST ====================
 let toastTimer;
-function pushToast(title, msg) {
+function pushToast(title, msg, mascota = "taza") {
   state.notifications.unshift({ id: Date.now(), title, msg, time: "ahora" });
   $("#notifDot").hidden = false;
+  $("#toastMascot").innerHTML = renderMascota(mascota, "feliz", { size: 36 });
   $("#toastTitle").textContent = title;
   $("#toastMsg").textContent = msg;
   const toast = $("#pushToast");
@@ -548,8 +597,16 @@ function pushToast(title, msg) {
   toastTimer = setTimeout(() => { toast.hidden = true; }, 4500);
 }
 
-// ==================== CARRUSEL HERO GIRATORIO 3D (ESTILO LUMA BOBA SHOP) ====================
-state.heroStep = 0;
+// ==================== 1. HERO ARMADOR + CARRUSEL 3D GIRATORIO ====================
+function calcBuilderPrice(productId, builder) {
+  return calcUnitPrice({
+    productId,
+    size: builder.size,
+    milk: builder.milk,
+    sweet: "sin",
+    extras: builder.extras
+  });
+}
 
 function positionHeroRing(dragDeltaSteps = 0) {
   const total = HERO_IDS.length;
@@ -558,7 +615,6 @@ function positionHeroRing(dragDeltaSteps = 0) {
   const activeLogical = ((Math.round(state.heroStep) % total) + total) % total;
 
   cups.forEach((cupBtn, i) => {
-    // Ángulo relativo más corto para giro continuo
     let diff = i - (state.heroStep - dragDeltaSteps);
     while (diff > total / 2) diff -= total;
     while (diff < -total / 2) diff += total;
@@ -566,11 +622,11 @@ function positionHeroRing(dragDeltaSteps = 0) {
     const rad = (diff * 2 * Math.PI) / total;
     const cos = Math.cos(rad);
     const sin = Math.sin(rad);
-    const x = sin * 126;
+    const x = sin * 124;
     const y = (1 - cos) * 18;
-    const scale = 0.56 + (cos + 1) * 0.22; // 0.56 atrás -> 1.00 al frente
-    const tilt = sin * 8;
-    const opacity = 0.25 + (cos + 1) * 0.375;
+    const scale = 0.56 + (cos + 1) * 0.22;
+    const tilt = sin * 6;
+    const opacity = 0.28 + (cos + 1) * 0.36;
     const zIndex = Math.round((cos + 1) * 10);
 
     cupBtn.classList.toggle("dragging", dragDeltaSteps !== 0);
@@ -587,28 +643,39 @@ function renderHero() {
   state.heroIdx = idx;
 
   const cur = productById(HERO_IDS[idx]);
-  $("#heroCarousel").style.setProperty("--tint", cur.tint || "rgba(200,16,46,.5)");
-  $("#heroGhost").textContent = cur.ghost || cur.name.toUpperCase();
-  $("#heroStage").setAttribute("aria-label", `${idx + 1} de ${total}`);
-  $("#heroCount").textContent = `${String(idx + 1).padStart(2, "0")} — ${String(total).padStart(2, "0")}`;
-  $("#heroEyebrow").textContent = `— ${cur.cat.toUpperCase()} · SAN LUIS R.C.`;
+  const liveTotal = calcBuilderPrice(cur.id, state.heroBuilder);
+
+  $("#heroStage").setAttribute("aria-label", cur.name);
+  $("#heroCategoryLabel").textContent = cur.cat;
   $("#heroTitle").textContent = cur.name;
-  $("#heroPrice").textContent = `$${cur.price}`;
+  $("#heroLiveTotal").textContent = `$${liveTotal}`;
   $("#heroDesc").textContent = cur.desc;
 
-  $("#heroIndexList").innerHTML = HERO_IDS.map((id, i) => {
+  $("#heroDrinkChips").innerHTML = HERO_IDS.map((id, i) => {
     const item = productById(id);
     const short = {
       frappe_supremo: "Supremo",
       refresher_duo: "Refresher",
       frappe_beancraft: "Frappé",
       latte_caramelo: "Latte",
-      cold_brew: "Cold Brew"
-    }[id] || item.name.split(" ")[0];
-    return `<button type="button" role="tab" aria-selected="${i === idx}" data-hero-idx="${i}"><i>0${i + 1}</i> ${short}</button>`;
+      cold_brew: "Cold brew"
+    }[id] || item.name;
+    return `<button type="button" class="pill-opt" role="tab" aria-selected="${i === idx}" data-hero-idx="${i}">${short}</button>`;
   }).join("");
 
-  $("#heroLive").textContent = `${cur.name}, ${cur.price} pesos (${idx + 1} de ${total})`;
+  $("#heroSizeChips").innerHTML = OPTIONS.size.map((s) =>
+    `<button type="button" class="pill-opt" aria-pressed="${state.heroBuilder.size === s.id}" data-hb-size="${s.id}">${s.label} +$${s.cost}</button>`
+  ).join("");
+
+  $("#heroMilkChips").innerHTML = OPTIONS.milk.map((m) =>
+    `<button type="button" class="pill-opt" aria-pressed="${state.heroBuilder.milk === m.id}" data-hb-milk="${m.id}">${m.label} +$${m.cost}</button>`
+  ).join("");
+
+  $("#heroExtraChips").innerHTML = OPTIONS.extras.map((ex) =>
+    `<button type="button" class="pill-opt" aria-pressed="${state.heroBuilder.extras.has(ex.id)}" data-hb-extra="${ex.id}">${ex.label} +$${ex.cost}</button>`
+  ).join("");
+
+  $("#heroLive").textContent = `${cur.name}, precio actual ${liveTotal} pesos.`;
   positionHeroRing(0);
 }
 
@@ -623,6 +690,11 @@ function spinHeroTo(targetIdx) {
 }
 
 function initHero() {
+  // Mascotas alrededor del Armador (Sección 6)
+  $("#heroMascotLeft").innerHTML = renderMascota("grano", "feliz", { size: 54, rotation: -2 });
+  $("#heroMascotRight").innerHTML = renderMascota("espuma", "guino", { size: 54, rotation: 2 });
+  $("#heroMascotTop").innerHTML = renderMascota("taza", "sorprendido", { size: 50, holo: true, rotation: 2 });
+
   const ring = $("#heroRing");
   ring.innerHTML = HERO_IDS.map((id, i) => {
     const p = productById(id);
@@ -642,15 +714,39 @@ function initHero() {
     else spinHeroTo(target);
   });
 
-  $("#heroIndexList").addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-hero-idx]");
-    if (!btn) return;
-    spinHeroTo(Number(btn.dataset.heroIdx));
+  $("#heroCarousel").addEventListener("click", (e) => {
+    const idxBtn = e.target.closest("[data-hero-idx]");
+    if (idxBtn) { spinHeroTo(Number(idxBtn.dataset.heroIdx)); return; }
+    const sBtn = e.target.closest("[data-hb-size]");
+    if (sBtn) { state.heroBuilder.size = sBtn.dataset.hbSize; renderHero(); return; }
+    const mBtn = e.target.closest("[data-hb-milk]");
+    if (mBtn) { state.heroBuilder.milk = mBtn.dataset.hbMilk; renderHero(); return; }
+    const exBtn = e.target.closest("[data-hb-extra]");
+    if (exBtn) {
+      const id = exBtn.dataset.hbExtra;
+      if (state.heroBuilder.extras.has(id)) state.heroBuilder.extras.delete(id);
+      else state.heroBuilder.extras.add(id);
+      renderHero();
+    }
   });
-  $("#heroOrderBtn").addEventListener("click", () => openCustomizer(HERO_IDS[state.heroIdx]));
+
+  $("#heroOrderBtn").addEventListener("click", () => {
+    const pid = HERO_IDS[state.heroIdx];
+    const p = productById(pid);
+    state.cart.push({
+      uid: `hero-${Date.now()}`,
+      productId: pid,
+      size: state.heroBuilder.size,
+      milk: state.heroBuilder.milk,
+      sweet: "sin",
+      extras: [...state.heroBuilder.extras],
+      qty: 1
+    });
+    updateBadges();
+    pushToast("Bebida armada al carrito", `${p.name} · $${calcBuilderPrice(pid, state.heroBuilder)} MXN`, p.mascota);
+  });
   $("#heroMenuBtn").addEventListener("click", () => navigate("menu"));
 
-  // Arrastrar en vivo para girar el carrusel 3D
   let startX = null;
   let lastDx = 0;
   const stage = $("#heroStage");
@@ -678,14 +774,34 @@ function initHero() {
   stage.addEventListener("pointercancel", endDrag);
 }
 
-// ==================== HOJA DE MENÚ SELECCIONABLE (INICIO, ESTILO LUMA) ====================
+// ==================== 2. MOSAICO DE PROMOCIONES (CEREZA + LIMÓN) ====================
+function renderPromos() {
+  const promos = [
+    { code: "BIENVENIDA", title: "Primer pedido -$30", desc: "Cupón de bienvenida aplicable en tu carrito.", vig: "Vigencia: una vez por cliente" },
+    { code: "OTONO2X1", title: "-20% en temporada", desc: "Aplica en frappés y bebidas calientes de la casa.", vig: "Hasta el 30 de noviembre" },
+    { code: "CAFE15", title: "-$15 en cafés", desc: "Descuento directo en latte, capuchino o americano.", vig: "Jueves, todo el mes" }
+  ];
+  $("#promoTrack").innerHTML = promos.map((pr) => `
+    <button type="button" class="promo-card" data-promo-code="${pr.code}">
+      <span class="promo-card-title">${pr.title}</span>
+      <p class="promo-card-desc">${pr.desc}</p>
+      <span class="promo-card-vig">${pr.vig} · Código ${pr.code}</span>
+    </button>`).join("");
+
+  $("#promoTrack").addEventListener("click", (e) => {
+    const card = e.target.closest("[data-promo-code]");
+    if (!card) return;
+    const code = card.dataset.promoCode;
+    if (tryApplyCoupon(code)) navigate("cart");
+  });
+}
+
+// ==================== 3. HOJA DE MENÚ SELECCIONABLE (INICIO) ====================
 function renderMenuSheetSection() {
-  // Tabs
   $("#sheetTabs").innerHTML = SHEET_PAGES.map((pg, i) =>
-    `<button type="button" class="ls-tab" role="tab" aria-selected="${i === state.sheetIdx}" data-sheet-idx="${i}">${pg.tab}</button>`
+    `<button type="button" class="chip" role="tab" aria-selected="${i === state.sheetIdx}" data-sheet-idx="${i}">${pg.tab}</button>`
   ).join("");
 
-  // Poster Sheets
   $("#sheetBookTrack").innerHTML = SHEET_PAGES.map((pg, i) => {
     const heroProd = productById(pg.heroId);
     const listHtml = pg.listIds.map((pid) => {
@@ -708,16 +824,17 @@ function renderMenuSheetSection() {
     }).join("");
 
     return `
-      <article class="poster-sheet" role="group" aria-roledescription="slide" aria-label="${i + 1} de ${SHEET_PAGES.length}">
-        <div class="poster-top">
+      <article class="poster-sheet" role="group" aria-roledescription="slide" aria-label="${pg.title}">
+        <div class="poster-top ${pg.altVerde ? "alt-verde" : ""}">
           <div>
             <h3 class="poster-cat">${pg.title}</h3>
             <p class="poster-sub">${pg.sub}</p>
             <div class="poster-list">${listHtml}</div>
           </div>
-          <button type="button" class="poster-hero-cup" data-pick-id="${heroProd.id}" style="background:none;border:none" aria-label="Elegir ${heroProd.name}">
-            ${renderProductArt(heroProd, 96)}
+          <button type="button" class="poster-hero-cup" data-pick-id="${heroProd.id}" aria-label="Armar ${heroProd.name}">
+            ${renderProductArt(heroProd, 92)}
             <span>Toca para pedir</span>
+            <div style="margin-top:4px">${renderMascota(pg.mascota, "feliz", { size: 36 })}</div>
           </button>
         </div>
         <div class="poster-bottom">${tilesHtml}</div>
@@ -729,13 +846,13 @@ function renderMenuSheetSection() {
 
 function syncSheetControls() {
   const idx = state.sheetIdx;
-  $("#sheetPageCount").textContent = `${String(idx + 1).padStart(2, "0")} / ${String(SHEET_PAGES.length).padStart(2, "0")}`;
-  document.querySelectorAll("#sheetTabs .ls-tab").forEach((tab, i) => {
+  const pg = SHEET_PAGES[idx];
+  $("#sheetPageName").textContent = pg.tab;
+  document.querySelectorAll("#sheetTabs .chip").forEach((tab, i) => {
     tab.setAttribute("aria-selected", String(i === idx));
     if (i === idx) tab.scrollIntoView({ block: "nearest", inline: "nearest" });
   });
 
-  const pg = SHEET_PAGES[idx];
   const uniqueIds = [...new Set([...pg.listIds, ...pg.tileIds])];
   $("#sheetQuickChips").innerHTML = uniqueIds.map((pid) => {
     const p = productById(pid);
@@ -748,9 +865,7 @@ function goToSheet(idx) {
   state.sheetIdx = (idx + total) % total;
   const track = $("#sheetBookTrack");
   const card = track.children[state.sheetIdx];
-  if (card) {
-    track.scrollTo({ left: card.offsetLeft - 18, behavior: "smooth" });
-  }
+  if (card) track.scrollTo({ left: card.offsetLeft - 16, behavior: "smooth" });
   syncSheetControls();
 }
 
@@ -763,13 +878,11 @@ function initMenuSheet() {
   $("#sheetPrevBtn").addEventListener("click", () => goToSheet(state.sheetIdx - 1));
   $("#sheetNextBtn").addEventListener("click", () => goToSheet(state.sheetIdx + 1));
 
-  // Click en cualquier bebida de la hoja o chips abre el personalizador (como Luma)
   $("#homeMenuSheetSection").addEventListener("click", (e) => {
     const pick = e.target.closest("[data-pick-id]");
     if (pick) openCustomizer(pick.dataset.pickId);
   });
 
-  // Sincroniza índice al deslizar la hoja manualmente
   let scrollT;
   $("#sheetBookTrack").addEventListener("scroll", () => {
     clearTimeout(scrollT);
@@ -791,7 +904,262 @@ function initMenuSheet() {
   });
 }
 
-// ==================== MÓDULO MENÚ (TARJETAS CRISTALINAS + BEBIDAS GRANDES) ====================
+// ==================== 4. QUIZ DE BEBIDAS EN PÁGINA (SEC. 9.5) ====================
+function renderQuiz() {
+  const box = $("#quizContainer");
+  if (state.quizStep === -1) {
+    box.innerHTML = `
+      <div class="quiz-card">
+        <h2 class="titulo-mixto">El quiz de las <em>Bebidas</em></h2>
+        <p style="font-size:16px">Descubre cuál eres en 5 preguntas rápidas.</p>
+        <div class="quiz-collage">
+          ${renderMascota("grano", "feliz", { size: 46, rotation: -2 })}
+          ${renderMascota("espuma", "guino", { size: 46 })}
+          ${renderMascota("hielito", "feliz", { size: 52, holo: true, rotation: 2 })}
+          ${renderMascota("croissant", "feliz", { size: 46 })}
+          ${renderMascota("taza", "sorprendido", { size: 46, rotation: -1 })}
+        </div>
+        <button type="button" class="btn-primary full" id="startQuizBtn">¡Llévame ya!</button>
+      </div>`;
+    return;
+  }
+
+  if (state.quizStep >= 0 && state.quizStep < QUIZ_QUESTIONS.length) {
+    const q = QUIZ_QUESTIONS[state.quizStep];
+    const pct = Math.round(((state.quizStep + 1) / QUIZ_QUESTIONS.length) * 100);
+    box.innerHTML = `
+      <div class="quiz-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <strong style="font-size:14px">Pregunta ${state.quizStep + 1} de ${QUIZ_QUESTIONS.length}</strong>
+          <span class="marcatextos" style="font-size:13px">${pct}%</span>
+        </div>
+        <div class="quiz-progress" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100">
+          <div class="quiz-progress-fill" style="width:${pct}%"></div>
+        </div>
+        <h3 style="font-family:var(--font-display);font-size:22px;line-height:1.15">${q.q}</h3>
+        <div class="quiz-options" role="radiogroup" aria-label="${q.q}">
+          ${q.opts.map((o, idx) => `<button type="button" class="quiz-opt" role="radio" aria-checked="false" data-qopt="${idx}">${o.label}</button>`).join("")}
+        </div>
+        <div>
+          <button type="button" class="link" id="quizBackBtn">← Atrás</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const resProd = productById(state.quizResultId) || productById("cold_brew");
+  const isCold = resProd.id === "cold_brew";
+  const quote = isCold
+    ? "Tranquilo, directo y con carácter."
+    : resProd.desc;
+
+  box.innerHTML = `
+    <div class="quiz-card">
+      <div class="quiz-result-box">
+        ${renderMascota("hielito", "guino", { size: 64, label: "Hielito guiñando" })}
+        <div>
+          <h3 class="titulo-mixto" style="font-size:22px">Eres un <em>${resProd.name}</em></h3>
+          <p style="font-size:14px;margin-top:4px">${quote}</p>
+          <span class="marcatextos" style="font-size:14px;margin-top:6px">Desde $${resProd.price} MXN</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)">
+        <button type="button" class="btn-primary" id="quizArmarBtn">Armarla</button>
+        <button type="button" class="btn-secondary" id="quizPedirBtn">Pedir en la app</button>
+      </div>
+      <button type="button" class="link" id="quizResetBtn">Repetir quiz</button>
+    </div>`;
+}
+
+function initQuiz() {
+  renderQuiz();
+  $("#quizContainer").addEventListener("click", (e) => {
+    if (e.target.id === "startQuizBtn") {
+      state.quizStep = 0;
+      state.quizScores = {};
+      renderQuiz();
+      return;
+    }
+    if (e.target.id === "quizBackBtn") {
+      state.quizStep = Math.max(-1, state.quizStep - 1);
+      renderQuiz();
+      return;
+    }
+    if (e.target.id === "quizResetBtn") {
+      state.quizStep = -1;
+      state.quizScores = {};
+      renderQuiz();
+      return;
+    }
+    if (e.target.id === "quizArmarBtn") {
+      const idx = HERO_IDS.indexOf(state.quizResultId);
+      if (idx >= 0) spinHeroTo(idx);
+      $("#heroCarousel").scrollIntoView({ behavior: "smooth" });
+      openCustomizer(state.quizResultId);
+      return;
+    }
+    if (e.target.id === "quizPedirBtn") {
+      openCustomizer(state.quizResultId);
+      return;
+    }
+    const optBtn = e.target.closest("[data-qopt]");
+    if (optBtn) {
+      const q = QUIZ_QUESTIONS[state.quizStep];
+      const pick = q.opts[Number(optBtn.dataset.qopt)].pick;
+      state.quizScores[pick] = (state.quizScores[pick] || 0) + 1;
+      state.quizStep++;
+      if (state.quizStep >= QUIZ_QUESTIONS.length) {
+        const ranked = Object.entries(state.quizScores).sort((a, b) => b[1] - a[1]);
+        state.quizResultId = ranked[0]?.[0] || "cold_brew";
+      }
+      renderQuiz();
+    }
+  });
+}
+
+// ==================== 5. LÍNEA DE PEDIDO EN INICIO (SEC. 9.6) ====================
+function renderHomeOrderTimeline() {
+  const curIdx = state.activeOrder ? state.activeOrder.statusIdx : 1;
+  const meta = ORDER_META[curIdx];
+  $("#homeOrderTimeline").innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <span class="insignia-estado ${meta.key}">
+        ${stateIconSvg(meta.key)}
+        <span>${meta.label}</span>
+      </span>
+      <span style="font-size:14px;font-weight:600">${state.activeOrder ? `Pedido #${state.activeOrder.id}` : "Vista previa del pedido"}</span>
+    </div>
+    <div class="estado-steps">
+      ${ORDER_META.map((m, i) => `
+        <div class="estado-step ${i === curIdx ? "activo" : ""}">
+          ${renderMascota(m.mascota, i === curIdx ? "feliz" : "pensando", { size: 40 })}
+          <span>${m.label}</span>
+        </div>`).join("")}
+    </div>
+    <p style="font-size:16px;font-weight:600" aria-live="polite">"${meta.copy}"</p>
+    <button type="button" class="btn-secondary full" data-nav="orders">Ir a Mi pedido</button>`;
+}
+
+// ==================== 6. SUCURSALES + MAPA SVG PROPIO (SEC. 9.4) ====================
+function renderBranchesSection() {
+  const q = state.branchSearch.trim().toLowerCase();
+  const list = BRANCHES.filter((b) =>
+    !q || `${b.name} ${b.addr} ${b.ref}`.toLowerCase().includes(q)
+  );
+
+  $("#branchesContainer").innerHTML = `
+    <h2 class="titulo-mixto">Pasa por <em>tu</em> barra</h2>
+    <p style="font-size:16px;margin-top:4px">Elige la más cercana y aparta tu hora de recogida.</p>
+
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+      <label class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--c-tostado)" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="branchSearchInput" value="${state.branchSearch}" placeholder="Busca por C.P., colonia o dirección">
+      </label>
+      <button type="button" class="btn-secondary full" id="useGeoBtn">Usar mi ubicación</button>
+      ${state.branchGeoNote ? `<p style="font-size:14px;color:var(--c-verde);font-weight:600">${state.branchGeoNote}</p>` : ""}
+    </div>
+
+    <div class="branch-list">
+      ${list.map((b) => `
+        <article class="branch-card ${b.id === state.branchId ? "selected" : ""}">
+          <div class="branch-card-top">
+            <strong style="font-family:var(--font-display);font-size:18px">${b.name}</strong>
+            <span class="branch-status ${b.openNow ? "open" : "closed"}">${b.openNow ? "Abierta" : "Cerrada"}</span>
+          </div>
+          <p style="font-size:14px">${b.addr}</p>
+          <p style="font-size:14px"><strong>Referencia:</strong> ${b.ref}</p>
+          <p style="font-size:14px">Hoy: ${b.hours}</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <button type="button" class="link" data-how-branch="${b.id}">Cómo llegar ↗</button>
+            <button type="button" class="chip" aria-pressed="${b.id === state.branchId}" data-pick-branch="${b.id}">
+              ${b.id === state.branchId ? "Seleccionada" : "Elegir barra"}
+            </button>
+          </div>
+          <div class="branch-slots">
+            ${["11:00", "12:00", "13:00"].map((h) => `<button type="button" class="slot-btn" data-quick-slot="${h}" data-pick-branch="${b.id}">${h}</button>`).join("")}
+          </div>
+        </article>`).join("")}
+    </div>
+
+    <div class="svg-map-card">
+      <strong style="display:block;font-size:14px;margin-bottom:6px">Mapa ilustrado de barras BeanCraft</strong>
+      <svg viewBox="0 0 340 130" width="100%" height="130" role="img" aria-label="Mapa ilustrado con ubicaciones de las 3 sucursales">
+        <rect width="340" height="130" rx="12" fill="var(--c-espuma)" stroke="var(--c-tostado)" stroke-width="2"/>
+        <path d="M12 40 H328 M12 88 H328 M110 10 V120 M240 10 V120" stroke="var(--c-menta)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M12 40 H328 M12 88 H328 M110 10 V120 M240 10 V120" stroke="var(--c-tostado)" stroke-width="1.2" stroke-dasharray="4 4"/>
+        ${BRANCHES.map((b) => {
+          const active = b.id === state.branchId;
+          return `
+            <g transform="translate(${b.mapPos.x},${b.mapPos.y})">
+              <circle cx="0" cy="0" r="${active ? 10 : 7}" fill="${active ? "var(--c-miel)" : "var(--c-verde)"}" stroke="var(--c-tostado)" stroke-width="2"/>
+              <text x="12" y="4" fill="var(--c-tostado)" font-size="11" font-weight="700" font-family="var(--font-body)">${b.name.replace("BeanCraft ", "")}</text>
+            </g>`;
+        }).join("")}
+      </svg>
+    </div>`;
+}
+
+function initBranchesSection() {
+  renderBranchesSection();
+  $("#branchesContainer").addEventListener("input", (e) => {
+    if (e.target.id === "branchSearchInput") {
+      state.branchSearch = e.target.value;
+      renderBranchesSection();
+      const inp = $("#branchSearchInput");
+      inp.focus();
+      inp.setSelectionRange(inp.value.length, inp.value.length);
+    }
+  });
+  $("#branchesContainer").addEventListener("click", (e) => {
+    if (e.target.id === "useGeoBtn") {
+      if (!navigator.geolocation) {
+        state.branchId = "centro";
+        state.branchGeoNote = "Sugerida más cercana: BeanCraft Centro (0.8 km).";
+        renderBranchesSection();
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          state.branchId = "centro";
+          state.branchGeoNote = "Ubicación detectada: BeanCraft Centro es la más cercana (0.8 km).";
+          updateBranchHeader();
+          renderBranchesSection();
+        },
+        () => {
+          state.branchId = "centro";
+          state.branchGeoNote = "Sugerida por zona: BeanCraft Centro (0.8 km).";
+          updateBranchHeader();
+          renderBranchesSection();
+        }
+      );
+      return;
+    }
+    const how = e.target.closest("[data-how-branch]");
+    if (how) {
+      const b = branchById(how.dataset.howBranch);
+      pushToast(`Ruta a ${b.name}`, `${b.addr} (${b.ref})`, "grano");
+      return;
+    }
+    const pick = e.target.closest("[data-pick-branch]");
+    if (pick) {
+      state.branchId = pick.dataset.pickBranch;
+      if (pick.dataset.quickSlot) {
+        state.checkoutMode = "scheduled";
+        state.scheduledHour = pick.dataset.quickSlot;
+      }
+      updateBranchHeader();
+      renderBranchesSection();
+    }
+  });
+}
+
+function updateBranchHeader() {
+  const b = branchById(state.branchId);
+  $("#homeBranchText").innerHTML = `<strong>${b.name}</strong> · ${b.openNow ? `Abierta hasta ${b.close}:00` : "Cerrada por ahora"}`;
+}
+
+// ==================== MÓDULO MENÚ: TARJETAS CRISTALINAS PLANAS ====================
 function renderCrystalMenu() {
   const cats = ["Todo", "Cafés", "Bebidas frías", "Frappés", "Repostería"];
   $("#menuFilterChips").innerHTML = cats.map((c) =>
@@ -809,31 +1177,45 @@ function renderCrystalMenu() {
   $("#menuCountLabel").textContent = `${filtered.length} producto${filtered.length === 1 ? "" : "s"}`;
 
   if (filtered.length === 0) {
-    $("#crystalMenuGrid").innerHTML = `<p style="grid-column:1/-1;text-align:center;padding:36px 12px;color:var(--mut);font-weight:600">No hay productos con ese filtro.</p>`;
+    $("#crystalMenuGrid").innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:32px 12px;display:flex;flex-direction:column;align-items:center;gap:10px">
+        ${renderMascota("hielito", "pensando", { size: 72 })}
+        <p style="font-size:16px;font-weight:700">No encontramos bebidas con ese filtro.</p>
+        <button type="button" class="btn-secondary" id="clearMenuFilterBtn">Ver todas las bebidas</button>
+      </div>`;
+    $("#clearMenuFilterBtn").addEventListener("click", () => {
+      state.menuCat = "Todo";
+      state.menuQuery = "";
+      state.menuFavOnly = false;
+      $("#menuSearchInput").value = "";
+      $("#menuFavFilterBtn").setAttribute("aria-pressed", "false");
+      renderCrystalMenu();
+    });
     return;
   }
 
   $("#crystalMenuGrid").innerHTML = filtered.map((p) => {
     const isFav = state.favorites.has(p.id);
     return `
-      <article class="ccard" style="--c1:${p.c1};--c2:${p.c2};--cg:${p.glow}">
-        ${crystalFacets(p.glow)}
+      <article class="ccard">
+        ${crystalFacets(p.crystalToken)}
         <div class="cc-head">
           <div class="cc-title-col">
             <h3 class="cc-name">${p.name}</h3>
             <span class="cc-rate">★ ${p.rate.toFixed(1)}</span>
           </div>
           <button type="button" class="cc-fav" data-fav-id="${p.id}" aria-pressed="${isFav}" aria-label="Favorito ${p.name}">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
           </button>
         </div>
+        <div class="cc-sticker">${renderMascota(p.mascota, "feliz", { size: 32, rotation: 2 })}</div>
         <button type="button" class="cc-stage" data-open-id="${p.id}" aria-label="Personalizar ${p.name}">
           ${renderProductArt(p, 130)}
         </button>
         <div class="cc-glass-foot">
           <span class="cc-price">$${p.price.toFixed(2)}</span>
           <button type="button" class="cc-add" data-open-id="${p.id}" aria-label="Agregar ${p.name}">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
           </button>
         </div>
       </article>`;
@@ -874,7 +1256,7 @@ function initCrystalMenu() {
 // ==================== PERSONALIZADOR (RF-03, RN-02) ====================
 function calcUnitPrice(item) {
   const p = productById(item.productId);
-  if (!p.customizable) return p.price;
+  if (!p || !p.customizable) return p ? p.price : 0;
   const s = OPTIONS.size.find((x) => x.id === item.size)?.cost || 0;
   const m = OPTIONS.milk.find((x) => x.id === item.milk)?.cost || 0;
   const sw = OPTIONS.sweet.find((x) => x.id === item.sweet)?.cost || 0;
@@ -904,25 +1286,25 @@ function renderCustomizer() {
 
   const optsMarkup = p.customizable ? `
     <div>
-      <strong style="font-size:13px;display:block;margin-bottom:6px">Tamaño</strong>
+      <strong style="font-size:14px;display:block;margin-bottom:6px">Tamaño</strong>
       <div class="opt-grid">
         ${OPTIONS.size.map((o) => `<button type="button" class="opt-btn" data-opt="size" data-val="${o.id}" aria-pressed="${c.size === o.id}"><b>${o.label}</b><span>+$${o.cost}</span></button>`).join("")}
       </div>
     </div>
     <div>
-      <strong style="font-size:13px;display:block;margin-bottom:6px">Tipo de leche</strong>
+      <strong style="font-size:14px;display:block;margin-bottom:6px">Tipo de leche</strong>
       <div class="opt-grid four">
         ${OPTIONS.milk.map((o) => `<button type="button" class="opt-btn" data-opt="milk" data-val="${o.id}" aria-pressed="${c.milk === o.id}"><b>${o.label}</b><span>+$${o.cost}</span></button>`).join("")}
       </div>
     </div>
     <div>
-      <strong style="font-size:13px;display:block;margin-bottom:6px">Endulzante</strong>
+      <strong style="font-size:14px;display:block;margin-bottom:6px">Endulzante</strong>
       <div class="opt-grid four">
         ${OPTIONS.sweet.map((o) => `<button type="button" class="opt-btn" data-opt="sweet" data-val="${o.id}" aria-pressed="${c.sweet === o.id}"><b>${o.label}</b><span>+$${o.cost}</span></button>`).join("")}
       </div>
     </div>
     <div>
-      <strong style="font-size:13px;display:block;margin-bottom:6px">Extras</strong>
+      <strong style="font-size:14px;display:block;margin-bottom:6px">Extras</strong>
       <div style="display:flex;flex-direction:column;gap:6px">
         ${OPTIONS.extras.map((o) => `
           <label class="extra-item">
@@ -930,34 +1312,35 @@ function renderCustomizer() {
               <input type="checkbox" data-extra="${o.id}" ${c.extras.has(o.id) ? "checked" : ""}>
               ${o.label}
             </span>
-            <span style="color:var(--mut)">+$${o.cost}</span>
+            <span>+$${o.cost}</span>
           </label>`).join("")}
       </div>
     </div>
-  ` : `<p style="font-size:13px;color:var(--mut)">Producto de repostería artesanal listo para recoger.</p>`;
+  ` : `<p style="font-size:16px">Producto de repostería listo para recoger.</p>`;
 
   $("#custBody").innerHTML = `
     <div class="dlg-head">
       <h2 id="custTitle">${p.name}</h2>
       <button type="button" class="dlg-close" data-close-dlg="customizerDialog" aria-label="Cerrar">×</button>
     </div>
-    <div class="cust-hero" style="background:linear-gradient(135deg var(--in-oklab), ${p.c1}, ${p.c2})">
-      <span class="cust-price-burst">$${unit}</span>
+    <div class="cust-hero">
+      <span class="marcatextos cust-price-burst">$${unit}</span>
       <div class="cust-hero-img">${renderProductArt(p, 84)}</div>
       <div>
-        <span style="font-size:11px;font-weight:800;color:var(--red);text-transform:uppercase">${p.cat}</span>
-        <p style="font-size:13px;color:var(--ink);margin-top:3px;line-height:1.35">${p.desc}</p>
+        <span style="font-size:13px;font-weight:700;color:var(--c-verde)">${p.cat}</span>
+        <p style="font-size:14px;margin-top:4px;line-height:1.4">${p.desc}</p>
       </div>
+      <div>${renderMascota(p.mascota, "feliz", { size: 42 })}</div>
     </div>
     ${optsMarkup}
     <div class="qty-bar">
       <div class="stepper">
         <button type="button" id="custMinus" aria-label="Disminuir cantidad">−</button>
-        <strong style="min-width:18px;text-align:center">${c.qty}</strong>
+        <strong style="min-width:20px;text-align:center">${c.qty}</strong>
         <button type="button" id="custPlus" aria-label="Aumentar cantidad">+</button>
       </div>
       <button type="button" class="btn-primary" style="flex:1" id="custAddBtn">
-        Agregar al pedido · $${total}
+        Agregar · $${total}
       </button>
     </div>
   `;
@@ -979,6 +1362,7 @@ function initCustomizerEvents() {
       renderCustomizer();
     } else if (e.target.id === "custAddBtn") {
       const c = state.cust;
+      const p = productById(c.productId);
       state.cart.push({
         uid: `item-${Date.now()}`,
         productId: c.productId,
@@ -990,7 +1374,7 @@ function initCustomizerEvents() {
       });
       updateBadges();
       $("#customizerDialog").close();
-      pushToast("Agregado al carrito", `${c.qty} × ${productById(c.productId).name}`);
+      pushToast("Agregado al carrito", `${c.qty} × ${p.name}`, p.mascota);
     }
   });
   $("#custBody").addEventListener("change", (e) => {
@@ -1003,7 +1387,7 @@ function initCustomizerEvents() {
   });
 }
 
-// ==================== CARRITO, CUPONES Y CHECKOUT (RF-05, RF-06, RF-07, RF-08) ====================
+// ==================== CARRITO Y CHECKOUT DESLIZABLE ====================
 function calcCartSummary() {
   const subtotal = state.cart.reduce((s, item) => s + calcUnitPrice(item) * item.qty, 0);
   let discount = 0;
@@ -1019,9 +1403,10 @@ function renderCartView() {
   const host = $("#cartContent");
   if (state.cart.length === 0) {
     host.innerHTML = `
-      <div class="pad" style="text-align:center;padding-top:40px">
-        <p style="font-size:17px;font-weight:800">Tu carrito está vacío</p>
-        <p style="font-size:13.5px;color:var(--mut);margin:6px 0 18px">Explora el menú o elige una bebida en la hoja de inicio.</p>
+      <div class="pad" style="text-align:center;padding-top:32px;display:flex;flex-direction:column;align-items:center;gap:12px">
+        ${renderMascota("hielito", "pensando", { size: 80 })}
+        <p style="font-size:18px;font-weight:800">Tu carrito está vacío</p>
+        <p style="font-size:16px">Elige una bebida desde el Armador o el Menú completo.</p>
         <button type="button" class="btn-primary" id="emptyGoMenuBtn">Explorar menú</button>
       </div>`;
     $("#emptyGoMenuBtn").addEventListener("click", () => navigate("menu"));
@@ -1047,7 +1432,7 @@ function renderCartView() {
       : p.cat;
     return `
       <div class="citem">
-        <div class="c-art" style="background:rgba(255,255,255,.12)">${renderProductArt(p, 42)}</div>
+        <div class="c-art">${renderProductArt(p, 42)}</div>
         <div class="c-info">
           <b>${p.name}</b>
           <span>${subText}</span>
@@ -1066,14 +1451,14 @@ function renderCartView() {
     <div class="pad">
       <div class="coupon-card">
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <strong style="font-size:13.5px">Cupón de descuento (RN-01)</strong>
+          <strong style="font-size:14px">Cupón de descuento (RN-01)</strong>
           <button type="button" class="link" id="cartScanQrBtn">Escanear QR</button>
         </div>
         <div class="coupon-row">
-          <input type="text" id="couponInput" placeholder="Ej. BIENVENIDA o OTONO2X1" value="${state.appliedCoupon ? state.appliedCoupon.code : ""}">
-          <button type="button" class="btn-primary" style="height:40px;padding:0 14px;font-size:13px" id="applyCouponBtn">Aplicar</button>
+          <input type="text" id="couponInput" placeholder="BIENVENIDA o OTONO2X1" value="${state.appliedCoupon ? state.appliedCoupon.code : ""}">
+          <button type="button" class="btn-primary" id="applyCouponBtn">Aplicar</button>
         </div>
-        <p id="couponFeedback" style="font-size:12px;color:${state.appliedCoupon ? "var(--green)" : "var(--mut)"};font-weight:600">
+        <p id="couponFeedback" style="font-size:14px;font-weight:600;color:${state.appliedCoupon ? "var(--c-verde)" : "var(--c-tostado)"}">
           ${state.appliedCoupon ? `Aplicado: ${state.appliedCoupon.label}` : "Prueba BIENVENIDA, OTONO2X1 o VENCIDO25"}
         </p>
       </div>
@@ -1081,11 +1466,11 @@ function renderCartView() {
       <div class="totals-card">
         <div class="totals-line"><span>Subtotal</span><strong>$${subtotal.toFixed(2)}</strong></div>
         <div class="totals-line disc"><span>Descuento</span><strong>−$${discount.toFixed(2)}</strong></div>
-        <div class="totals-line grand"><span>Total</span><strong>$${total.toFixed(2)} MXN</strong></div>
+        <div class="totals-line grand"><span>Total</span><span class="marcatextos">$${total.toFixed(2)} MXN</span></div>
       </div>
 
       <div class="checkout-block">
-        <strong style="font-size:14px">Recoger en ${branch.name} (${branch.hours})</strong>
+        <strong style="font-size:16px">Recoger en ${branch.name} (${branch.hours})</strong>
         <div class="seg">
           <button type="button" data-mode="now" aria-pressed="${state.checkoutMode === "now"}">
             Ahora<small>Listo en 10 min</small>
@@ -1098,9 +1483,9 @@ function renderCartView() {
           <div class="slots">
             ${visibleSlots.map((sl) => `<button type="button" class="slot-btn" data-slot="${sl}" aria-pressed="${state.scheduledHour === sl}">${sl}</button>`).join("")}
           </div>
-          <p style="font-size:11.5px;color:var(--mut)">RN-03: solo horarios permitidos entre ${branch.open}:00 y ${branch.close}:00.</p>
+          <p style="font-size:14px">Solo horarios entre ${branch.open}:00 y ${branch.close}:00 (RN-03).</p>
         ` : ""}
-        <strong style="font-size:13.5px;margin-top:4px">Pago al recoger en mostrador (S2)</strong>
+        <strong style="font-size:14px">Pago al recoger en mostrador</strong>
         <div class="seg">
           <button type="button" data-pay="tarjeta" aria-pressed="${state.payMethod === "tarjeta"}">Tarjeta en mostrador</button>
           <button type="button" data-pay="efectivo" aria-pressed="${state.payMethod === "efectivo"}">Efectivo</button>
@@ -1123,25 +1508,25 @@ function tryApplyCoupon(raw) {
   const fb = $("#couponFeedback");
   if (!code) {
     state.appliedCoupon = null;
-    renderCartView();
-    return;
+    if (state.view === "cart") renderCartView();
+    return false;
   }
   const c = COUPONS[code];
   if (!c) {
-    if (fb) { fb.style.color = "var(--red)"; fb.textContent = "Cupón no encontrado."; }
+    if (fb) { fb.style.color = "var(--c-cereza)"; fb.textContent = "Cupón no encontrado. Revisa el código."; }
     return false;
   }
   if (!c.active) {
-    if (fb) { fb.style.color = "var(--red)"; fb.textContent = `Cupón ${code} vencido o desactivado (RN-01).`; }
+    if (fb) { fb.style.color = "var(--c-cereza)"; fb.textContent = `El cupón ${code} ya venció o está desactivado.`; }
     return false;
   }
   if (state.usedCoupons.has(code)) {
-    if (fb) { fb.style.color = "var(--red)"; fb.textContent = `Ya usaste el cupón ${code} anteriormente.`; }
+    if (fb) { fb.style.color = "var(--c-cereza)"; fb.textContent = `Ya usaste el cupón ${code} en un pedido anterior.`; }
     return false;
   }
   state.appliedCoupon = c;
-  renderCartView();
-  pushToast("Cupón aplicado", `${c.code}: ${c.label}`);
+  if (state.view === "cart") renderCartView();
+  pushToast("Cupón aplicado", `${c.code}: ${c.label}`, "espuma");
   return true;
 }
 
@@ -1178,7 +1563,7 @@ function initCartEvents() {
 
 function confirmCheckoutOrder() {
   if (!state.user) {
-    openAuthModal("Inicia sesión para confirmar tu pedido");
+    openAuthModal("Inicia sesión para confirmar tu pedido.");
     return false;
   }
   const { total } = calcCartSummary();
@@ -1198,7 +1583,8 @@ function confirmCheckoutOrder() {
   state.cart = [];
   state.appliedCoupon = null;
   updateBadges();
-  pushToast(`Pedido #${state.activeOrder.id} recibido`, `Sucursal ${branchById(state.branchId).name} ya recibió tu orden.`);
+  renderHomeOrderTimeline();
+  pushToast(`Pedido #${state.activeOrder.id} recibido`, ORDER_META[0].copy, "grano");
   navigate("orders");
   return true;
 }
@@ -1217,7 +1603,7 @@ function bindCheckoutSlider() {
   const setPos = (x) => {
     currentX = Math.max(0, Math.min(maxDist, x));
     knob.style.transform = `translateX(${currentX}px)`;
-    fill.style.width = `${62 + currentX}px`;
+    fill.style.width = `${60 + currentX}px`;
   };
 
   const reset = () => {
@@ -1234,11 +1620,11 @@ function bindCheckoutSlider() {
     label.textContent = "¡Pedido confirmado!";
     setTimeout(() => {
       if (!confirmCheckoutOrder()) reset();
-    }, 180);
+    }, 160);
   };
 
   knob.addEventListener("pointerdown", (e) => {
-    maxDist = track.clientWidth - knob.offsetWidth - 10;
+    maxDist = track.clientWidth - knob.offsetWidth - 8;
     startX = e.clientX - currentX;
     knob.classList.add("dragging");
     knob.setPointerCapture(e.pointerId);
@@ -1258,11 +1644,10 @@ function bindCheckoutSlider() {
 
   knob.addEventListener("pointerup", release);
   knob.addEventListener("pointercancel", release);
-
   knob.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      maxDist = track.clientWidth - knob.offsetWidth - 10;
+      maxDist = track.clientWidth - knob.offsetWidth - 8;
       complete();
     }
   });
@@ -1274,9 +1659,10 @@ function renderOrdersView() {
   const o = state.activeOrder;
   if (!o) {
     host.innerHTML = `
-      <div class="track-card">
-        <p style="font-size:17px;font-weight:800">Sin pedidos activos</p>
-        <p style="font-size:13.5px;color:var(--mut);margin:8px 0 18px">Arma tu bebida y confirma desde el carrito para seguir su preparación en vivo.</p>
+      <div class="track-card" style="display:flex;flex-direction:column;align-items:center;gap:12px">
+        ${renderMascota("hielito", "pensando", { size: 78 })}
+        <p style="font-size:18px;font-weight:800">No tienes pedidos activos</p>
+        <p style="font-size:16px">Arma tu bebida y desliza en el carrito para seguir tu pedido.</p>
         <button type="button" class="btn-primary full" id="ordersToMenuBtn">Ir al menú</button>
       </div>`;
     $("#ordersToMenuBtn").addEventListener("click", () => navigate("menu"));
@@ -1284,30 +1670,38 @@ function renderOrdersView() {
   }
 
   const branch = branchById(o.branchId);
-  const statusName = ORDER_STATES[o.statusIdx];
+  const curMeta = ORDER_META[o.statusIdx];
   const digits = o.code.split("").map((d) => `<span>${d}</span>`).join("");
-  const stepsHtml = ORDER_STATES.map((st, i) => {
+
+  const stepsHtml = ORDER_META.map((m, i) => {
     const cls = i < o.statusIdx ? "done" : i === o.statusIdx ? "now" : "";
     const mark = i < o.statusIdx ? "✓" : i === o.statusIdx ? "•" : "";
     return `
       <div class="step ${cls}">
         <span class="step-dot">${mark}</span>
-        <div><b>${st}</b><span>${i <= o.statusIdx ? "Confirmado" : "Pendiente"}</span></div>
+        <div><b>${m.label}</b><span>${i <= o.statusIdx ? "Listo" : "Pendiente"}</span></div>
       </div>`;
   }).join("");
 
+  const nextMeta = ORDER_META[o.statusIdx + 1];
   const actionBtn = o.statusIdx < 3
-    ? `<button type="button" class="btn-primary full" id="advanceOrderBtn">Simular avance de sucursal → ${ORDER_STATES[o.statusIdx + 1]}</button>`
+    ? `<button type="button" class="btn-primary full" id="advanceOrderBtn">Avanzar estado: ${nextMeta.label}</button>`
     : o.rated
-      ? `<p class="msg-ok">Gracias. Tu calificación de este pedido ya fue registrada (RN-05).</p>`
-      : `<button type="button" class="btn-primary full" id="openRatingBtn">Calificar pedido y bebidas (RF-11)</button>`;
+      ? `<p class="msg-ok">Tu calificación ya quedó registrada (RN-05).</p>`
+      : `<button type="button" class="btn-accent full" id="openRatingBtn">Calificar pedido y bebidas</button>`;
 
   host.innerHTML = `
     <div class="track-card">
-      <span style="font-size:12px;font-weight:800;color:var(--red)">PEDIDO #${o.id} · ${branch.name}</span>
-      <h2 style="font-size:24px;margin-top:4px">${statusName}</h2>
-      <p style="font-size:13px;color:var(--mut);margin-top:2px">
-        ${o.mode === "now" ? "Recoger ahora (10 min)" : `Programado para las ${o.scheduledHour}`} · Pago en mostrador (${o.payMethod})
+      <div style="display:flex;justify-content:center;margin-bottom:8px">
+        ${renderMascota(curMeta.mascota, "feliz", { size: 72, label: curMeta.label })}
+      </div>
+      <span class="insignia-estado ${curMeta.key}">
+        ${stateIconSvg(curMeta.key)}
+        <span>${curMeta.label}</span>
+      </span>
+      <h2 style="font-family:var(--font-display);font-size:24px;margin-top:8px" aria-live="polite">Pedido #${o.id} · "${curMeta.copy}"</h2>
+      <p style="font-size:14px;margin-top:4px">
+        ${branch.name} · ${o.mode === "now" ? "Recoger ahora" : `Programado ${o.scheduledHour}`} · Pago: ${o.payMethod}
       </p>
       <div class="code-digits">${digits}</div>
       <div class="steps-grid">${stepsHtml}</div>
@@ -1319,9 +1713,10 @@ function initOrderEvents() {
   $("#ordersContent").addEventListener("click", (e) => {
     if (e.target.id === "advanceOrderBtn" && state.activeOrder && state.activeOrder.statusIdx < 3) {
       state.activeOrder.statusIdx++;
-      const st = ORDER_STATES[state.activeOrder.statusIdx];
+      const m = ORDER_META[state.activeOrder.statusIdx];
       updateBadges();
-      pushToast(`Pedido #${state.activeOrder.id}: ${st}`, `Tu pedido pasó a estado "${st}" en ${branchById(state.activeOrder.branchId).name}.`);
+      renderHomeOrderTimeline();
+      pushToast(`Pedido #${state.activeOrder.id}: ${m.label}`, m.copy, m.mascota);
       renderOrdersView();
     } else if (e.target.id === "openRatingBtn") {
       openRatingModal();
@@ -1339,8 +1734,8 @@ function openRatingModal() {
         <h2 id="ratingTitle">Califica tu pedido #${o.id}</h2>
         <button type="button" class="dlg-close" data-close-dlg="ratingDialog" aria-label="Cerrar">×</button>
       </div>
-      <div style="display:flex;justify-content:center;gap:8px;padding:6px 0">
-        ${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-star="${n}" style="background:none;border:none;font-size:32px;color:${n <= stars ? "#E0A21B" : "#DDD2CA"}" aria-label="${n} estrellas">★</button>`).join("")}
+      <div style="display:flex;justify-content:center;gap:6px">
+        ${[1, 2, 3, 4, 5].map((n) => `<button type="button" data-star="${n}" style="min-width:44px;min-height:44px;background:none;border:none;font-size:32px;color:${n <= stars ? "var(--c-miel)" : "var(--c-menta)"}" aria-label="${n} estrellas">★</button>`).join("")}
       </div>
       <div class="form-field">
         <label for="rateComment">Comentario corto (máx. 140 caracteres)</label>
@@ -1356,7 +1751,7 @@ function openRatingModal() {
     } else if (e.target.id === "submitRatingBtn") {
       o.rated = true;
       $("#ratingDialog").close();
-      pushToast("Calificación guardada", `Calificaste con ${stars}/5 estrellas.`);
+      pushToast("Calificación guardada", `Gracias por tus ${stars} estrellas.`, "croissant");
       renderOrdersView();
     }
   };
@@ -1376,11 +1771,11 @@ function syncAuthUI() {
   } else {
     label.textContent = "Iniciar sesión";
     btn.classList.remove("signed");
-    av.textContent = "Inv";
+    av.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>`;
   }
 }
 
-function openAuthModal(subtitle = "Pide desde tu celular y recoge en sucursal sin fila.") {
+function openAuthModal(subtitle = "Pide en la app y ahórrate la fila.") {
   let mode = "login";
   const draw = (err = "") => {
     $("#authBody").innerHTML = `
@@ -1388,7 +1783,10 @@ function openAuthModal(subtitle = "Pide desde tu celular y recoge en sucursal si
         <h2 id="authTitle">${mode === "login" ? "Iniciar sesión" : "Crear cuenta"}</h2>
         <button type="button" class="dlg-close" data-close-dlg="authDialog" aria-label="Cerrar">×</button>
       </div>
-      <p style="font-size:13px;color:var(--mut)">${subtitle}</p>
+      <div style="display:flex;align-items:center;gap:10px">
+        ${renderMascota("grano", err ? "triste" : "feliz", { size: 48 })}
+        <p style="font-size:15px">${subtitle}</p>
+      </div>
       <form id="authForm" style="display:flex;flex-direction:column;gap:10px" novalidate>
         ${mode === "register" ? `
           <div class="form-field"><label for="authName">Nombre completo</label><input id="authName" required placeholder="Ricardo Martínez"></div>
@@ -1399,8 +1797,8 @@ function openAuthModal(subtitle = "Pide desde tu celular y recoge en sucursal si
         ${err ? `<p class="msg-err">${err}</p>` : ""}
         <button type="submit" class="btn-primary full">${mode === "login" ? "Entrar" : "Registrarme"}</button>
       </form>
-      <button type="button" class="btn-ghost full" id="switchAuthModeBtn">
-        ${mode === "login" ? "¿No tienes cuenta? Regístrate aquí" : "Ya tengo cuenta · Iniciar sesión"}
+      <button type="button" class="btn-secondary full" id="switchAuthModeBtn">
+        ${mode === "login" ? "¿No tienes cuenta? Regístrate" : "Ya tengo cuenta · Iniciar sesión"}
       </button>`;
   };
   draw();
@@ -1414,13 +1812,17 @@ function openAuthModal(subtitle = "Pide desde tu celular y recoge en sucursal si
     e.preventDefault();
     const email = $("#authEmail").value.trim().toLowerCase();
     const pass = $("#authPass").value;
+    if (!email) {
+      draw("Falta tu correo. Escríbelo para continuar.");
+      return;
+    }
     if (!email.includes("@") || pass.length < 6) {
-      draw("Ingresa un correo válido y contraseña de al menos 6 caracteres.");
+      draw("Revisa tu correo y usa una contraseña de al menos 6 caracteres.");
       return;
     }
     if (mode === "register") {
       if (state.registeredEmails.has(email)) {
-        draw("Ese correo ya está registrado (restricción UNIQUE RF-01).");
+        draw("Ese correo ya existe. Inicia sesión para continuar.");
         return;
       }
       const name = $("#authName").value.trim() || "Cliente BeanCraft";
@@ -1432,7 +1834,7 @@ function openAuthModal(subtitle = "Pide desde tu celular y recoge en sucursal si
     }
     syncAuthUI();
     $("#authDialog").close();
-    pushToast("Sesión iniciada", `Bienvenido, ${state.user.name}`);
+    pushToast("Sesión iniciada", `Bienvenido, ${state.user.name}.`, "taza");
   };
   $("#authDialog").showModal();
 }
@@ -1441,10 +1843,12 @@ function renderProfileView() {
   const host = $("#profileContent");
   if (!state.user) {
     host.innerHTML = `
-      <div class="pad" style="padding-top:30px;text-align:center">
-        <h2 style="font-size:22px">Inicia sesión en BeanCraft</h2>
-        <p style="font-size:13.5px;color:var(--mut);margin:8px 0 18px">Guarda tus bebidas favoritas, consulta pedidos y edita tu perfil.</p>
+      <div class="pad" style="padding-top:30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
+        ${renderMascota("taza", "guino", { size: 78 })}
+        <h1 class="titulo-mixto" style="font-size:26px">Inicia sesión en <em>BeanCraft</em></h1>
+        <p style="font-size:16px">Guarda tus bebidas favoritas, consulta pedidos y edita tu perfil.</p>
         <button type="button" class="btn-primary full" id="profLoginBtn">Iniciar sesión o registrarme</button>
+        <button type="button" class="btn-secondary full" data-nav="design">Ver Guía viva /design</button>
       </div>`;
     $("#profLoginBtn").addEventListener("click", () => openAuthModal());
     return;
@@ -1455,8 +1859,8 @@ function renderProfileView() {
     <div class="prof-top">
       <div class="topbar">
         <button type="button" class="rbtn" data-nav="home" aria-label="Volver">←</button>
-        <h1 class="t-center">Mi perfil</h1>
-        <div style="width:42px"></div>
+        <h1 class="titulo-mixto t-center" style="font-size:22px;color:var(--c-espuma)">Mi <em>perfil</em></h1>
+        <div style="width:44px"></div>
       </div>
       <div class="prof-id">
         <div class="avatar lg">${initials}</div>
@@ -1472,7 +1876,8 @@ function renderProfileView() {
       <div class="form-field"><label for="profPhone">Teléfono</label><input id="profPhone" value="${state.user.phone}"></div>
       <div class="form-field"><label for="profNewPass">Nueva contraseña (opcional)</label><input id="profNewPass" type="password" placeholder="Dejar vacío para conservar"></div>
       <button type="submit" class="btn-primary full">Guardar cambios (RF-22)</button>
-      <button type="button" class="btn-ghost full" id="logoutBtn" style="color:var(--red)">Cerrar sesión</button>
+      <button type="button" class="btn-secondary full" data-nav="design">Ver Guía viva /design</button>
+      <button type="button" class="btn-secondary full" id="logoutBtn">Cerrar sesión</button>
     </form>`;
 
   $("#profileForm").onsubmit = (e) => {
@@ -1483,13 +1888,75 @@ function renderProfileView() {
     if (np.length >= 6) state.user.password = np;
     syncAuthUI();
     renderProfileView();
-    pushToast("Perfil actualizado", "Tus datos quedaron guardados.");
+    pushToast("Perfil actualizado", "Tus datos quedaron guardados.", "taza");
   };
   $("#logoutBtn").onclick = () => {
     state.user = null;
     syncAuthUI();
     navigate("home");
-    pushToast("Sesión cerrada", "Has salido de tu cuenta.");
+    pushToast("Sesión cerrada", "Has salido de tu cuenta.", "grano");
+  };
+}
+
+// ==================== GUÍA VIVA /design ====================
+function renderDesignView() {
+  const tokens = [
+    ["Tostado", "var(--c-tostado)"],
+    ["Verde", "var(--c-verde)"],
+    ["Espuma", "var(--c-espuma)"],
+    ["Menta", "var(--c-menta)"],
+    ["Miel", "var(--c-miel)"],
+    ["Fresa", "var(--c-fresa)"],
+    ["Lila", "var(--c-lila)"],
+    ["Limón", "var(--c-limon)"],
+    ["Cereza", "var(--c-cereza)"],
+    ["Blanco", "var(--c-blanco)"]
+  ];
+
+  $("#designContent").innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:18px;padding-bottom:24px">
+      <div>
+        <h2 class="titulo-mixto" style="font-size:24px">Tokens de <em>color</em></h2>
+        <div class="design-grid">
+          ${tokens.map(([name, tok]) => `
+            <div class="swatch-card">
+              <span class="swatch-chip" style="background:${tok}"></span>
+              <div><strong style="font-size:14px">${name}</strong><small style="display:block;font-size:13px">${tok.replace("var(", "").replace(")", "")}</small></div>
+            </div>`).join("")}
+        </div>
+      </div>
+
+      <div>
+        <h2 class="titulo-mixto" style="font-size:24px">Insignias de <em>estado</em></h2>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+          ${[...ORDER_META, { key: "cancelado", label: "Cancelado" }].map((st) => `
+            <span class="insignia-estado ${st.key}">${stateIconSvg(st.key)}<span>${st.label}</span></span>
+          `).join("")}
+        </div>
+      </div>
+
+      <div>
+        <h2 class="titulo-mixto" style="font-size:24px">Las 5 <em>Mascotas</em> SVG</h2>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+          ${MASCOTA_ESTADOS.map((m) => `<button type="button" class="chip" aria-pressed="${state.designMood === m}" data-mood="${m}">${m === "guino" ? "guiño" : m}</button>`).join("")}
+        </div>
+        <div class="mascota-gallery">
+          ${MASCOTAS_INFO.map((m, idx) => `
+            <article class="mascota-card">
+              ${renderMascota(m.id, state.designMood, { size: 74, holo: idx === 2, label: `${m.nombre} ${state.designMood}` })}
+              <strong style="font-family:var(--font-display);font-size:16px">${m.nombre}</strong>
+              <p style="font-size:13px">${m.base}</p>
+            </article>`).join("")}
+        </div>
+      </div>
+    </div>`;
+
+  $("#designContent").onclick = (e) => {
+    const moodBtn = e.target.closest("[data-mood]");
+    if (moodBtn) {
+      state.designMood = moodBtn.dataset.mood;
+      renderDesignView();
+    }
   };
 }
 
@@ -1497,23 +1964,23 @@ function renderProfileView() {
 function openBranchModal() {
   $("#branchBody").innerHTML = `
     <div class="dlg-head">
-      <h2 id="branchTitle">Elige tu sucursal (RF-04)</h2>
+      <h2 id="branchTitle">Elige tu sucursal</h2>
       <button type="button" class="dlg-close" data-close-dlg="branchDialog" aria-label="Cerrar">×</button>
     </div>
     ${BRANCHES.map((b) => `
-      <button type="button" class="extra-item" data-branch-pick="${b.id}" style="text-align:left;${b.id === state.branchId ? "border-color:var(--red);background:#FFF6F7" : ""}">
+      <button type="button" class="extra-item" data-branch-pick="${b.id}" style="text-align:left;${b.id === state.branchId ? "background:var(--c-menta)" : ""}">
         <div>
-          <strong style="display:block;font-size:14px">${b.name} ${b.suggested ? '<span style="color:var(--red);font-size:11px">· Más cercana</span>' : ""}</strong>
-          <span style="font-size:12px;color:var(--mut)">${b.addr} · ${b.hours}</span>
+          <strong style="display:block;font-size:15px">${b.name} ${b.suggested ? "· Más cercana" : ""}</strong>
+          <span style="font-size:13px">${b.addr} · ${b.hours}</span>
         </div>
-        <strong style="color:var(--red);font-size:12.5px">${b.dist}</strong>
+        <span class="branch-status ${b.openNow ? "open" : "closed"}">${b.openNow ? "Abierta" : "Cerrada"}</span>
       </button>`).join("")}`;
   $("#branchBody").onclick = (e) => {
     const pick = e.target.closest("[data-branch-pick]");
     if (!pick) return;
     state.branchId = pick.dataset.branchPick;
-    const b = branchById(state.branchId);
-    $("#homeBranchText").innerHTML = `<strong>${b.name}</strong> · ${b.dist} · Abierto hasta ${b.close}:00`;
+    updateBranchHeader();
+    renderBranchesSection();
     $("#branchDialog").close();
     if (state.view === "cart") renderCartView();
   };
@@ -1523,19 +1990,19 @@ function openBranchModal() {
 function openQrModal() {
   $("#qrBody").innerHTML = `
     <div class="dlg-head">
-      <h2 id="qrTitle">Escanear cupón QR (RF-06)</h2>
+      <h2 id="qrTitle">Escanear cupón QR</h2>
       <button type="button" class="dlg-close" data-close-dlg="qrDialog" aria-label="Cerrar">×</button>
     </div>
     <div class="qr-frame">
       <div class="qr-box">
-        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--c-espuma)" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
       </div>
-      <span style="font-size:12.5px;color:#E9C9B5">Simulación de lector QR · Elige un cupón de prueba</span>
+      <span style="font-size:14px">Simulador de lector QR · Elige un cupón</span>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button type="button" class="ls-chip" data-qr-code="BIENVENIDA">QR: BIENVENIDA (-$30)</button>
       <button type="button" class="ls-chip" data-qr-code="OTONO2X1">QR: OTONO2X1 (-20%)</button>
-      <button type="button" class="ls-chip" data-qr-code="VENCIDO25">QR: VENCIDO25 (inválido)</button>
+      <button type="button" class="ls-chip" data-qr-code="VENCIDO25">QR: VENCIDO25 (vencido)</button>
     </div>
     <p id="qrErrMsg" class="msg-err" hidden></p>`;
   $("#qrBody").onclick = (e) => {
@@ -1545,13 +2012,13 @@ function openQrModal() {
     const c = COUPONS[code];
     if (!c || !c.active) {
       $("#qrErrMsg").hidden = false;
-      $("#qrErrMsg").textContent = `Cupón ${code} vencido o desactivado (RN-01).`;
+      $("#qrErrMsg").textContent = `El cupón ${code} ya venció o está desactivado (RN-01).`;
       return;
     }
     state.appliedCoupon = c;
     $("#qrDialog").close();
     navigate("cart");
-    pushToast("Cupón escaneado", `${c.code}: ${c.label}`);
+    pushToast("Cupón escaneado", `${c.code}: ${c.label}`, "espuma");
   };
   $("#qrDialog").showModal();
 }
@@ -1560,16 +2027,16 @@ function openNotifModal() {
   $("#notifDot").hidden = true;
   $("#notifBody").innerHTML = `
     <div class="dlg-head">
-      <h2 id="notifTitle">Notificaciones (RF-10)</h2>
+      <h2 id="notifTitle">Notificaciones</h2>
       <button type="button" class="dlg-close" data-close-dlg="notifDialog" aria-label="Cerrar">×</button>
     </div>
     ${state.notifications.map((n) => `
-      <div style="padding:10px 12px;border-radius:14px;background:var(--cream);border:1px solid var(--line)">
+      <div style="padding:12px;border-radius:var(--r-campo);background:var(--c-espuma);border:var(--borde)">
         <div style="display:flex;justify-content:space-between">
-          <strong style="font-size:13.5px">${n.title}</strong>
-          <span style="font-size:11px;color:var(--mut)">${n.time}</span>
+          <strong style="font-size:15px">${n.title}</strong>
+          <span style="font-size:13px">${n.time}</span>
         </div>
-        <p style="font-size:12.5px;color:var(--mut);margin-top:3px">${n.msg}</p>
+        <p style="font-size:14px;margin-top:4px">${n.msg}</p>
       </div>`).join("")}`;
   $("#notifDialog").showModal();
 }
@@ -1601,13 +2068,20 @@ function initDialogs() {
 function init() {
   initSplash();
   initHero();
+  renderPromos();
   initMenuSheet();
+  initQuiz();
+  renderHomeOrderTimeline();
+  initBranchesSection();
+  $("#footerMascot").innerHTML = renderMascota("taza", "guino", { size: 60 });
+
   initCrystalMenu();
   initCustomizerEvents();
   initCartEvents();
   initOrderEvents();
   initDialogs();
   syncAuthUI();
+  updateBranchHeader();
   updateBadges();
 
   document.addEventListener("click", (e) => {
@@ -1624,13 +2098,14 @@ function init() {
     else openAuthModal();
   });
   $("#openBranchBtn").addEventListener("click", openBranchModal);
+  $("#openQrBtn").addEventListener("click", openQrModal);
   $("#fabQrBtn").addEventListener("click", openQrModal);
   $("#homeNotifBtn").addEventListener("click", openNotifModal);
   $("#ordersNotifBtn").addEventListener("click", openNotifModal);
   $("#closeToastBtn").addEventListener("click", () => { $("#pushToast").hidden = true; });
 
   const initialView = new URLSearchParams(location.search).get("view");
-  if (initialView && ["home", "menu", "cart", "orders", "profile"].includes(initialView)) {
+  if (initialView && ["home", "menu", "cart", "orders", "profile", "design"].includes(initialView)) {
     $("#splashScreen").classList.add("done");
     navigate(initialView);
   }

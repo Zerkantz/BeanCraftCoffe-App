@@ -1,28 +1,36 @@
-# BeanCraft Coffee — App Móvil Interactiva
+# BeanCraft Coffee App
 
-Prototipo web móvil interactivo para **BeanCraft Coffee** (clientes), alineado con los requerimientos funcionales **RF-01 a RF-11 y RF-22** y las reglas de negocio **RN-01 a RN-05** del documento `SRS BeanCraft Coffee v1.3.pdf`.
+Aplicación web móvil interactiva para **BeanCraft Coffee** con arquitectura **híbrida**: cumple estrictamente las reglas visuales, tipográficas, de accesibilidad y tokens de la **Guía de diseño front-end BeanCraft v1.0**, integrando en los módulos móviles los flujos e interacciones del **SRS v1.3** (`RF-01`–`RF-11`, `RF-22`, `RN-01`–`RN-05`).
 
-> **Nota sobre la tecnología del SRS:** El SRS v1.3 especifica **Figma** (prototipo interactivo sin lenguaje de código de interfaz) para el front-end y **MySQL 8.x** para el back-end. Esta versión web interactiva está construida en **HTML5, CSS3 y JavaScript (ES Modules)** para poder interactuar en vivo desde el navegador y exportarse/importarse en **Figma Make** o publicarse mediante **GitHub Pages**.
+## Arquitectura y archivos principales
 
-## Estructura
+- [`tokens.css`](tokens.css): Fuente única de verdad con los 10 tokens de color (`--c-tostado`, `--c-verde`, `--c-espuma`, `--c-menta`, `--c-miel`, `--c-fresa`, `--c-lila`, `--c-limon`, `--c-cereza`, `--c-blanco`), escalas de espaciado y radios, bordes duros (`2px solid var(--c-tostado)`), sombra dura (`4px 4px 0 var(--c-tostado)`), `@media (prefers-reduced-motion: reduce)` y declaraciones `@font-face` locales.
+- [`fonts/`](fonts/): Tipografías auto-hospedadas en formato `.woff2` (`Instrument Serif`, `Bricolage Grotesque`, `Instrument Sans`) para funcionar sin CDNs ni dependencias externas.
+- [`mascotas.js`](mascotas.js): Exporta `MASCOTAS_INFO`, `MASCOTA_ESTADOS` y `renderMascota(nombre, estado, opts)` con las **5 mascotas SVG originales** (`Grano`, `Taza`, `Espuma`, `Hielito`, `Croissant`) en **5 estados** (`feliz`, `sorprendido`, `triste`, `pensando`, `guino`) trazadas con tokens CSS y contorno Tostado.
+- [`index.html`](index.html), [`styles.css`](styles.css), [`app.js`](app.js): Aplicación SPA móvil (`max-width: 430px`) con 6 vistas (`home`, `menu`, `cart`, `orders`, `profile`, `design`), modales nativos `<dialog>` y catálogo completo en [`assets/`](assets/).
 
-- `index.html` — Estructura semántica móvil (`<dialog>` nativos, carrusel accesible y vistas de la app).
-- `styles.css` — Paleta inspirada en **Caffenio**, carrusel Hero difuminado y hoja de menú seleccionable inspirados en **Luma Boba Shop** en el Inicio, y tarjetas cristalinas de colores en el módulo **Menú**.
-- `app.js` — Lógica interactiva completa:
-  - **Splash** inicial y acceso directo.
-  - **Inicio** con botón de *Iniciar sesión* en la parte superior derecha, selector de sucursal cercana (`RF-04`), carrusel Hero de 5 bebidas y hoja de menú seleccionable.
-  - **Menú** con búsqueda, filtro por categorías, favoritos y tarjetas cristalinas de colores (`RF-02`).
-  - **Personalizador en vivo** con fórmula `RN-02` (`base + tamaño + leche + endulzante + extras`) (`RF-03`).
-  - **Carrito y Checkout** con cupones por código o simulación QR (`RN-01`), horario validado por sucursal (`RN-03`), recoger ahora o programado y pago en mostrador (`RF-05` a `RF-08`).
-  - **Seguimiento en 4 estados**, notificaciones push y calificación única tras entrega (`RF-09` a `RF-11`, `RN-04`, `RN-05`).
-  - **Perfil** editable y cierre de sesión (`RF-22`).
-- `assets/` — Imágenes de bebidas.
-- `beancraft-pantallas.pdf` / `beancraft-app-mockup.pdf` — Exportaciones vectoriales para importar pantallas estáticas a Figma Design.
+## Reglas de diseño e integración híbrida
 
-## Cómo ejecutar localmente
+- **Estricta fidelidad visual**: Cero colores hex fuera de `tokens.css`, cero degradados CSS, cero sombras difuminadas o `backdrop-filter`, cero `text-transform: uppercase`, cero mapas o librerías de terceros y `--c-cereza` reservado para promociones, etiquetas de descuento, estado `Cancelado` y mensajes de error.
+- **Hero giratorio + Armador en vivo**: Carrusel 3D orbital en escenario plano (`Menta`/`Espuma`) acompañado por `Grano`, `Espuma` y `Taza`, conectado en tiempo real al armador de `Tamaño`, `Leche` y `Extras` con precio destacado en `.marcatextos`.
+- **Inicio y módulos interactivos**:
+  - `BarraNovedad` fija superior, `MosaicoPromo` (`RN-01`), **hoja de menú seleccionable** y barra de navegación inferior con botón central `Cupón QR`.
+  - **Quiz inline de 5 preguntas** (cierra con `Hielito` en estado `guiño` y botón `"Armarla"`).
+  - **Sucursales** con indicador `Abierta`/`Cerrada`, referencia, horarios por cápsula, enlace `"Cómo llegar"`, botón `"Usar mi ubicación"` bajo clic y mapa SVG ilustrado propio.
+  - **Menú (`?view=menu`)**: Tarjetas con fondo geométrico facetado en SVG plano pastel (`Menta`, `Miel`, `Fresa`, `Lila`, `Limón`), fotografía grande de bebidas, búsqueda, favoritos y personalizador `RN-02`.
+  - **Carrito (`?view=cart`)**: Cupones `RN-01` (`BIENVENIDA`, `OTONO2X1`, `VENCIDO25`), escáner QR simulado y confirmación tipo **Desliza para confirmar**.
+  - **Guía viva (`?view=design`)**: Muestra los 10 tokens de color, las 5 insignias de estado (`Recibido`, `Preparando`, `Listo`, `Entregado`, `Cancelado`) y el selector interactivo de las 5 mascotas SVG.
+
+## Ejecución local
+
+Al usar módulos ES (`<script type="module" src="app.js">`), sírvelo mediante HTTP local desde la raíz del repositorio:
 
 ```bash
-python -m http.server 8080
+python -m http.server 8000
 ```
 
-Abre `http://localhost:8080` en Chrome o Edge (recomendado en vista móvil `390 × 844`).
+Rutas útiles:
+
+- App principal: `http://localhost:8000/?view=home`
+- Menú de bebidas: `http://localhost:8000/?view=menu`
+- Guía viva /design: `http://localhost:8000/?view=design`
