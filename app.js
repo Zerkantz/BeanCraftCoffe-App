@@ -580,7 +580,7 @@ function renderProductArt(p, size = 100) {
 
 // ==================== SPLASH ====================
 function initSplash() {
-  $("#splashMascot").innerHTML = renderMascota("grano", "feliz", { size: 136, onDark: true, holo: true });
+  $("#splashMascot").innerHTML = renderMascota("grano", "feliz", { size: 136, holo: true });
   const splash = $("#splashScreen");
   const hide = () => splash.classList.add("done");
   $("#skipSplashBtn").addEventListener("click", hide);
@@ -689,7 +689,7 @@ function renderHero() {
   }[cur.mascota] || ["Tip BeanCraft", "Personaliza tamaño, leche y extras al instante."];
 
   $("#heroMascotCallout").innerHTML = `
-    ${renderMascota(cur.mascota, "feliz", { size: 62, accentBg: true })}
+    ${renderMascota(cur.mascota, "feliz", { size: 62 })}
     <div>
       <strong style="display:block;font-family:var(--font-display);font-size:15px">${heroSpeech[0]}</strong>
       <span style="font-size:14px">${heroSpeech[1]}</span>
@@ -838,7 +838,7 @@ function renderPromos() {
           <span class="promo-card-title">${pr.title}</span>
           <p class="promo-card-desc">${pr.desc}</p>
         </div>
-        ${renderMascota(pr.mascota, "feliz", { size: 72, onDark: true })}
+        ${renderMascota(pr.mascota, "feliz", { size: 72 })}
       </div>
       <span class="promo-card-vig">${pr.vig} · Código ${pr.code}</span>
     </button>`).join("");
@@ -889,7 +889,7 @@ function renderMenuSheetSection() {
           <button type="button" class="poster-hero-cup" data-pick-id="${heroProd.id}" aria-label="Armar ${heroProd.name}">
             ${renderProductArt(heroProd, 92)}
             <span>Toca para pedir</span>
-            <div style="margin-top:4px">${renderMascota(pg.mascota, "feliz", { size: 64, onDark: true })}</div>
+            <div style="margin-top:4px">${renderMascota(pg.mascota, "feliz", { size: 64 })}</div>
           </button>
         </div>
         <div class="poster-bottom">${tilesHtml}</div>
@@ -911,7 +911,7 @@ function syncSheetControls() {
   };
   const sm = sheetMsgs[pg.id] || ["Pícale al menú", "¡Toca la bebida o pan que más se te antoje!"];
   $("#sheetMascotBanner").innerHTML = `
-    ${renderMascota(pg.mascota, "feliz", { size: 72, accentBg: true })}
+    ${renderMascota(pg.mascota, "feliz", { size: 72 })}
     <div class="mascot-speech-bubble">
       <strong>${sm[0]}</strong>
       <span>${sm[1]}</span>
@@ -983,7 +983,7 @@ function renderQuiz() {
         <div class="quiz-collage">
           ${renderMascota("grano", "feliz", { size: 66, rotation: -2 })}
           ${renderMascota("espuma", "guino", { size: 66 })}
-          ${renderMascota("hielito", "feliz", { size: 84, accentBg: true, holo: true, rotation: 2 })}
+          ${renderMascota("hielito", "feliz", { size: 84, holo: true, rotation: 2 })}
           ${renderMascota("croissant", "feliz", { size: 66 })}
           ${renderMascota("taza", "sorprendido", { size: 66, rotation: -1 })}
         </div>
@@ -1006,7 +1006,7 @@ function renderQuiz() {
           <div class="quiz-progress-fill" style="width:${pct}%"></div>
         </div>
         <div class="quiz-q-host">
-          ${renderMascota(hostMascot, "pensando", { size: 72, accentBg: true })}
+          ${renderMascota(hostMascot, "pensando", { size: 72 })}
           <h3 style="font-family:var(--font-display);font-size:20px;line-height:1.15">${q.q}</h3>
         </div>
         <div class="quiz-options" role="radiogroup" aria-label="${q.q}">
@@ -1028,7 +1028,7 @@ function renderQuiz() {
   box.innerHTML = `
     <div class="quiz-card">
       <div class="quiz-result-box">
-        ${renderMascota("hielito", "guino", { size: 112, accentBg: true, holo: true, label: "Hielito" })}
+        ${renderMascota("hielito", "guino", { size: 112, holo: true, label: "Hielito" })}
         <div>
           <h3 class="titulo-mixto" style="font-size:22px">Eres un <em>${resProd.name}</em></h3>
           <p style="font-size:14px;margin-top:4px">${quote}</p>
@@ -1104,7 +1104,7 @@ function renderHomeOrderTimeline() {
     <div class="estado-steps">
       ${ORDER_META.map((m, i) => `
         <div class="estado-step ${i === curIdx ? "activo" : ""}">
-          ${renderMascota(m.mascota, i === curIdx ? "feliz" : "pensando", { size: 64, accentBg: i === curIdx })}
+          ${renderMascota(m.mascota, i === curIdx ? "feliz" : "pensando", { size: 64 })}
           <span>${m.label}</span>
         </div>`).join("")}
     </div>
@@ -1247,7 +1247,7 @@ function renderCrystalMenu() {
   };
   const [mId, mTitle, mCopy] = catBannerMap[state.menuCat] || catBannerMap["Todo"];
   $("#menuMascotBanner").innerHTML = `
-    ${renderMascota(mId, "feliz", { size: 74, accentBg: true })}
+    ${renderMascota(mId, "feliz", { size: 74 })}
     <div class="mascot-speech-bubble">
       <strong>${mTitle}</strong>
       <span>${mCopy}</span>
@@ -1266,7 +1266,7 @@ function renderCrystalMenu() {
   if (filtered.length === 0) {
     $("#crystalMenuGrid").innerHTML = `
       <div style="grid-column:1/-1;text-align:center;padding:32px 12px;display:flex;flex-direction:column;align-items:center;gap:10px">
-        ${renderMascota("hielito", "pensando", { size: 120, accentBg: true })}
+        ${renderMascota("hielito", "pensando", { size: 120 })}
         <p style="font-size:16px;font-weight:700">No encontramos bebidas con ese filtro.</p>
         <button type="button" class="btn-secondary" id="clearMenuFilterBtn">Ver todas las bebidas</button>
       </div>`;
@@ -1295,7 +1295,7 @@ function renderCrystalMenu() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
           </button>
         </div>
-        <div class="cc-sticker">${renderMascota(p.mascota, "feliz", { size: 52, onDark: true, rotation: 2 })}</div>
+        <div class="cc-sticker">${renderMascota(p.mascota, "feliz", { size: 52, rotation: 2 })}</div>
         <button type="button" class="cc-stage" data-open-id="${p.id}" aria-label="Personalizar ${p.name}">
           ${renderProductArt(p, 130)}
         </button>
@@ -1417,7 +1417,7 @@ function renderCustomizer() {
         <span style="font-size:13px;font-weight:700;color:var(--c-verde)">${p.cat}</span>
         <p style="font-size:14px;margin-top:4px;line-height:1.4">${p.desc}</p>
       </div>
-      <div>${renderMascota(p.mascota, "feliz", { size: 64, accentBg: true })}</div>
+      <div>${renderMascota(p.mascota, "feliz", { size: 64 })}</div>
     </div>
     ${optsMarkup}
     <div class="qty-bar">
@@ -1491,7 +1491,7 @@ function renderCartView() {
   if (state.cart.length === 0) {
     host.innerHTML = `
       <div class="pad" style="text-align:center;padding-top:32px;display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("hielito", "pensando", { size: 120, accentBg: true })}
+        ${renderMascota("hielito", "pensando", { size: 120 })}
         <p style="font-size:18px;font-weight:800">Tu carrito está vacío</p>
         <p style="font-size:16px">Elige una bebida desde el Armador o el Menú completo.</p>
         <button type="button" class="btn-primary" id="emptyGoMenuBtn">Explorar menú</button>
@@ -1578,7 +1578,7 @@ function renderCartView() {
           <button type="button" data-pay="efectivo" aria-pressed="${state.payMethod === "efectivo"}">Efectivo</button>
         </div>
         <div class="checkout-mascot-tip">
-          ${renderMascota(state.cart.some((it) => productById(it.productId)?.cat === "Repostería") ? "croissant" : "taza", "feliz", { size: 64, accentBg: true })}
+          ${renderMascota(state.cart.some((it) => productById(it.productId)?.cat === "Repostería") ? "croissant" : "taza", "feliz", { size: 64 })}
           <span>¿Todo listo? Desliza abajo y empezamos a prepararlo.</span>
         </div>
         <div class="slide-checkout" id="slideCheckout" data-total="${total.toFixed(2)}">
@@ -1751,7 +1751,7 @@ function renderOrdersView() {
   if (!o) {
     host.innerHTML = `
       <div class="track-card" style="display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("hielito", "pensando", { size: 120, accentBg: true, holo: true })}
+        ${renderMascota("hielito", "pensando", { size: 120, holo: true })}
         <p style="font-size:18px;font-weight:800">No tienes pedidos activos</p>
         <p style="font-size:16px">Arma tu bebida y desliza en el carrito para seguir tu pedido.</p>
         <button type="button" class="btn-primary full" id="ordersToMenuBtn">Ir al menú</button>
@@ -1784,7 +1784,7 @@ function renderOrdersView() {
   host.innerHTML = `
     <div class="track-card">
       <div style="display:flex;justify-content:center;margin-bottom:8px">
-        ${renderMascota(curMeta.mascota, "feliz", { size: 120, accentBg: true, holo: true, label: curMeta.label })}
+        ${renderMascota(curMeta.mascota, "feliz", { size: 120, holo: true, label: curMeta.label })}
       </div>
       <span class="insignia-estado ${curMeta.key}">
         ${stateIconSvg(curMeta.key)}
@@ -1875,7 +1875,7 @@ function openAuthModal(subtitle = "Pide en la app y ahórrate la fila.") {
         <button type="button" class="dlg-close" data-close-dlg="authDialog" aria-label="Cerrar">×</button>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
-        ${renderMascota("grano", err ? "triste" : "feliz", { size: 72, accentBg: true })}
+        ${renderMascota("grano", err ? "triste" : "feliz", { size: 72 })}
         <p style="font-size:15px">${subtitle}</p>
       </div>
       <form id="authForm" style="display:flex;flex-direction:column;gap:10px" novalidate>
@@ -1935,7 +1935,7 @@ function renderProfileView() {
   if (!state.user) {
     host.innerHTML = `
       <div class="pad" style="padding-top:30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
-        ${renderMascota("taza", "guino", { size: 124, accentBg: true, holo: true })}
+        ${renderMascota("taza", "guino", { size: 124, holo: true })}
         <h1 class="titulo-mixto" style="font-size:26px">Inicia sesión en <em>BeanCraft</em></h1>
         <p style="font-size:16px">Guarda tus bebidas favoritas, consulta pedidos y edita tu perfil.</p>
         <button type="button" class="btn-primary full" id="profLoginBtn">Iniciar sesión o registrarme</button>
@@ -2034,7 +2034,7 @@ function renderDesignView() {
         <div class="mascota-gallery">
           ${MASCOTAS_INFO.map((m, idx) => `
             <article class="mascota-card">
-              ${renderMascota(m.id, "feliz", { size: 96, accentBg: true, holo: idx === 2, label: m.nombre })}
+              ${renderMascota(m.id, "feliz", { size: 96, holo: idx === 2, label: m.nombre })}
               <strong style="font-family:var(--font-display);font-size:17px">${m.nombre}</strong>
               <span class="mascota-role">${m.rol}</span>
               <p style="font-size:13px">${m.base}</p>
@@ -2158,7 +2158,7 @@ function init() {
   initQuiz();
   renderHomeOrderTimeline();
   initBranchesSection();
-  $("#footerMascot").innerHTML = renderMascota("taza", "guino", { size: 88, onDark: true });
+  $("#footerMascot").innerHTML = renderMascota("taza", "guino", { size: 88 });
 
   initCrystalMenu();
   initCustomizerEvents();

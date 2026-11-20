@@ -68,25 +68,17 @@ export function renderMascota(nombre, estado = "feliz", opts = {}) {
     size = 64,
     rotation = 0,
     holo = false,
-    onDark = false,
-    accentBg = false,
     label = "",
     className = ""
   } = opts;
 
   const info = MASCOTAS_INFO.find((m) => m.id === nombre) || MASCOTAS_INFO[0];
   const rot = rotation ? Math.max(-2, Math.min(2, rotation)) : 0;
-  const classes = [
-    "mascota-wrap",
-    onDark ? "on-dark" : "",
-    accentBg ? "accent-bg" : "",
-    className
-  ].filter(Boolean).join(" ");
+  const classes = ["mascota-wrap", className].filter(Boolean).join(" ");
 
   const styles = [
     `width:${size}px`,
     `height:${size}px`,
-    accentBg ? `background:${info.accent}` : "",
     rot ? `transform:rotate(${rot}deg)` : ""
   ].filter(Boolean).join(";");
 

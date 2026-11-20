@@ -2023,19 +2023,6 @@ textarea:focus-visible {
   vertical-align: middle;
 }
 
-.mascota-wrap.on-dark {
-  border-radius: var(--r-pildora);
-  background: var(--c-espuma);
-  border: var(--borde);
-  padding: 4px;
-}
-
-.mascota-wrap.accent-bg {
-  border-radius: var(--r-pildora);
-  border: var(--borde);
-  padding: 6px;
-}
-
 .mascota-holo {
   position: absolute;
   inset: -4px;
