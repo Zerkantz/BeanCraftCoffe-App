@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "BeanCraft Coffee",
+    "slug": "beancraft-coffee",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "beancraft",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "mx.beancraft.coffee"
+    },
+    "android": {
+      "package": "mx.beancraft.coffee",
+      "softwareKeyboardLayoutMode": "resize"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "BeanCraft usa tu ubicación cuando solicitas buscar una sucursal cercana."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "BeanCraft usa la cámara para leer el QR de tu cupón.",
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": true
+        }
+      ]
+    ]
+  }
+}

@@ -1,7 +1,6 @@
 // 5 mascotas oficiales de BeanCraft Coffee (ilustraciones PNG transparentes estilo vintage rubber-hose)
 // Cero hex sueltos: fondos, acentos y capa holo usan exclusivamente tokens CSS de tokens.css.
 
-export const MASCOTA_FAMILIA_SRC = "assets/mascotas/beancraft_mascotas_familia.png";
 
 export const MASCOTAS_INFO = [
   {
@@ -11,7 +10,7 @@ export const MASCOTAS_INFO = [
     base: "Grano de café con surco central",
     rol: "Curioso, el guía del sitio",
     accent: "var(--c-limon)",
-    usos: "Hero · Quiz · Recibido"
+    usos: "Recibido"
   },
   {
     id: "taza",
@@ -20,7 +19,7 @@ export const MASCOTAS_INFO = [
     base: "Taza con asa y vapor",
     rol: "Cálida, acompaña pedidos",
     accent: "var(--c-menta)",
-    usos: "Hero · Preparando · Footer"
+    usos: "Preparando"
   },
   {
     id: "espuma",
@@ -29,7 +28,7 @@ export const MASCOTAS_INFO = [
     base: "Nube de espuma con corazón de latte",
     rol: "Dulce y soñadora",
     accent: "var(--c-lila)",
-    usos: "Hero · Quiz · Listo"
+    usos: "Listo"
   },
   {
     id: "hielito",
@@ -38,7 +37,7 @@ export const MASCOTAS_INFO = [
     base: "Cubo de hielo facetado",
     rol: "Fresco, burlón",
     accent: "var(--c-limon)",
-    usos: "Quiz · Bebidas frías · Estado vacío"
+    usos: "Bebidas frías · Estado vacío"
   },
   {
     id: "croissant",
@@ -47,7 +46,7 @@ export const MASCOTAS_INFO = [
     base: "Croissant curvo con glaseado",
     rol: "Antojadizo",
     accent: "var(--c-menta)",
-    usos: "Quiz · Repostería · Entregado"
+    usos: "Repostería · Entregado"
   }
 ];
 

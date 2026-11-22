@@ -4,3 +4,7 @@ Thumbs.db
 __pycache__/
 *.pyc
 node_modules/
+.expo/
+dist/
+mobile/generated/
+tmp/

@@ -11,26 +11,6 @@
   <a class="skip-link" href="#mainViewport">Saltar al contenido</a>
 
   <div class="app-shell" id="appShell">
-    <!-- SPLASH SCREEN -->
-    <section class="splash-overlay" id="splashScreen" aria-label="Pantalla de bienvenida">
-      <div class="splash-rings" aria-hidden="true"><span></span><span></span><span></span></div>
-      <div class="splash-center">
-        <div id="splashMascot" aria-hidden="true"></div>
-        <p class="splash-logo">BEAN CRAFT</p>
-        <p class="splash-sub">Tu café, tú mandas</p>
-      </div>
-      <div class="splash-foot">
-        <div class="loader" aria-hidden="true"><span></span></div>
-        <p>Elige, mira el precio al instante y pídelo sin fila.</p>
-        <button type="button" class="splash-skip" id="skipSplashBtn">Entrar ahora</button>
-      </div>
-    </section>
-
-    <!-- BARRA NOVEDAD FIJA SUPERIOR (Limón + Tostado, Sec. 4) -->
-    <div class="barra-novedad" id="barraNovedad" role="region" aria-label="Promoción del día">
-      <span>Hoy el latte de avena va con $10 menos. Aprovéchalo.</span>
-    </div>
-
     <!-- TOAST NO BLOQUEANTE (RF-10) -->
     <aside class="push-toast" id="pushToast" hidden aria-live="polite">
       <div class="toast-ic" id="toastMascot" aria-hidden="true"></div>
@@ -44,49 +24,16 @@
     <!-- MAIN APP VIEWPORT -->
     <main class="viewport" id="mainViewport" tabindex="-1">
 
-      <!-- ==================== VISTA 1: INICIO ==================== -->
-      <section class="view active" id="view-home" aria-label="Inicio">
-        <!-- Cabecera Caffenio/Guía con Iniciar sesión arriba a la derecha -->
-        <header class="home-header">
-          <div class="home-topbar">
-            <button type="button" class="brand-lockup" data-nav="home" aria-label="BeanCraft Inicio">
-              <svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true">
-                <rect width="48" height="48" rx="14" fill="var(--c-verde)" stroke="var(--c-tostado)" stroke-width="2.5"/>
-                <ellipse cx="24" cy="24" rx="10" ry="13.5" transform="rotate(32 24 24)" fill="var(--c-espuma)"/>
-                <path d="M30.5 13c-6.5 3.2-3.6 9.4-7.4 13.1-2.4 2.4-5.8 3-5.9 8.7" fill="none" stroke="var(--c-tostado)" stroke-width="2.6" stroke-linecap="round"/>
-              </svg>
-              <span class="logo-word">BEAN CRAFT</span>
-            </button>
-            <div class="home-actions">
-              <button type="button" class="icon-circle" id="homeNotifBtn" aria-label="Notificaciones">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21h4"/></svg>
-                <span class="dot-badge" id="notifDot" hidden></span>
-              </button>
-              <button type="button" class="login-pill" id="homeAuthBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-                <span id="homeAuthLabel">Iniciar sesión</span>
-              </button>
-            </div>
-          </div>
-
-          <button type="button" class="branch-bar" id="openBranchBtn">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--c-verde)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-            <span id="homeBranchText"><strong>BeanCraft Centro</strong> · Abierta hasta 22:00</span>
-            <span class="branch-change">Cambiar</span>
-          </button>
-        </header>
-
-        <!-- 1. HERO ARMADOR + CARRUSEL 3D GIRATORIO (Híbrido sobre Guía v1.0) -->
-        <section class="hero-armador" id="heroCarousel" aria-roledescription="carousel" aria-label="Armador de bebidas destacadas">
+      <section class="view active" id="view-home" aria-label="Inicio"><div id="homeContent" class="pad"></div>        <section class="hero-armador" id="heroCarousel" aria-roledescription="carousel" aria-label="Armador de bebidas destacadas">
           <div class="hero-copy">
             <h1 class="titulo-mixto hero-h1">Arma tu bebida, <em>tú</em> mandas</h1>
-            <p class="hero-sub">Elige, mira el precio al instante y pídela en la app.</p>
+            <p class="hero-sub">Elige, personaliza y agrega tu bebida al carrito.</p>
           </div>
 
           <!-- Escenario orbital 3D plano sin degradados + Mascotas Grano, Taza y Espuma -->
           <div class="hero-stage-wrap">
-            <span class="etiqueta-desc rot-neg hero-tag-left">-20% hoy</span>
-            <span class="etiqueta-nueva rot-pos hero-tag-right">¡Nuevo!</span>
+            <span class="etiqueta-desc rot-neg hero-tag-left">A tu gusto</span>
+            <span class="etiqueta-nueva rot-pos hero-tag-right">Tu bebida</span>
             <div class="hero-mascot-left" id="heroMascotLeft" aria-hidden="true"></div>
             <div class="hero-mascot-right" id="heroMascotRight" aria-hidden="true"></div>
             <div class="hero-mascot-top" id="heroMascotTop" aria-hidden="true"></div>
@@ -124,7 +71,7 @@
 
             <div class="armador-row">
               <span class="armador-lbl">Bebida</span>
-              <div class="armador-chips" id="heroDrinkChips" role="tablist" aria-label="Elegir bebida destacada"></div>
+              <div class="armador-chips" id="heroDrinkChips" role="group" aria-label="Elegir bebida destacada"></div>
             </div>
             <div class="armador-row">
               <span class="armador-lbl">Tamaño</span>
@@ -134,93 +81,21 @@
               <span class="armador-lbl">Leche</span>
               <div class="armador-chips" id="heroMilkChips"></div>
             </div>
+            <div class="armador-row"><span class="armador-lbl">Endulzante</span><div class="armador-chips" id="heroSweetChips"></div></div>
             <div class="armador-row">
               <span class="armador-lbl">Extras</span>
               <div class="armador-chips" id="heroExtraChips"></div>
             </div>
 
             <div class="armador-actions">
-              <button type="button" class="btn-primary" id="heroOrderBtn">Pedir ahora</button>
+              <button type="button" class="btn-primary" id="heroOrderBtn">Agregar al carrito</button>
               <button type="button" class="btn-secondary" id="heroMenuBtn">Ver menú</button>
             </div>
           </div>
           <p class="visually-hidden" id="heroLive" role="status" aria-live="polite"></p>
         </section>
 
-        <!-- 2. MOSAICO DE PROMOCIONES (Cereza + Limón, vigencia visible RN-01) -->
-        <section class="section-block" id="promoSection" aria-label="Promociones vigentes">
-          <div class="section-head">
-            <h2 class="titulo-mixto">Aprovecha las <em>ofertas</em></h2>
-          </div>
-          <div class="promo-track" id="promoTrack"></div>
-        </section>
-
-        <!-- 3. HOJA DE MENÚ SELECCIONABLE (Híbrido Luma en tokens de la guía, solo en Inicio) -->
-        <section class="luma-sheet-section" id="homeMenuSheetSection" aria-roledescription="carousel" aria-label="Hoja de menú seleccionable">
-          <div class="ls-header">
-            <div>
-              <h2 class="titulo-mixto">Las <em>Bebidas</em> de la casa</h2>
-              <p class="ls-sub">Toca una bebida en la hoja para armarla a tu gusto.</p>
-              <div class="mascot-speech-bar" id="sheetMascotBanner"></div>
-            </div>
-          </div>
-
-          <div class="ls-tabs" id="sheetTabs" role="tablist" aria-label="Categorías de la hoja de menú"></div>
-
-          <div class="ls-book-wrap">
-            <div class="ls-book-track" id="sheetBookTrack"></div>
-          </div>
-
-          <div class="ls-pager">
-            <button type="button" class="ls-arr" id="sheetPrevBtn" aria-label="Hoja anterior">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
-            </button>
-            <span class="ls-page-name" id="sheetPageName">Frappés y Especiales</span>
-            <button type="button" class="ls-arr" id="sheetNextBtn" aria-label="Siguiente hoja">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-            </button>
-          </div>
-
-          <div class="ls-chips-block">
-            <span class="ls-chips-label">En esta hoja</span>
-            <div class="ls-chips" id="sheetQuickChips"></div>
-          </div>
-        </section>
-
-        <!-- 4. QUIZ DE BEBIDAS (Sección 9.5, en página, sin "Más tarde") -->
-        <section class="section-block" id="quizSection" aria-label="Quiz de bebidas">
-          <div id="quizContainer"></div>
-        </section>
-
-        <!-- 5. ¿CÓMO VA MI PEDIDO? (Sección 9.6, 4 estados + mascotas) -->
-        <section class="section-block" id="homeOrderSection" aria-label="Seguimiento rápido de pedido">
-          <h2 class="titulo-mixto">¿Cómo va mi <em>pedido</em>?</h2>
-          <div class="estado-panel" id="homeOrderTimeline"></div>
-        </section>
-
-        <!-- 6. SUCURSALES (Sección 9.4: Referencia, Abierta/Cerrada, mapa SVG propio) -->
-        <section class="section-block" id="branchesSection" aria-label="Sucursales BeanCraft">
-          <div id="branchesContainer"></div>
-        </section>
-
-        <!-- 7. FOOTER TOSTADO CON MASCOTA (Sección 9.1 / 9.2) -->
-        <footer class="site-footer">
-          <div class="footer-top">
-            <div id="footerMascot" aria-hidden="true"></div>
-            <div>
-              <p class="footer-quote">"Y recuerda… pide en la app y ahórrate la fila."</p>
-              <span class="footer-brand">BeanCraft Coffee · San Luis R.C.</span>
-            </div>
-          </div>
-          <div class="footer-links">
-            <button type="button" data-nav="menu">Menú completo</button>
-            <button type="button" data-nav="orders">Mi pedido</button>
-            <button type="button" data-nav="profile">Mi perfil</button>
-            <button type="button" data-nav="design">Guía /design</button>
-          </div>
-        </footer>
-      </section>
-
+<div id="homePromos" class="pad"></div></section>
       <!-- ==================== VISTA 2: MÓDULO MENÚ (TARJETAS CRISTALINAS PLANAS) ==================== -->
       <section class="view" id="view-menu" aria-label="Explorar menú" hidden>
         <div class="menu-crystal-bg">
@@ -229,7 +104,7 @@
               <button type="button" class="rbtn" data-nav="home" aria-label="Volver a inicio">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
               </button>
-              <h1 class="titulo-mixto t-center" style="font-size:22px">Las <em>Bebidas</em></h1>
+              <h1 class="titulo-mixto t-center" style="font-size:22px">Nuestro <em>menú</em></h1>
               <button type="button" class="avatar sm" id="menuAvatarBtn" aria-label="Mi cuenta">Inv</button>
             </header>
 
@@ -238,16 +113,10 @@
               <input type="search" id="menuSearchInput" placeholder="Buscar café, frappé, cold brew o pan...">
             </label>
 
-            <div class="chips" id="menuFilterChips" role="tablist" aria-label="Filtrar menú por categoría"></div>
-
-            <div class="mascot-speech-bar menu-mascot-bar" id="menuMascotBanner"></div>
+            <div class="chips" id="menuFilterChips" role="group" aria-label="Filtrar menú por categoría"></div>
 
             <div class="explore-bar">
               <span class="count" id="menuCountLabel">25 productos</span>
-              <button type="button" class="filter-chip-btn" id="menuFavFilterBtn" aria-pressed="false">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>
-                <span>Favoritos</span>
-              </button>
             </div>
           </div>
 
@@ -263,9 +132,6 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
             </button>
             <h1 class="titulo-mixto t-center" style="font-size:22px">Tu <em>carrito</em></h1>
-            <button type="button" class="rbtn" id="openQrBtn" aria-label="Escanear cupón QR">
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--c-verde)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
-            </button>
           </header>
         </div>
 
@@ -280,9 +146,6 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
             </button>
             <h1 class="titulo-mixto t-center" style="font-size:22px">Mi <em>pedido</em></h1>
-            <button type="button" class="rbtn" id="ordersNotifBtn" aria-label="Historial de notificaciones">
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 21h4"/></svg>
-            </button>
           </header>
           <div id="ordersContent"></div>
         </div>
@@ -291,20 +154,6 @@
       <!-- ==================== VISTA 5: PERFIL (RF-22) ==================== -->
       <section class="view" id="view-profile" aria-label="Perfil de usuario" hidden>
         <div id="profileContent"></div>
-      </section>
-
-      <!-- ==================== VISTA 6: GUÍA VIVA /design ==================== -->
-      <section class="view" id="view-design" aria-label="Guía de diseño viva" hidden>
-        <div class="pad">
-          <header class="topbar">
-            <button type="button" class="rbtn" data-nav="home" aria-label="Volver a inicio">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18 9 12l6-6"/></svg>
-            </button>
-            <h1 class="titulo-mixto t-center" style="font-size:22px">Guía <em>/design</em></h1>
-            <div style="width:44px"></div>
-          </header>
-          <div id="designContent"></div>
-        </div>
       </section>
 
     </main>
@@ -320,12 +169,6 @@
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 2.5v2.5M12 2.5v2.5"/></svg>
           <span>Menú</span>
         </button>
-        <div class="nav-fab-slot">
-          <button type="button" class="nav-fab" id="fabQrBtn" aria-label="Escanear cupón QR">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--c-espuma)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>
-          </button>
-          <span class="nav-fab-label">Cupón QR</span>
-        </div>
         <button type="button" class="nav-item" data-nav="cart">
           <span class="nav-badge" id="cartBadge" hidden>0</span>
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.2l2.3 11a1 1 0 0 0 1 .8h9.3a1 1 0 0 0 1-.8L20.5 8H6"/><circle cx="9.5" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>
@@ -336,6 +179,7 @@
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2-1.5L14 21l-2-1.5L10 21l-2-1.5L6 21z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>
           <span>Pedido</span>
         </button>
+        <button type="button" class="nav-item" data-nav="profile"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21v-3a8 8 0 0 1 16 0v3"/></svg><span>Perfil</span></button>
       </div>
     </nav>
   </div>
@@ -359,10 +203,6 @@
 
   <dialog id="ratingDialog" class="sheet-dialog" closedby="any" aria-labelledby="ratingTitle">
     <div class="dialog-sheet" id="ratingBody"></div>
-  </dialog>
-
-  <dialog id="notifDialog" class="sheet-dialog" closedby="any" aria-labelledby="notifTitle">
-    <div class="dialog-sheet" id="notifBody"></div>
   </dialog>
 
   <script type="module" src="app.js"></script>

@@ -1,36 +1,85 @@
-# BeanCraft Coffee App
+# BeanCraft Coffee · App del cliente
 
-Aplicación web móvil interactiva para **BeanCraft Coffee** con arquitectura **híbrida**: cumple estrictamente las reglas visuales, tipográficas, de accesibilidad y tokens de la **Guía de diseño front-end BeanCraft v1.0**, integrando en los módulos móviles los flujos e interacciones del **SRS v1.3** (`RF-01`–`RF-11`, `RF-22`, `RN-01`–`RN-05`).
+Proyecto escolar preparado para Expo Go. Conserva la arquitectura existente: contenedor React Native/Expo SDK 58 y pantallas HTML/CSS/JavaScript locales en WebView. Cámara QR, ubicación, áreas seguras y botón Atrás se integran mediante módulos nativos. No requiere una web publicada.
 
-## Arquitectura y archivos principales
+## Iniciar en Windows
 
-- [`tokens.css`](tokens.css): Fuente única de verdad con los 10 tokens de color (`--c-tostado`, `--c-verde`, `--c-espuma`, `--c-menta`, `--c-miel`, `--c-fresa`, `--c-lila`, `--c-limon`, `--c-cereza`, `--c-blanco`), escalas de espaciado y radios, bordes duros (`2px solid var(--c-tostado)`), sombra dura (`4px 4px 0 var(--c-tostado)`), `@media (prefers-reduced-motion: reduce)` y declaraciones `@font-face` locales.
-- [`fonts/`](fonts/): Tipografías auto-hospedadas en formato `.woff2` (`Instrument Serif`, `Bricolage Grotesque`, `Instrument Sans`) para funcionar sin CDNs ni dependencias externas.
-- [`mascotas.js`](mascotas.js) y [`assets/mascotas/`](assets/mascotas/): Exporta `MASCOTAS_INFO`, `MASCOTA_ESTADOS`, `MASCOTA_FAMILIA_SRC` y `renderMascota(nombre, estado, opts)` conectando las **5 ilustraciones PNG transparentes estilo vintage rubber-hose** (`grano.png`, `taza.png`, `espuma.png`, `hielito.png`, `croissant.png` y `beancraft_mascotas_familia.png`) con soporte de respaldo claro en superficies oscuras (`onDark`), fondos de acento (`accentBg`) y capa `holo` con tokens CSS.
-- [`index.html`](index.html), [`styles.css`](styles.css), [`app.js`](app.js): Aplicación SPA móvil (`max-width: 430px`) con 6 vistas (`home`, `menu`, `cart`, `orders`, `profile`, `design`), modales nativos `<dialog>` y catálogo completo de **25 productos** (`20` bebidas + `5` piezas de repostería recortadas sin fondo en [`assets/`](assets/): `concha_vainilla.png`, `dona_fresa.png`, `croissant_mantequilla.png`, `oreja_hojaldrada.png` y `cuernito_mantequilla.png`).
-
-## Reglas de diseño e integración híbrida
-
-- **Estricta fidelidad visual**: Cero colores hex fuera de `tokens.css`, cero degradados CSS, cero sombras difuminadas o `backdrop-filter`, cero `text-transform: uppercase`, cero mapas o librerías de terceros y `--c-cereza` reservado para promociones, etiquetas de descuento, estado `Cancelado` y mensajes de error.
-- **Hero giratorio + Armador en vivo**: Carrusel 3D orbital en escenario plano (`Menta`/`Espuma`) flanqueado de forma protagónica por `Grano` (`96 px`), `Espuma` (`90 px`) y `Taza` (`76 px` holo), más la barra dinámica `#heroMascotCallout` en el armador de `Tamaño`, `Leche` y `Extras` con precio destacado en `.marcatextos`.
-- **Inicio y módulos interactivos**:
-  - `BarraNovedad` fija superior, `MosaicoPromo` (`RN-01`) con stickers `onDark`, **hoja de menú seleccionable** (incluye `Horno Artesanal` y banner dinámico `#sheetMascotBanner`) y barra de navegación inferior con botón central `Cupón QR`.
-  - **Quiz inline de 5 preguntas** con alineación de las 5 mascotas (`66–84 px`), anfitriones por pregunta y cierre con `Hielito` (`112 px`) y botón `"Armarla"`.
-  - **Sucursales** con indicador `Abierta`/`Cerrada`, referencia, horarios por cápsula, enlace `"Cómo llegar"`, botón `"Usar mi ubicación"` bajo clic y mapa SVG ilustrado propio.
-  - **Menú (`?view=menu`)**: Tarjetas con fondo geométrico facetado en SVG plano pastel (`Menta`, `Miel`, `Fresa`, `Lila`, `Limón`), banner guía `#menuMascotBanner`, sellos coleccionables de mascota (`52 px onDark`), fotografías grandes de bebidas y panadería, búsqueda, favoritos y personalizador `RN-02`.
-  - **Carrito (`?view=cart`), Pedido (`?view=orders`) y Splash/Perfil**: Cupones `RN-01` (`BIENVENIDA`, `OTONO2X1`, `VENCIDO25`), acompañante de checkout, confirmación **Desliza para confirmar** y vitrinas protagonistas de mascotas (`120–136 px`).
-  - **Guía viva (`?view=design`)**: Muestra los 10 tokens de color, las 5 insignias de estado (`Recibido`, `Preparando`, `Listo`, `Entregado`, `Cancelado`), el póster oficial de la familia (`beancraft_mascotas_familia.png`) y las tarjetas de las 5 mascotas con roles y usos.
-
-## Ejecución local
-
-Al usar módulos ES (`<script type="module" src="app.js">`), sírvelo mediante HTTP local desde la raíz del repositorio:
-
-```bash
-python -m http.server 8000
+```powershell
+npm.cmd install
+npx.cmd expo start --clear
 ```
 
-Rutas útiles:
+En esta copia las dependencias ya están instaladas. `npx.cmd` evita el bloqueo de scripts `npx.ps1` de PowerShell sin cambiar la política del sistema. También funciona `npx expo start` en una terminal que lo permita.
 
-- App principal: `http://localhost:8000/?view=home`
-- Menú de bebidas: `http://localhost:8000/?view=menu`
-- Guía viva /design: `http://localhost:8000/?view=design`
+Usa Node 22.13+ de la rama 22 o 24.3+ de la rama 24, y Expo Go compatible con SDK 58. Conecta teléfono y computadora a la misma red y escanea el QR. Si tu red bloquea Metro, puedes iniciar con `npx.cmd expo start --tunnel`.
+
+## Cinco accesos principales
+
+| Pantalla | Función |
+| --- | --- |
+| Inicio | Carrusel orbital original, armador de bebidas en vivo, sucursal, promociones vigentes y pedido actual. |
+| Menú | Productos activos, búsqueda, filtros y detalle personalizable. |
+| Carrito | Edición, cantidades, cupón manual/QR, recogida, pago en mostrador, revisión y deslizador original para confirmar. |
+| Pedido | Confirmación, resumen, cuatro estados y evaluación tras la entrega. |
+| Perfil | Acceso/registro, edición de nombre y teléfono, cambio de contraseña y cierre de sesión. |
+
+Detalle, acceso, sucursal, cupón QR y evaluación usan diálogos. No hay navegación administrativa, quiz, favoritos, bandeja de notificaciones ni página de diseño.
+
+## Probar el recorrido
+
+Cuenta ficticia: **cliente@beancraft.mx** / **Cafe1234**. También puedes registrar otra cuenta.
+
+1. Inicia sesión y abre Menú. Personaliza un Latte de caramelo: grande, avena, sin endulzante y shot extra = **$100 MXN**.
+2. Revisa el carrito, modifica cantidades o edita el producto. Aplica `BIENVENIDA`: descuento de $30 por pedido, total $70 para una unidad.
+3. Elige sucursal manualmente o solicita ubicación; la sugerencia usa distancia geográfica entre coordenadas de prueba. Selecciona una hora futura dentro del horario de esa sucursal (hora de Sonora).
+4. Elige efectivo o tarjeta **al recoger**, revisa y desliza para confirmar. El deslizador conserva su gesto original y admite Enter/Espacio o activación asistida. No se solicitan datos bancarios.
+5. La simulación avanza cada 20 segundos: recibido → preparando → listo → entregado. Al finalizar, califica el pedido y cada producto; solo se permite una evaluación.
+6. En Perfil, modifica nombre/teléfono y cambia la contraseña. Cierra sesión y verifica el nuevo acceso.
+
+Cupones de prueba centralizados en `data/mocks.js`:
+
+| Código | Caso |
+| --- | --- |
+| BIENVENIDA | $30 menos, activo hasta 2028-12-31. |
+| OTONO20 | 20% menos, del 2026-09-01 al 2026-11-30. |
+| VENCIDO25 | Vencido. |
+| INACTIVO | Desactivado. |
+
+Un QR debe contener el código literal, por ejemplo `BIENVENIDA`. En Carrito → Escanear QR → Abrir cámara se solicita el permiso. Si lo deniegas, vuelve a la captura manual. La ubicación también pide permiso solo cuando pulsas “Usar mi ubicación”.
+
+## Datos y simulación
+
+No existe backend ni conexión a base de datos. Cuentas, contraseñas de prueba, cambios de perfil, carrito, cupones usados, pedido y evaluación viven en memoria y **se reinician al recargar o cerrar la ejecución**. Cerrar sesión conserva las cuentas en esa misma ejecución y vacía el carrito. Usa datos ficticios.
+
+La simulación está separada en `lib/mock-orders.js` y se configura con `MOCK_CONFIG` en `data/mocks.js`. También acelera los pedidos programados para poder demostrar el flujo en clase. En una integración futura, los estados vendrán del servicio del personal. Los avisos actuales son internos; no son notificaciones push. Solo se conserva el pedido actual por cuenta.
+
+## Continuar trabajando en la misma estructura
+
+- `app.js`, `index.html`, `styles.css`, `tokens.css`: navegación, interfaz y diseño original corregidos.
+- `data/catalog.js`: productos, imágenes y cargos de personalización del SRS.
+- `data/mocks.js`: sucursales, horarios, coordenadas, cupones, usuarios y configuración de simulación.
+- `lib/rules.js`: cálculo de precios, cupones, horarios, distancia y validaciones.
+- `lib/mock-orders.js`: avance automático exclusivo del modo de prueba.
+- `mascotas.js`, `assets/`, `fonts/`: ilustraciones, fotografías y fuentes locales originales.
+- `mobile/`: contenedor Expo y puente con cámara, ubicación y navegación nativa.
+- `scripts/prepare-web.cjs`: genera el contenido local al iniciar Metro y al guardar cambios. **No editar `mobile/generated/`.**
+
+`npm.cmd run web` permite inspeccionar la misma interfaz en `http://localhost:8000`; la cámara QR nativa se prueba en Expo Go. `.figma/` se conserva como metadatos y herramientas de la exportación, sin publicar nada automáticamente.
+
+## Verificación
+
+```powershell
+npm.cmd run check
+npm.cmd run test:e2e
+npx.cmd expo install --check
+npx.cmd expo-doctor
+npx.cmd expo export --platform all --output-dir tmp/expo-export
+```
+
+Las pruebas de interfaz usan Microsoft Edge instalado y guardan capturas en `tmp/playwright/`. Cubren acceso/registro, perfil/contraseña, precios, carrito, cupones, revisión/confirmación, seguimiento/evaluación, permisos denegados mediante el puente simulado, navegación y pantallas pequeñas.
+
+También verifican el carrusel original, el precio del armador, el arrastre de confirmación y el regreso del deslizador cuando se suelta antes de completar el gesto.
+
+La comprobación automatizada del puente no sustituye la prueba física de cámara, GPS, permisos del sistema, teclado y áreas seguras en Android/iPhone. El empaquetado Android/iOS comprueba la integración de módulos, sin abrir Expo Go en un teléfono.
+
+Consulta `docs/EXPO-MIGRATION.md` para el alcance de la corrección y las decisiones técnicas.
