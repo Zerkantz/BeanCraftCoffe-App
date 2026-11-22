@@ -28,6 +28,16 @@
           "recordAudioAndroid": false,
           "barcodeScannerEnabled": true
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./mobile/assets/notifications/bean-icon.png",
+          "color": "#0B5C63",
+          "largeIcon": "./assets/mascotas/taza.png",
+          "defaultChannel": "beancraft-avisos",
+          "enableRemoteNotifications": false
+        }
       ]
     ]
   }

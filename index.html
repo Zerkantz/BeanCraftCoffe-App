@@ -6,22 +6,12 @@
   <title>BeanCraft Coffee — App Móvil</title>
   <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="layout.css">
 </head>
 <body>
   <a class="skip-link" href="#mainViewport">Saltar al contenido</a>
 
   <div class="app-shell" id="appShell">
-    <!-- TOAST NO BLOQUEANTE (RF-10) -->
-    <aside class="push-toast" id="pushToast" hidden aria-live="polite">
-      <div class="toast-ic" id="toastMascot" aria-hidden="true"></div>
-      <div class="toast-body">
-        <strong id="toastTitle">BeanCraft</strong>
-        <span id="toastMsg">Actualización de pedido</span>
-      </div>
-      <button type="button" class="toast-close" id="closeToastBtn" aria-label="Cerrar notificación">×</button>
-    </aside>
-
-    <!-- MAIN APP VIEWPORT -->
     <main class="viewport" id="mainViewport" tabindex="-1">
 
       <section class="view active" id="view-home" aria-label="Inicio"><div id="homeContent" class="pad"></div>        <section class="hero-armador" id="heroCarousel" aria-roledescription="carousel" aria-label="Armador de bebidas destacadas">
@@ -29,11 +19,9 @@
             <h1 class="titulo-mixto hero-h1">Arma tu bebida, <em>tú</em> mandas</h1>
             <p class="hero-sub">Elige, personaliza y agrega tu bebida al carrito.</p>
           </div>
-
-          <!-- Escenario orbital 3D plano sin degradados + Mascotas Grano, Taza y Espuma -->
           <div class="hero-stage-wrap">
-            <span class="etiqueta-desc rot-neg hero-tag-left">A tu gusto</span>
-            <span class="etiqueta-nueva rot-pos hero-tag-right">Tu bebida</span>
+            <span class="etiqueta-desc rot-neg hero-tag-left">-20%</span>
+            <span class="etiqueta-nueva rot-pos hero-tag-right">¡Nuevo!</span>
             <div class="hero-mascot-left" id="heroMascotLeft" aria-hidden="true"></div>
             <div class="hero-mascot-right" id="heroMascotRight" aria-hidden="true"></div>
             <div class="hero-mascot-top" id="heroMascotTop" aria-hidden="true"></div>
@@ -57,46 +45,11 @@
             </div>
           </div>
 
-          <!-- Armador en vivo sincronizado con el Carrusel 3D -->
-          <div class="armador-box">
-            <div class="hero-host-bar" id="heroMascotCallout"></div>
-            <div class="armador-head">
-              <div>
-                <span class="armador-cat" id="heroCategoryLabel">Frappés</span>
-                <h2 class="armador-title" id="heroTitle">Frappé Supremo</h2>
-              </div>
-              <span class="marcatextos armador-price" id="heroLiveTotal">$65</span>
-            </div>
-            <p class="armador-desc" id="heroDesc">Espresso doble frappeado con crema batida y caramelo de la casa.</p>
-
-            <div class="armador-row">
-              <span class="armador-lbl">Bebida</span>
-              <div class="armador-chips" id="heroDrinkChips" role="group" aria-label="Elegir bebida destacada"></div>
-            </div>
-            <div class="armador-row">
-              <span class="armador-lbl">Tamaño</span>
-              <div class="armador-chips" id="heroSizeChips"></div>
-            </div>
-            <div class="armador-row">
-              <span class="armador-lbl">Leche</span>
-              <div class="armador-chips" id="heroMilkChips"></div>
-            </div>
-            <div class="armador-row"><span class="armador-lbl">Endulzante</span><div class="armador-chips" id="heroSweetChips"></div></div>
-            <div class="armador-row">
-              <span class="armador-lbl">Extras</span>
-              <div class="armador-chips" id="heroExtraChips"></div>
-            </div>
-
-            <div class="armador-actions">
-              <button type="button" class="btn-primary" id="heroOrderBtn">Agregar al carrito</button>
-              <button type="button" class="btn-secondary" id="heroMenuBtn">Ver menú</button>
-            </div>
-          </div>
+          <div class="hero-pick"><h2 id="heroTitle"></h2><p id="heroPrice"></p><button class="btn-primary" id="heroOrderBtn">Pedir ya</button><button class="link" data-nav="menu">Ver todo el menú</button></div>
           <p class="visually-hidden" id="heroLive" role="status" aria-live="polite"></p>
         </section>
 
-<div id="homePromos" class="pad"></div></section>
-      <!-- ==================== VISTA 2: MÓDULO MENÚ (TARJETAS CRISTALINAS PLANAS) ==================== -->
+<div id="homePromos" class="pad"></div><section id="houseSection" class="home-section" aria-label="Bebidas de la casa"></section><section id="quizContainer" class="home-section" aria-label="Quiz de bebidas"></section><footer id="homeFooter" class="home-footer"></footer></section>
       <section class="view" id="view-menu" aria-label="Explorar menú" hidden>
         <div class="menu-crystal-bg">
           <div class="pad">
@@ -115,16 +68,11 @@
 
             <div class="chips" id="menuFilterChips" role="group" aria-label="Filtrar menú por categoría"></div>
 
-            <div class="explore-bar">
-              <span class="count" id="menuCountLabel">25 productos</span>
-            </div>
-          </div>
+</div>
 
           <div class="cgrid" id="crystalMenuGrid"></div>
         </div>
       </section>
-
-      <!-- ==================== VISTA 3: CARRITO Y CHECKOUT ==================== -->
       <section class="view" id="view-cart" aria-label="Carrito de compras" hidden>
         <div class="pad">
           <header class="topbar">
@@ -137,8 +85,6 @@
 
         <div id="cartContent"></div>
       </section>
-
-      <!-- ==================== VISTA 4: SEGUIMIENTO DE PEDIDO ==================== -->
       <section class="view" id="view-orders" aria-label="Seguimiento de pedido" hidden>
         <div class="pad">
           <header class="topbar">
@@ -150,15 +96,11 @@
           <div id="ordersContent"></div>
         </div>
       </section>
-
-      <!-- ==================== VISTA 5: PERFIL (RF-22) ==================== -->
       <section class="view" id="view-profile" aria-label="Perfil de usuario" hidden>
         <div id="profileContent"></div>
       </section>
 
     </main>
-
-    <!-- BARRA DE NAVEGACIÓN INFERIOR FIJA -->
     <nav class="nav-wrap" aria-label="Navegación principal">
       <div class="nav">
         <button type="button" class="nav-item on" data-nav="home" aria-current="page">
@@ -183,8 +125,6 @@
       </div>
     </nav>
   </div>
-
-  <!-- MODALES NATIVOS (<dialog>) -->
   <dialog id="customizerDialog" class="sheet-dialog" closedby="any" aria-labelledby="custTitle">
     <div class="dialog-sheet" id="custBody"></div>
   </dialog>
@@ -205,6 +145,9 @@
     <div class="dialog-sheet" id="ratingBody"></div>
   </dialog>
 
+  <dialog id="avatarDialog" class="sheet-dialog" aria-labelledby="avatarTitle"><div class="dialog-sheet" id="avatarBody"></div></dialog>
+  <dialog id="notifDialog" class="sheet-dialog" aria-labelledby="notifTitle"><div class="dialog-sheet" id="notifBody"></div></dialog>
+  <script src="vendor/anime.min.js"></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>

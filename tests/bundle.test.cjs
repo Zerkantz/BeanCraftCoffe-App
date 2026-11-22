@@ -5,10 +5,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { buildHtml, ROOT } = require('../scripts/prepare-web.cjs');
 
-test('el paquete conserva las 5 pantallas, 5 diálogos y todos los recursos locales', () => {
+test('el paquete conserva las 5 pantallas, 7 diálogos y todos los recursos locales', () => {
   const { html, resources } = buildHtml();
   assert.equal((html.match(/class="view(?: active)?"/g) || []).length, 5);
-  assert.equal((html.match(/<dialog /g) || []).length, 5);
+  assert.equal((html.match(/<dialog /g) || []).length, 7);
   assert.equal(resources.length, 39);
   for (const name of resources) {
     const base64 = fs.readFileSync(path.join(ROOT, name)).toString('base64');
@@ -24,7 +24,7 @@ test('el paquete conserva las 5 pantallas, 5 diálogos y todos los recursos loca
 test('los scripts empaquetados son válidos sin importaciones ES ni servidor', () => {
   const { html } = buildHtml();
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
-  assert.equal(scripts.length, 2);
+  assert.equal(scripts.length, 3);
   scripts.forEach(([, script]) => new vm.Script(script));
 });
 

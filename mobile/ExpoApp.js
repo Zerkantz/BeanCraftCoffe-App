@@ -6,6 +6,8 @@ import { StatusBar } from 'expo-status-bar';
 import * as Location from 'expo-location';
 import { WebView } from 'react-native-webview';
 import html from './generated/web-content';
+import { notificationPayload } from '../lib/notification-payload';
+import { presentLocalNotification, clearPhoneNotices, listenForNotificationPress, notificationErrorDetails } from './localNotifications';
 
 const BASE_URL = 'https://beancraft.local/';
 // Extract shell colors from the generated design tokens; no second palette to maintain.
@@ -15,6 +17,9 @@ const source = { html, baseUrl: BASE_URL };
 
 function CoffeeApp() {
   const web = useRef(null);
+  const noticeCount = useRef(0);
+  const pendingView = useRef(null);
+  const interfaceReady = useRef(false);
   const canGoBack = useRef(false);
   const reduceMotion = useRef(false);
   const requestingLocation = useRef(false);
@@ -26,6 +31,15 @@ function CoffeeApp() {
   const [, requestCameraPermission] = useCameraPermissions();
 
   const inject = useCallback((code) => web.current?.injectJavaScript(`${code}; true;`), []);
+
+  useEffect(() => {
+    const remove=listenForNotificationPress(view=>{
+      if(!['home','menu','cart','orders','profile'].includes(view))return;
+      if(interfaceReady.current)inject(`window.BeanCraftNative?.openView(${JSON.stringify(view)})`);
+      else pendingView.current=view;
+    });
+    return remove;
+  },[inject]);
 
   useEffect(() => {
     const back = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -46,10 +60,17 @@ function CoffeeApp() {
     let message;
     try { message = JSON.parse(nativeEvent.data); } catch { return; }
     if (!message || typeof message !== 'object') return;
-    if (message.type === 'navigation') {
+    if(message.type==='notify') {
+      const notice=notificationPayload(message,'beancraft-'+Date.now()+'-'+(++noticeCount.current));
+      if(!notice)return;
+      presentLocalNotification(notice).catch(error=>notificationErrorDetails(error,'schedule'));
+    } else if(message.type==='clearPhoneNotices') {
+      clearPhoneNotices().catch(()=>{});
+    } else if (message.type === 'navigation') {
       canGoBack.current = message.canGoBack === true;
     } else if (message.type === 'ready') {
-      setReady(true);
+      setReady(true);interfaceReady.current=true;
+      if(pendingView.current){inject(`window.BeanCraftNative?.openView(${JSON.stringify(pendingView.current)})`);pendingView.current=null;}
       inject(`window.BeanCraftNative?.reducedMotion(${reduceMotion.current})`);
     } else if (message.type === 'error') {
       setError('La interfaz no pudo cargarse. Vuelve a intentarlo.');
@@ -96,7 +117,7 @@ function CoffeeApp() {
     return false;
   };
 
-  const retry = () => { canGoBack.current = false; setError(null); setReady(false); setRevision((value) => value + 1); };
+  const retry = () => { interfaceReady.current=false; canGoBack.current = false; setError(null); setReady(false); setRevision((value) => value + 1); };
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'left', 'right', 'bottom']}>
