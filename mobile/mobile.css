@@ -1,0 +1,12 @@
+/* Mobile-only adjustments; the original styles.css stays the design source. */
+html { -webkit-text-size-adjust: 100%; }
+body { overscroll-behavior-y: none; }
+input, textarea, .search-box input, .coupon-row input { min-width: 0; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+/* Keep the original header usable on narrow phones without resizing the logo. */
+@media (max-width: 390px) {
+  .home-topbar { flex-wrap: wrap; }
+  .cust-hero { flex-wrap: wrap; }
+  .cust-hero > div:nth-child(3) { flex: 1; min-width: 125px; }
+}
