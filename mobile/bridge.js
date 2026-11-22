@@ -27,6 +27,7 @@ navigate = function (view) {
 
 window.BeanCraftNative = {
   qrResult: receiveQr,
+  openView(view) { if(['home','menu','cart','orders','profile'].includes(view))navigate(view); },
   back() {
     const dialogs = [...document.querySelectorAll('dialog[open]')];
     if (dialogs.length) dialogs.at(-1).close();
@@ -48,6 +49,9 @@ window.BeanCraftNative = {
     else request.success(result.position);
   },
   reducedMotion(enabled) {
+    state.reducedMotion = enabled;
+    if(enabled) stopStatusAnimation();
+    else if(state.view === "orders") animateOrderState();
     document.getElementById('native-reduced-motion')?.remove();
     if (!enabled) return;
     const style = document.createElement('style');

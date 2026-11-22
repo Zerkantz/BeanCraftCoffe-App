@@ -1,85 +1,71 @@
-# BeanCraft Coffee · App del cliente
+# BeanCraft Coffee
 
-Proyecto escolar preparado para Expo Go. Conserva la arquitectura existente: contenedor React Native/Expo SDK 58 y pantallas HTML/CSS/JavaScript locales en WebView. Cámara QR, ubicación, áreas seguras y botón Atrás se integran mediante módulos nativos. No requiere una web publicada.
+App del cliente para elegir bebidas, personalizarlas y recoger el pedido en una sucursal.
 
-## Iniciar en Windows
+## Abrir la app
+
+Desde esta carpeta, en PowerShell:
 
 ```powershell
 npm.cmd install
 npx.cmd expo start --clear
 ```
 
-En esta copia las dependencias ya están instaladas. `npx.cmd` evita el bloqueo de scripts `npx.ps1` de PowerShell sin cambiar la política del sistema. También funciona `npx expo start` en una terminal que lo permita.
+Conecta el teléfono y la computadora al mismo Wi-Fi. Abre Expo Go y escanea el QR. Si la red no permite conectarse, prueba `npx.cmd expo start --tunnel`.
 
-Usa Node 22.13+ de la rama 22 o 24.3+ de la rama 24, y Expo Go compatible con SDK 58. Conecta teléfono y computadora a la misma red y escanea el QR. Si tu red bloquea Metro, puedes iniciar con `npx.cmd expo start --tunnel`.
+## Cuenta para probar
 
-## Cinco accesos principales
+Correo: `cliente@beancraft.mx`
 
-| Pantalla | Función |
-| --- | --- |
-| Inicio | Carrusel orbital original, armador de bebidas en vivo, sucursal, promociones vigentes y pedido actual. |
-| Menú | Productos activos, búsqueda, filtros y detalle personalizable. |
-| Carrito | Edición, cantidades, cupón manual/QR, recogida, pago en mostrador, revisión y deslizador original para confirmar. |
-| Pedido | Confirmación, resumen, cuatro estados y evaluación tras la entrega. |
-| Perfil | Acceso/registro, edición de nombre y teléfono, cambio de contraseña y cierre de sesión. |
+Contraseña: `Cafe1234`
 
-Detalle, acceso, sucursal, cupón QR y evaluación usan diálogos. No hay navegación administrativa, quiz, favoritos, bandeja de notificaciones ni página de diseño.
+Puedes crear otra cuenta en Perfil. En esa pantalla también puedes editar tus datos, cambiar la contraseña y tocar tu foto para elegir una mascota.
 
-## Probar el recorrido
+## Qué puedes probar
 
-Cuenta ficticia: **cliente@beancraft.mx** / **Cafe1234**. También puedes registrar otra cuenta.
+- Inicio: carrusel con «Pedir ya», ofertas, Bebidas de la casa con cinco productos por hoja: dos arriba y tres abajo, quiz y pie con mascota cambiante.
+- Menú: búsqueda, categorías y promedio de estrellas por producto. Si nadie lo ha calificado, aparece «Sin reseñas».
+- Carrito: hasta 10 unidades en total. Puedes editar productos, aplicar cupón, elegir sucursal, hora y pago al recoger. Revisa y desliza para confirmar.
+- Pedido: cambia de estado cada 3 segundos. En «Entregado» pulsa «Terminar pedido». Las estrellas del pedido, de los productos y el comentario son opcionales: puedes terminar sin rellenar nada.
+- Notificaciones: avisos locales en la barra del teléfono, también mientras usas BeanCraft. La campana de Inicio permite consultar avisos, terminar el pedido o borrar los avisos.
 
-1. Inicia sesión y abre Menú. Personaliza un Latte de caramelo: grande, avena, sin endulzante y shot extra = **$100 MXN**.
-2. Revisa el carrito, modifica cantidades o edita el producto. Aplica `BIENVENIDA`: descuento de $30 por pedido, total $70 para una unidad.
-3. Elige sucursal manualmente o solicita ubicación; la sugerencia usa distancia geográfica entre coordenadas de prueba. Selecciona una hora futura dentro del horario de esa sucursal (hora de Sonora).
-4. Elige efectivo o tarjeta **al recoger**, revisa y desliza para confirmar. El deslizador conserva su gesto original y admite Enter/Espacio o activación asistida. No se solicitan datos bancarios.
-5. La simulación avanza cada 20 segundos: recibido → preparando → listo → entregado. Al finalizar, califica el pedido y cada producto; solo se permite una evaluación.
-6. En Perfil, modifica nombre/teléfono y cambia la contraseña. Cierra sesión y verifica el nuevo acceso.
+Cupones de ejemplo: `AVENA10` (Latte de caramelo con leche de avena, $10 menos), `FRIO2X1` (dos Cold brew por uno, solo jueves), `PRIMER15` (15% en el primer pedido), `BIENVENIDA` ($30 menos) y `OTONO20` (20%). Cada promoción muestra su vigencia y condiciones. Un cupón por pedido y un uso por cuenta.
 
-Cupones de prueba centralizados en `data/mocks.js`:
+Los datos son de prueba. Las cuentas, mascotas elegidas, pedidos, avisos y cupones usados se conservan durante la ejecución y se reinician al recargar la app. El pago se hace al recoger; la app no cobra.
 
-| Código | Caso |
-| --- | --- |
-| BIENVENIDA | $30 menos, activo hasta 2028-12-31. |
-| OTONO20 | 20% menos, del 2026-09-01 al 2026-11-30. |
-| VENCIDO25 | Vencido. |
-| INACTIVO | Desactivado. |
+## Límites de texto
 
-Un QR debe contener el código literal, por ejemplo `BIENVENIDA`. En Carrito → Escanear QR → Abrir cámara se solicita el permiso. Si lo deniegas, vuelve a la captura manual. La ubicación también pide permiso solo cuando pulsas “Usar mi ubicación”.
+Nombre: 60 caracteres. Teléfono: 10 dígitos. Correo: 254 caracteres. Contraseña: entre 6 y 72 caracteres. Cupón: 24 caracteres. Búsqueda: 80 caracteres. Comentario: 140 caracteres.
 
-## Datos y simulación
+## Avisos del teléfono
 
-No existe backend ni conexión a base de datos. Cuentas, contraseñas de prueba, cambios de perfil, carrito, cupones usados, pedido y evaluación viven en memoria y **se reinician al recargar o cerrar la ejecución**. Cerrar sesión conserva las cuentas en esa misma ejecución y vacía el carrito. Usa datos ficticios.
+Al recibir el primer aviso puedes autorizar las notificaciones. Si las rechazas, puedes autorizarlas después en los ajustes de Expo Go del teléfono. Tocar un aviso abre la pantalla relacionada. La campana de Inicio conserva únicamente el historial y la opción de borrarlo.
 
-La simulación está separada en `lib/mock-orders.js` y se configura con `MOCK_CONFIG` en `data/mocks.js`. También acelera los pedidos programados para poder demostrar el flujo en clase. En una integración futura, los estados vendrán del servicio del personal. Los avisos actuales son internos; no son notificaciones push. Solo se conserva el pedido actual por cuenta.
+Los avisos son locales, generados mientras la app ejecuta sus datos de prueba. No hay un servidor que envíe avisos con la app cerrada. La app no muestra banners propios: el teléfono presenta sus notificaciones con su formato habitual. En Expo Go, el icono del sistema pertenece a Expo Go.
 
-## Continuar trabajando en la misma estructura
+Cada aviso lleva el nombre BeanCraft, el verde de la marca y una firma de Grano, Taza, Espuma, Hielito o Croissant con su frase. Android decide cómo colocar y mostrar estos elementos. El grano del logo como icono y la imagen de Taza están preparados para cuando se instale una versión propia de BeanCraft; esas imágenes no cambian dentro de Expo Go. Las notificaciones ya recibidas mantienen su apariencia.
 
-- `app.js`, `index.html`, `styles.css`, `tokens.css`: navegación, interfaz y diseño original corregidos.
-- `data/catalog.js`: productos, imágenes y cargos de personalización del SRS.
-- `data/mocks.js`: sucursales, horarios, coordenadas, cupones, usuarios y configuración de simulación.
-- `lib/rules.js`: cálculo de precios, cupones, horarios, distancia y validaciones.
-- `lib/mock-orders.js`: avance automático exclusivo del modo de prueba.
-- `mascotas.js`, `assets/`, `fonts/`: ilustraciones, fotografías y fuentes locales originales.
-- `mobile/`: contenedor Expo y puente con cámara, ubicación y navegación nativa.
-- `scripts/prepare-web.cjs`: genera el contenido local al iniciar Metro y al guardar cambios. **No editar `mobile/generated/`.**
+Los promedios se calculan solo con las estrellas de producto enviadas durante esta ejecución. La cantidad comprada y las reseñas omitidas no alteran el promedio.
 
-`npm.cmd run web` permite inspeccionar la misma interfaz en `http://localhost:8000`; la cámara QR nativa se prueba en Expo Go. `.figma/` se conserva como metadatos y herramientas de la exportación, sin publicar nada automáticamente.
+## Subir cambios a GitHub
 
-## Verificación
+La rama de trabajo es **AppMain**. Ejecuta estos comandos cuando quieras subir tus cambios:
+
+```powershell
+git switch AppMain
+git status
+git add .
+git commit -m "Actualizar el frontend de BeanCraft"
+git push origin AppMain
+```
+
+`git status` muestra qué archivos cambiaste. `git commit` guarda una versión local y `git push` la sube a GitHub. Si Git indica que hay cambios nuevos de otros colaboradores, resuélvelos antes de volver a subir; no uses `--force`.
+
+## Comprobar cambios
 
 ```powershell
 npm.cmd run check
 npm.cmd run test:e2e
-npx.cmd expo install --check
-npx.cmd expo-doctor
-npx.cmd expo export --platform all --output-dir tmp/expo-export
 ```
 
-Las pruebas de interfaz usan Microsoft Edge instalado y guardan capturas en `tmp/playwright/`. Cubren acceso/registro, perfil/contraseña, precios, carrito, cupones, revisión/confirmación, seguimiento/evaluación, permisos denegados mediante el puente simulado, navegación y pantallas pequeñas.
-
-También verifican el carrusel original, el precio del armador, el arrastre de confirmación y el regreso del deslizador cuando se suelta antes de completar el gesto.
-
-La comprobación automatizada del puente no sustituye la prueba física de cámara, GPS, permisos del sistema, teclado y áreas seguras en Android/iPhone. El empaquetado Android/iOS comprueba la integración de módulos, sin abrir Expo Go en un teléfono.
-
-Consulta `docs/EXPO-MIGRATION.md` para el alcance de la corrección y las decisiones técnicas.
+Las pruebas visuales usan Microsoft Edge. Para detalles del diseño y para recuperar los bordes de las tarjetas anteriores, consulta `docs/EXPO-MIGRATION.md`.

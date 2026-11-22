@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { ROOT } = require('./prepare-web.cjs');
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2' };
+require('./prepare-design.cjs').prepareDesign();
 const port = Number(process.env.PORT || 8000);
 http.createServer((req, res) => {
   const pathname = new URL(req.url, 'http://localhost').pathname;

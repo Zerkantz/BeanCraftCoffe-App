@@ -51,7 +51,7 @@ test('horarios: zona de Sonora, cierre, días cerrados, fechas reales y futuras'
   assert.equal(r.nearestBranch(BRANCHES,{latitude:32.456,longitude:-114.756}).id,'universidad');
 });
 
-test('perfil y evaluación: entrega obligatoria, todos los productos y una sola vez', async () => {
+test('perfil y evaluación: entrega obligatoria, reseñas opcionales y un solo cierre', async () => {
   const [r] = await modules;
   assert.ok(r.profileError('','6531234567'));
   assert.ok(r.profileError('Ana','123'));
@@ -60,10 +60,10 @@ test('perfil y evaluación: entrega obligatoria, todos los productos y una sola 
   const rating={stars:5,products:{latte_caramelo:4},comment:'Bien'};
   assert.match(r.ratingError(order,rating),/entregado/);
   order.statusIdx=3;
-  assert.ok(r.ratingError(order,{...rating,products:{}}));
+  assert.equal(r.ratingError(order,{...rating,products:{}}),'');
   assert.ok(r.ratingError(order,{...rating,stars:6}));
   assert.ok(r.ratingError(order,{...rating,comment:'a'.repeat(141)}));
   assert.equal(r.ratingError(order,rating),'');
   order.rating=rating;
-  assert.match(r.ratingError(order,rating),/ya tiene/);
+  assert.match(r.ratingError(order,rating),/ya está terminado/);
 });

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 48 48">
+  <defs>
+    <mask id="bean-cut">
+      <rect width="48" height="48" fill="white"/>
+      <path d="M30.5 13c-6.5 3.2-3.6 9.4-7.4 13.1-2.4 2.4-5.8 3-5.9 8.7" fill="none" stroke="black" stroke-width="2.6" stroke-linecap="round"/>
+    </mask>
+  </defs>
+  <g transform="translate(24 24) scale(1.4) translate(-24 -24)">
+    <ellipse cx="24" cy="24" rx="10" ry="13.5" transform="rotate(32 24 24)" fill="white" mask="url(#bean-cut)"/>
+  </g>
+</svg>

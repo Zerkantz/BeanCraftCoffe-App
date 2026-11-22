@@ -1,56 +1,52 @@
-# Corrección del frontend móvil de BeanCraft
+# Diseño y mantenimiento de BeanCraft
 
-## Referencias y alcance
+Se conserva la estructura existente y el carrusel original. La personalización se abre con «Pedir ya»; ya no aparece una segunda ficha debajo del carrusel.
 
-Se revisaron el SRS BeanCraft Coffee v1.3 (16 páginas) y la guía de diseño (14 páginas). El SRS define funciones y precios; la guía aporta identidad visual. Los prompts incluidos en los documentos no se ejecutaron como instrucciones adicionales. Se limita el trabajo a la aplicación del cliente.
+## Apariencia
 
-## Revisión y cambios
+Bricolage Grotesque es la tipografía principal; Instrument Serif cursiva acompaña los títulos. Las fuentes e imágenes se incluyen localmente.
 
-| Antes | Decisión e implementación |
-| --- | --- |
-| Inicio con múltiples secciones comerciales y accesos duplicados | Se conservan carrusel orbital, armador en vivo y promociones desplazables; se retiran las secciones ajenas al flujo del cliente. |
-| Seis vistas, incluida una guía de diseño | Cinco vistas: Inicio, Menú, Carrito, Pedido y Perfil. Ruta de diseño retirada. |
-| Quiz, favoritos y bandeja de notificaciones | Eliminados junto con su implementación exclusiva; quedan avisos breves internos. |
-| Datos y reglas mezclados en el archivo de interfaz | Catálogo/opciones y datos ficticios centralizados en `data/`; validaciones compartidas en `lib/`. |
-| Personalización y carrito básicos | Conservados los productos y tarjetas originales; añadida edición completa del producto y validación de precio/cantidad. |
-| Cupones sin comprobaciones completas | Activo, vigencia y uso por cuenta; un cupón por pedido, descuento aplicado una sola vez. |
-| QR simulado con botones | Cámara real mediante `expo-camera`, permiso bajo demanda, bloqueo de lecturas duplicadas y alternativa manual. |
-| Ubicación con sugerencia fija | Coordenadas nativas y cálculo Haversine para sugerir la sucursal más cercana. Selección manual siempre disponible. |
-| Horarios insuficientemente validados | Fecha real y futura, días de apertura, límites de horario y propuesta de siguiente horario disponible al cerrar. |
-| Confirmación deslizable | Se conserva el control original, después de la revisión integrada en Carrito, con corrección y validación final contra múltiples toques. |
-| Controles para avanzar el pedido | Retirados del cliente; simulación temporal aislada en `lib/mock-orders.js`. |
-| Calificación general incompleta | Pedido y cada producto de 1 a 5, comentario de hasta 140 caracteres, solo tras entrega y una vez. |
-| Acceso y perfil superficiales | Cuentas ficticias con credenciales coherentes, correo duplicado, edición de nombre/teléfono y cambio de contraseña. |
+Las categorías tienen un color y una mascota consistentes:
 
-Carrito combina cupón, sucursal, fecha/hora, pago y revisión, y termina con el deslizador original. Pedido combina confirmación y seguimiento. Perfil combina edición y cambio de contraseña; registro y acceso comparten un diálogo.
+- Cafés: Miel y Taza.
+- Bebidas frías: Menta y Hielito.
+- Repostería: Lila y Croissant.
 
-El carrusel conserva imágenes, escenario orbital, mascotas, gestos y flechas originales. Su armador añade endulzante y usa los cargos centralizados del SRS. La ficha completa mantiene las selecciones del armador al abrir la bebida del frente. Los rótulos de promociones fijas se sustituyen por textos neutrales para no anunciar descuentos inexistentes. La lista de promociones solo muestra cupones activos y vigentes. El deslizador permite teclado/activación asistida y cancela el gesto si se interrumpe.
+`layout.css` reúne los ajustes visuales nuevos. Para volver a las superficies con borde del carrito, seguimiento y sucursales, cambia `UI_CONFIG.openLayout` a `false` en `data/experience.js`. Los estilos anteriores siguen en `styles.css`.
 
-Se eliminaron estilos exclusivos sin uso, el póster de mascotas de la guía visual y las dependencias de comparación de capturas `pixelmatch` y `pngjs`. Se mantienen las 25 fotografías de productos, las cinco mascotas, nueve fuentes WOFF2 y los tokens originales. `expo-camera` es la única dependencia de ejecución añadida para este alcance.
+## Contenido y datos
 
-## Arquitectura conservada
+- `data/catalog.js`: productos y precios de personalización.
+- `data/experience.js`: hojas originales del menú, quiz, frases del pie y apariencia por categoría. Las selecciones son de prueba; aún no se calculan con ventas reales.
+- `data/mocks.js`: sucursales, cupones, cuenta de prueba y tiempos de simulación.
+- `lib/rules.js`: precios, descuentos y validaciones.
+- `lib/mock-orders.js`: estados cada 3 segundos; el pedido entregado permanece hasta confirmar Terminar pedido, con o sin reseña.
+- `app.js`: navegación y comportamiento de las pantallas.
 
-La implementación existente es híbrida: React Native/Expo contiene una WebView con HTML/CSS/JavaScript local. No se presenta como una reescritura de cada pantalla con componentes nativos. Se conservaron estructura, tipografías, imágenes, tarjetas facetadas, botones y paleta Tostado/Verde/Espuma/Menta con sus acentos.
+El pedido entregado conserva el botón Terminar pedido. El formulario permite omitir la calificación general, las estrellas de los productos y el comentario. Confirmarlo limpia el pedido actual y permite el siguiente. Cerrar el formulario conserva el pedido. Borrar los avisos tampoco elimina el pedido.
 
-Metro genera `mobile/generated/web-content.js` a partir de las fuentes. Incluye 39 recursos (30 imágenes y 9 fuentes) sin CDN ni servidor web adicional. La cámara, ubicación, áreas seguras, barra de estado, recuperación de carga y botón Atrás están en el contenedor nativo. Se conserva reducción de movimiento y ajuste del teclado configurado en Android.
+## Iconos y movimiento
 
-`.figma/` no es un sitio público independiente: sus scripts empaquetan la misma interfaz y ahora incluyen también `data/` y `lib/`. No se ejecutó ninguna publicación.
+Los estados recuperan las mascotas originales: Grano, Taza, Espuma y Croissant. Los iconos y colores de las insignias siguen la guía: bandeja/Menta, taza/Miel, check/Verde y bolsa/Tostado. Anime.js aplica una entrada suave de 420 ms al cambiar de estado. La preferencia de reducir movimiento deja la representación estática.
 
-## Reglas y límites del modo escolar
+Las librerías se incluyen en la app; no se descargan de internet al abrir una pantalla. Sus licencias se conservan en `vendor/`. `scripts/prepare-design.cjs` actualiza las copias locales utilizadas por la interfaz.
 
-- Tamaños: $0/$10/$18; leches: $0/$0/$12/$12; endulzantes: $0/$0/$0/$5; extras: $15/$8/$8, según SRS.
-- Precio por unidad = base + opciones + extras. Subtotal = suma de unidades × cantidad. Total = subtotal − descuento del único cupón.
-- Horarios expresados en Sonora, UTC−07:00, independientemente de la zona horaria del teléfono.
-- No se crean pedidos si falta sesión, carrito, producto disponible, horario válido o cupón válido. Se consulta un pedido actual por usuario; mientras está en curso se impide sustituirlo.
-- Pago en efectivo o tarjeta al recoger, sin pasarela ni datos bancarios.
-- Todo el estado de prueba es temporal en memoria, incluidas credenciales ficticias y usos de cupones. Se pierde al recargar; no hay backend ni almacenamiento seguro de cuentas reales.
-- Avance automático cada 20 segundos, incluso para pedidos programados, exclusivamente para demostración. Se desactiva con `MOCK_CONFIG.autoProgress = false`.
-- Avisos dentro de la aplicación; sin notificaciones push, panel de personal, historial o funciones administrativas.
+## Expo
 
-## Validación
+Las pantallas existentes se muestran dentro del contenedor de Expo. Cámara QR y ubicación usan funciones del teléfono. `scripts/prepare-web.cjs` prepara los recursos al iniciar Expo. No edites `mobile/generated/`.
 
-`npm run check` comprueba recursos íntegros, cinco vistas/diálogos, scripts empaquetados, precios SRS, cupones, horarios y calificaciones. `npm run test:e2e` cubre el recorrido completo y errores con Edge en tamaños de teléfono. Incluye respuestas simuladas del puente para cámara/ubicación denegadas y ubicación correcta, sin asumir que eso prueba el hardware.
+Pruebas: `npm.cmd run check` y `npm.cmd run test:e2e`. Las capturas quedan en `tmp/playwright/`. La cámara, el GPS y los permisos deben revisarse además en un teléfono físico con Expo Go.
 
-`expo install --check` confirma versiones compatibles. `expo-doctor` comprueba la configuración. `expo export --platform all` genera paquetes Android e iOS. Los archivos de prueba y exportación se guardan en `tmp/`, fuera de las fuentes.
+La foto del perfil abre un menú de selección de mascota. Tocar una opción la guarda y cierra el menú; cerrarlo sin elegir conserva la foto anterior.
 
-Queda por ejecutar en un teléfono físico: apertura de cámara, lectura de QR impreso, permisos del sistema, GPS real, teclado, áreas seguras y gesto/botón Atrás en Expo Go. Las credenciales, recorrido y comandos están documentados en README.
+Bebidas de la casa recupera las cuatro hojas de la versión Figma: dos productos en la lista superior, producto destacado a la derecha y otros tres con imagen debajo (cinco productos distintos por hoja), con pestañas, flechas y desplazamiento horizontal.
+
+## Límites y promedios
+
+Los límites se centralizan en data/limits.js y se validan tanto en los controles como al guardar. El máximo del carrito es de diez unidades sumando todas las líneas, incluidas las ediciones. Las reseñas enviadas se guardan en PRODUCT_REVIEWS y cada producto muestra la media aritmética de sus estrellas, sin contar campos omitidos ni ponderar cantidades.
+
+## Avisos locales
+
+mobile/localNotifications.js usa solo APIs locales de expo-notifications. No registra tokens ni solicita credenciales de un servicio remoto. El permiso se solicita como máximo una vez automáticamente por ejecución; si se deniega, se puede autorizar desde los ajustes del teléfono. Los avisos se presentan únicamente con el sistema del teléfono, tanto en primer plano como en segundo plano. El manejador permite banner, lista y sonido; no existe un banner superpuesto dentro de la app ni un sustituto si el permiso está denegado. La campana conserva únicamente el registro y la opción de borrarlo. Borrar los avisos también los descarta de la bandeja del teléfono.
+
+La apariencia del aviso del sistema la controla Android/iOS. El icono y la configuración propios de BeanCraft requieren una compilación propia; Expo Go conserva su identidad. Los avisos locales proceden de la ejecución de la app, sin promesa de envío remoto cuando está cerrada. Para revisar permisos y avisos reales hace falta un teléfono físico.

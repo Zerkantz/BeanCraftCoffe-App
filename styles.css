@@ -76,56 +76,6 @@ textarea:focus-visible {
   text-underline-offset: 3px;
 }
 
-/* ==================== TOAST NO BLOQUEANTE ==================== */
-.push-toast {
-  position: fixed;
-  top: 48px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 398px;
-  z-index: 90;
-  background: var(--c-blanco);
-  border: var(--borde);
-  border-radius: var(--r-tarjeta);
-  padding: var(--sp-2) var(--sp-3);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  box-shadow: var(--sombra-dura);
-}
-
-.push-toast[hidden] {
-  display: none;
-}
-
-.toast-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.toast-body strong {
-  font-size: 14px;
-  font-family: var(--font-display);
-}
-
-.toast-body span {
-  font-size: 14px;
-  color: var(--c-tostado);
-}
-
-.toast-close {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--r-pildora);
-  border: var(--borde);
-  background: var(--c-menta);
-  color: var(--c-tostado);
-  font-size: 20px;
-  line-height: 1;
-}
-
 /* ==================== TOPBARS Y CABECERA MÓVIL ==================== */
 
 .home-topbar {
@@ -1181,81 +1131,6 @@ summary { min-height:48px; padding:12px 0; font-weight:700; }
 }
 
 /* Armador en vivo */
-.armador-box {
-  margin-top: var(--sp-4);
-  padding: var(--sp-4);
-  background: var(--c-blanco);
-  border: var(--borde);
-  border-radius: var(--r-tarjeta);
-  box-shadow: var(--sombra-dura);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-}
-
-.armador-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--sp-2);
-}
-
-.armador-cat {
-  display: inline-block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--c-verde);
-}
-
-.armador-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.15;
-}
-
-.armador-price {
-  font-size: 24px;
-  line-height: 1;
-  padding: 4px 10px;
-}
-
-.armador-desc {
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--c-tostado);
-}
-
-.armador-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.armador-lbl {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--c-tostado);
-}
-
-.armador-chips {
-  display: flex;
-  gap: var(--sp-2);
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 2px 0;
-}
-
-.armador-chips::-webkit-scrollbar {
-  display: none;
-}
-
-.armador-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-2);
-  margin-top: var(--sp-1);
-}
 
 
 /* Deslizar para confirmar checkout */
@@ -1335,17 +1210,6 @@ summary { min-height:48px; padding:12px 0; font-weight:700; }
   font-weight: 800;
   color: var(--c-tostado);
   pointer-events: none;
-}
-
-
-.hero-host-bar {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  padding: var(--sp-2) var(--sp-3);
-  background: var(--c-espuma);
-  border: var(--borde);
-  border-radius: var(--r-campo);
 }
 @media(max-width:360px){.hero-h1{font-size:36px}.slide-knob{width:48px}.slide-label{font-size:13px;padding-left:46px;padding-right:16px}.slide-chevrons{right:8px}}
 
