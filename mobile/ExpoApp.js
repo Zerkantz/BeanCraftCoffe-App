@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, ActivityIndicator, Alert, BackHandler, Linking, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, Alert, BackHandler, Linking, Modal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -7,6 +7,7 @@ import * as Location from 'expo-location';
 import { WebView } from 'react-native-webview';
 import html from './generated/web-content';
 import { notificationPayload } from '../lib/notification-payload';
+import BeanCraftLoader from './BeanCraftLoader';
 import { presentLocalNotification, clearPhoneNotices, listenForNotificationPress, notificationErrorDetails } from './localNotifications';
 
 const BASE_URL = 'https://beancraft.local/';
@@ -164,7 +165,7 @@ function CoffeeApp() {
           allowsBackForwardNavigationGestures={Platform.OS === 'ios'}
           webviewDebuggingEnabled={__DEV__}
         />
-        {!ready && !error && <View style={styles.overlay} accessibilityLabel="Cargando BeanCraft"><ActivityIndicator size="large" color={colors.green} /></View>}
+        {!ready && !error && <View style={styles.overlay}><BeanCraftLoader colors={colors} /></View>}
         {error && <View style={styles.overlay}>
           <Text style={styles.error}>{error}</Text>
           <Pressable accessibilityRole="button" onPress={retry} style={styles.button}><Text style={styles.buttonText}>Volver a cargar</Text></Pressable>

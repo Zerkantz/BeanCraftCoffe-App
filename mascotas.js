@@ -86,7 +86,7 @@ export function renderMascota(nombre, estado = "feliz", opts = {}) {
     : `alt="" aria-hidden="true"`;
 
   return `
-    <span class="${classes}" data-estado="${estado}" style="${styles}">
+    <span class="${classes}" data-estado="${estado}" data-mascot="${info.id}" style="${styles}">
       ${holo ? holoLayer() : ""}
       <img class="mascota-img" src="${info.src}" width="${size}" height="${size}" ${imgA11y} decoding="async">
     </span>`;

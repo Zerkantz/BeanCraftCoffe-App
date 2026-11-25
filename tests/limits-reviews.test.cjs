@@ -44,3 +44,21 @@ test('terminar sin reseña, con reseña parcial o solo comentario; promedio sin 
  }
  PRODUCT_REVIEWS.length=0;
 });
+
+
+test('reseñas visibles: autor y comentario por producto, sin duplicar cantidades ni inventar estrellas',async()=>{
+ const [r,,{PRODUCT_REVIEWS}]=await modules;PRODUCT_REVIEWS.length=0;
+ try {
+  const order={id:'with-comment',statusIdx:3,items:[item,{...item,milk:'avena'},{...item,productId:'frappe_supremo'}],rating:null};
+  const user={name:'Ana del Café',avatar:'grano',email:'privado@example.com',password:'privada',order};
+  assert.equal(r.saveOrderRating(user,order,{stars:2,products:{latte_caramelo:4},comment:' Muy buen café. '}),'');
+  assert.equal(r.productReviews('latte_caramelo').length,1);assert.equal(r.productReviews('frappe_supremo').length,1);
+  const review=r.productReviews('latte_caramelo')[0];assert.equal(review.authorName,'Ana del Café');assert.equal(review.comment,'Muy buen café.');assert.equal(review.stars,4);assert.equal(review.avatar,'grano');assert.ok(Number.isFinite(review.createdAt));assert.equal(review.email,undefined);assert.equal(review.password,undefined);
+  user.name='Otro nombre';assert.equal(review.authorName,'Ana del Café');
+  assert.deepEqual(r.productRating('latte_caramelo'),{count:1,average:4});assert.deepEqual(r.productRating('frappe_supremo'),{count:0,average:null});assert.equal(r.productReviews('frappe_supremo')[0].stars,null);
+  assert.equal(r.productReviews('cold_brew').length,0);assert.ok(r.saveOrderRating(user,order,{stars:5,products:{latte_caramelo:5},comment:'Otra vez'}));assert.equal(r.productReviews('latte_caramelo').length,1);
+  const second={id:'comment-only',statusIdx:3,items:[item],rating:null};
+  assert.equal(r.saveOrderRating({name:'Leo',order:second},second,{stars:5,products:{},comment:'Solo comentario.'}),'');
+  assert.equal(r.productReviews('latte_caramelo')[0].authorName,'Leo');assert.equal(r.productReviews('latte_caramelo')[0].stars,null);assert.deepEqual(r.productRating('latte_caramelo'),{count:1,average:4});
+ } finally { PRODUCT_REVIEWS.length=0; }
+});

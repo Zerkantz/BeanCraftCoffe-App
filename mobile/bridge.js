@@ -50,6 +50,7 @@ window.BeanCraftNative = {
   },
   reducedMotion(enabled) {
     state.reducedMotion = enabled;
+    setMotionPreference(enabled);
     if(enabled) stopStatusAnimation();
     else if(state.view === "orders") animateOrderState();
     document.getElementById('native-reduced-motion')?.remove();
