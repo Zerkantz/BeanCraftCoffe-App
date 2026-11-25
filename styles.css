@@ -423,18 +423,6 @@ textarea:focus-visible {
   color: var(--c-tostado);
 }
 
-.cc-add {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--r-campo);
-  border: var(--borde);
-  background: var(--c-tostado);
-  color: var(--c-espuma);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* ==================== CARRITO & CHECKOUT DESLIZABLE ==================== */
 .cart-dark {
   margin: var(--sp-2) var(--sp-4) 0;

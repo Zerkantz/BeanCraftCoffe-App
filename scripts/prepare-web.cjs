@@ -4,7 +4,7 @@ const { prepareDesign } = require('./prepare-design.cjs');
 
 const ROOT = path.resolve(__dirname, '..');
 const OUTPUT = path.join(ROOT, 'mobile/generated/web-content.js');
-const SOURCES = ['index.html', 'tokens.css', 'styles.css', 'layout.css', 'app.js', 'mascotas.js',
+const SOURCES = ['index.html', 'tokens.css', 'styles.css', 'layout.css', 'polish.css', 'lib/motion.js', 'app.js', 'mascotas.js',
   'mobile/bootstrap.js', 'mobile/bridge.js', 'mobile/mobile.css', 'data/catalog.js', 'data/mocks.js', 'lib/rules.js', 'lib/mock-orders.js', 'data/experience.js', 'data/limits.js', 'lib/icons.js'];
 const MIME = { '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2' };
 
@@ -27,7 +27,7 @@ function buildHtml() {
     return [name, `data:${mime};base64,${fs.readFileSync(path.join(ROOT, name)).toString('base64')}`];
   }));
 
-  const css = `${read('tokens.css')}\n${read('styles.css')}\n${read('layout.css')}\n${read('mobile/mobile.css')}`
+  const css = `${read('tokens.css')}\n${read('styles.css')}\n${read('layout.css')}\n${read('mobile/mobile.css')}\n${read('polish.css')}`
     .replace(/url\(['"]?(?:\.\/)?([^)'"\s]+)['"]?\)/g, (_, name) => {
       if (!assets[name]) throw new Error(`Recurso CSS ausente: ${name}`);
       return `url("${assets[name]}")`;
@@ -35,7 +35,7 @@ function buildHtml() {
 
   // One copy per image, including photographs reused in multiple screens.
   const imageAssets = Object.fromEntries(Object.entries(assets).filter(([name]) => name.startsWith('assets/')));
-  let js = ['lib/icons.js', 'data/limits.js', 'data/experience.js', 'mascotas.js', 'data/catalog.js', 'data/mocks.js', 'lib/rules.js', 'lib/mock-orders.js', 'app.js', 'mobile/bridge.js']
+  let js = ['lib/icons.js', 'data/limits.js', 'data/experience.js', 'mascotas.js', 'data/catalog.js', 'data/mocks.js', 'lib/rules.js', 'lib/mock-orders.js', 'lib/motion.js', 'app.js', 'mobile/bridge.js']
     .map(name => read(name).replace(/^\uFEFF/, '').replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '')).join('\n');
   js = js.replace(/(["'])(assets\/[\w./-]+\.(?:png|webp))\1/g, (_, quote, name) => {
     if (!assets[name]) throw new Error(`Imagen ausente: ${name}`);
@@ -44,7 +44,7 @@ function buildHtml() {
   js = `(() => {\n'use strict';\nconst __beanAssets = ${JSON.stringify(imageAssets)};\n${js}\n})();`;
 
   const html = read('index.html')
-    .replace(/\s*<link rel="stylesheet" href="(?:tokens|styles|layout)\.css">/g, '')
+    .replace(/\s*<link rel="stylesheet" href="(?:tokens|styles|layout|polish)\.css">/g, '')
     .replace('</head>', () => `<style>${css}</style>${scriptTag(read('mobile/bootstrap.js'))}</head>`)
     .replace('<script src="vendor/anime.min.js"></script>', () => scriptTag(read('vendor/anime.min.js')))
     .replace('<script type="module" src="app.js"></script>', () => scriptTag(js));
