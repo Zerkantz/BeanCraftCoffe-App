@@ -1,0 +1,77 @@
+/* BeanCraft Web v1 · Páginas de librería. Recuadro punteado lila = Component Set de Figma. */
+.Lib { width: 1440px; margin: 0 auto; padding: var(--sp-7) var(--sp-7) var(--sp-9); background: var(--fondo-base); }
+.lib-cabeza { display: flex; align-items: center; gap: var(--sp-6); padding-bottom: var(--sp-5); margin-bottom: var(--sp-7); border-bottom: var(--borde); }
+.lib-titulos h1 { font-family: var(--font-display); font-weight: 800; font-size: 40px; line-height: 1.05; }
+.lib-titulos p { font-size: 16px; }
+.lib-nav { margin-left: auto; display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.lib-nav a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--sp-3); border: var(--borde); border-radius: var(--r-pildora); font-weight: 600; font-size: 14px; text-decoration: none; background: var(--fondo-superficie); }
+.lib-nav a[aria-current="page"] { background: var(--c-tostado); color: var(--c-espuma); }
+.lib-seccion { margin-bottom: var(--sp-8); }
+.lib-seccion-cabeza { margin-bottom: var(--sp-5); }
+.lib-seccion-cabeza h2 { font-family: var(--font-display); font-weight: 800; font-size: 32px; line-height: 1.1; }
+.lib-sub { font-family: var(--font-display); font-weight: 700; font-size: 18px; margin: var(--sp-5) 0 var(--sp-3); }
+.lib-regla { margin-top: var(--sp-4); font-size: 14px; max-width: 90ch; }
+.lib-set { margin-bottom: var(--sp-7); }
+.lib-set-cabeza { display: flex; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; margin-bottom: var(--sp-3); }
+.lib-set-nombre { font-family: var(--font-display); font-weight: 800; font-size: 26px; }
+.lib-set-props { font-size: 14px; }
+.lib-set-nota { width: 100%; font-size: 13px; }
+.lib-variantes { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--sp-5); padding: var(--sp-5); border: 2px dashed var(--c-lila); border-radius: var(--r-tarjeta); }
+.lib-var { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-2); }
+.lib-muestra { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.lib-etq { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--c-menta); }
+
+.lib-swatches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--sp-4); }
+.swatch { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.swatch .muestra { height: 96px; border: var(--borde); border-radius: var(--r-campo); margin-bottom: var(--sp-1); }
+.swatch code { font-size: 12.5px; }
+.swatch .uso { font-size: 13px; }
+.lib-semanticos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-2) var(--sp-5); }
+.sem { display: flex; align-items: center; gap: var(--sp-3); font-size: 14px; min-height: 40px; }
+.sem .mini { flex: none; width: 32px; height: 32px; border: var(--borde); border-radius: 8px; }
+.lib-contraste { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-3); }
+.par { display: flex; flex-direction: column; gap: 4px; padding: var(--sp-4); border: var(--borde); border-radius: var(--r-campo); }
+.par .aa { font-family: var(--font-display); font-weight: 800; font-size: 36px; line-height: 1; }
+.par .desc { font-weight: 700; font-size: 14px; }
+.par .ratio { font-size: 13px; }
+.lib-tipos { display: flex; flex-direction: column; border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); }
+.tipo { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: var(--sp-5); align-items: center; padding: var(--sp-4) var(--sp-5); border-bottom: var(--borde-panel); }
+.tipo:last-child { border-bottom: 0; }
+.tipo .meta { display: flex; flex-direction: column; font-size: 13px; }
+.tipo .meta strong { font-size: 15px; }
+.lib-escala { display: flex; flex-direction: column; gap: var(--sp-2); }
+.lib-escala .paso { display: grid; grid-template-columns: 120px 80px 80px; align-items: center; gap: var(--sp-3); font-size: 14px; }
+.lib-escala .barra { height: 20px; background: var(--c-miel); border: 1.5px solid var(--c-tostado); border-radius: 4px; }
+.lib-radios { display: flex; flex-wrap: wrap; gap: var(--sp-5); }
+.radio { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.radio .caja { width: 120px; height: 80px; border: var(--borde); background: var(--fondo-superficie); margin-bottom: var(--sp-2); }
+.lib-tabla { border-collapse: collapse; font-size: 14px; background: var(--fondo-superficie); }
+.lib-tabla th, .lib-tabla td { padding: var(--sp-2) var(--sp-4); border: var(--borde-panel); text-align: left; }
+.lib-grids { display: flex; gap: var(--sp-6); align-items: flex-start; }
+.lib-grid { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.frame-mini { height: 160px; border: var(--borde); border-radius: 8px; background: var(--fondo-superficie); margin-bottom: var(--sp-2); }
+.frame-mini .cols { display: flex; height: 100%; }
+.frame-mini .cols span { flex: 1; background: var(--c-fresa); opacity: .35; }
+.lib-iconos { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: var(--sp-3); }
+.icono { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); padding: var(--sp-4) var(--sp-2); border: var(--borde-panel); border-radius: var(--r-campo); background: var(--fondo-superficie); font-size: 12px; text-align: center; }
+.lib-mascotas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--sp-4); }
+.masc { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: var(--sp-4); border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); text-align: center; font-size: 14px; }
+.masc strong { font-family: var(--font-display); font-size: 20px; }
+.masc em { font-family: var(--font-serif); font-size: 17px; }
+.lib-plantillas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }
+.lib-plantilla { display: flex; flex-direction: column; gap: var(--sp-3); }
+.lib-plantilla > strong { font-family: var(--font-display); font-size: 20px; }
+.esquema { display: flex; flex-direction: column; gap: 6px; padding: var(--sp-3); border: 2px dashed var(--c-lila); border-radius: var(--r-tarjeta); min-height: 360px; }
+.esquema .p { display: flex; align-items: center; justify-content: center; min-height: 36px; padding: var(--sp-2); border: 1.5px solid var(--c-tostado); border-radius: 8px; background: var(--fondo-superficie); font-size: 13px; font-weight: 600; text-align: center; }
+.esquema .alto { flex: 1; min-height: 160px; }
+.esquema .fila { display: flex; gap: 6px; flex: 1; }
+.esquema .col { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.esquema .lateral { width: 90px; }
+.esquema .b-limon { background: var(--c-limon); }
+.esquema .b-tostado { background: var(--c-tostado); color: var(--c-espuma); }
+.esquema .b-menta { background: var(--c-menta); }
+.esquema .centro { flex-direction: column; }
+.esquema .tarjeta { width: 70%; min-height: 120px; }
+.Lib .Sidebar { position: relative; height: 820px; min-height: 0; }
+.Lib .Velo, .Lib .PanelLateral, .Lib .Dialogo { position: absolute; }
+.Lib ol { list-style: none; }

@@ -1,0 +1,166 @@
+/* BeanCraft Web v1 · Layout del sitio público.
+   El breakpoint lo fija la clase del <body> (bp-escritorio · bp-tablet · bp-movil) y el ancho del .Frame,
+   para que cada archivo se importe a Figma con el ancho exacto del frame sin depender de la ventana. */
+
+.Frame { position: relative; margin: 0 auto; background: var(--fondo-base); }
+.bp-escritorio .Frame { width: 100%; min-width: 1024px; }
+.bp-tablet .Frame { width: 100%; min-width: 640px; }
+.bp-movil .Frame { width: 100%; min-width: 320px; }
+
+.contenedor { width: 100%; max-width: 1344px; margin: 0 auto; padding: 0 var(--sp-6); }
+.bp-tablet .contenedor { padding: 0 var(--sp-5); }
+.bp-movil .contenedor { padding: 0 var(--sp-4); }
+
+.seccion { padding: var(--sp-9) 0; }
+.seccion[data-fondo="menta"] { background: var(--c-menta); border-block: var(--borde); }
+.seccion[data-fondo="blanco"] { background: var(--fondo-superficie); border-block: var(--borde); }
+.bp-tablet .seccion { padding: var(--sp-8) 0; }
+.bp-movil .seccion { padding: var(--sp-7) 0; }
+
+.cabeza-seccion { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--sp-5); margin-bottom: var(--sp-6); }
+.cabeza-seccion .titulos { display: flex; flex-direction: column; gap: var(--sp-3); }
+.bajada { font-size: 18px; max-width: 56ch; }
+.bp-movil .bajada { font-size: 16px; }
+.bp-movil .cabeza-seccion { flex-direction: column; align-items: stretch; margin-bottom: var(--sp-5); }
+.bp-movil .cabeza-seccion > .Boton { align-self: flex-start; }
+.filtros { max-width: 100%; }
+.migas { display: flex; align-items: center; gap: var(--sp-2); font-size: 14px; margin-bottom: var(--sp-4); }
+.migas a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Hero (Inicio) */
+
+/* Rejillas */
+.grid-tarjetas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-8) var(--sp-5); }
+.bp-tablet .grid-tarjetas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bp-movil .grid-tarjetas { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6) var(--sp-4); }
+.bp-movil .TarjetaBebida[data-variante="promo"] { grid-column: auto; flex-direction: column; }
+.bp-movil .TarjetaBebida[data-variante="promo"] .imagen { border-right: 0; border-bottom: var(--borde); border-radius: 21px 21px 0 0; }
+.bp-movil .TarjetaBebida[data-variante="promo"] .imagen { min-height: 200px; }
+.mosaico { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-5); }
+.mosaico[data-filas="2"] .MosaicoPromo[data-tam="grande"] { grid-column: span 2; }
+.bp-tablet .mosaico { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bp-tablet .mosaico .MosaicoPromo[data-tam="grande"] { grid-column: 1 / -1; }
+.bp-movil .mosaico { display: flex; overflow-x: auto; gap: var(--sp-3); margin-right: calc(var(--sp-4) * -1); padding-right: var(--sp-4); scrollbar-width: none; }
+.bp-movil .mosaico .MosaicoPromo { flex: 0 0 300px; min-height: 300px; }
+.bp-movil .mosaico[data-vista="lista"] { flex-direction: column; overflow: visible; margin-right: 0; padding-right: 0; }
+.bp-movil .mosaico[data-vista="lista"] .MosaicoPromo { flex: none; }
+.filtros { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.bp-movil .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+/* v3 · Menú: categorías con su foto, herramientas a la derecha y apartados como la carta de la barra */
+.barra-menu { display: flex; flex-direction: column; gap: var(--sp-5); margin-bottom: var(--sp-7); }
+.barra-menu .filtros { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.barra-menu .herramientas { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-3); padding-top: var(--sp-5); border-top: 1.5px solid var(--c-tostado); }
+.barra-menu .busqueda { flex: 0 1 420px; }
+.ChipCategoria { min-height: 76px; padding: 7px 22px 7px 7px; gap: 0; }
+.ChipCategoria .texto { display: inline-flex; align-items: center; gap: var(--sp-3); }
+.ChipCategoria .portada { display: flex; align-items: flex-end; justify-content: center; width: 60px; height: 60px; border: var(--borde); border-radius: 50%; overflow: hidden; }
+.ChipCategoria .portada[data-fondo="limon"] { align-items: center; background: var(--c-limon); }
+.ChipCategoria .foto-cat { max-height: 54px; width: auto; }
+.ChipCategoria .nombre-cat { font-family: var(--font-display); font-weight: 800; font-size: 18px; }
+.ChipCategoria .n { min-width: 28px; padding: 1px 8px; border-radius: var(--r-pildora); background: var(--c-menta); color: var(--c-tostado); font-weight: 700; font-size: 13px; text-align: center; }
+.ChipCategoria[data-seleccionado="si"] .n { background: var(--c-limon); }
+.ChipCategoria:hover .portada { transform: rotate(-6deg); }
+.ChipCategoria .portada { transition: transform var(--dur-normal) var(--ease); }
+[data-resultados] > .conteo { margin: 0 0 var(--sp-5); font-weight: 600; }
+.apartado-menu + .apartado-menu, .banda-promo + .apartado-menu { margin-top: var(--sp-9); }
+.apartado-menu .cabeza-apartado { display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-6); }
+.apartado-menu .cabeza-apartado h2 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 36px; letter-spacing: -.01em; }
+.apartado-menu .cabeza-apartado .n { font-family: var(--font-serif); font-style: italic; font-size: 26px; color: var(--c-verde); }
+.banda-promo { margin-top: var(--sp-9); }
+.banda-promo .TarjetaBebida[data-variante="promo"] { grid-column: auto; }
+.bp-tablet .barra-menu .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.bp-movil .barra-menu .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: calc(var(--sp-4) * -1); padding: 2px var(--sp-4) 2px 0; }
+.bp-movil .ChipCategoria { min-height: 60px; padding: 5px 16px 5px 5px; }
+.bp-movil .ChipCategoria .portada { width: 48px; height: 48px; }
+.bp-movil .ChipCategoria .foto-cat { max-height: 42px; }
+.bp-movil .ChipCategoria .nombre-cat { font-size: 15px; }
+.bp-movil .barra-menu .herramientas { flex-direction: column; align-items: stretch; }
+.bp-movil .barra-menu .busqueda { flex: none; }
+.bp-movil .apartado-menu .cabeza-apartado h2 { font-size: 28px; }
+.bp-movil .apartado-menu + .apartado-menu, .bp-movil .banda-promo + .apartado-menu, .bp-movil .banda-promo { margin-top: var(--sp-8); }
+.bp-movil .TarjetaBebida .imagen { height: 228px; }
+.ver-todo { display: flex; justify-content: center; margin-top: var(--sp-6); }
+
+/* Quiz y pedido en Inicio */
+.fila-sucursales { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }
+.bp-tablet .fila-sucursales, .bp-movil .fila-sucursales { grid-template-columns: minmax(0, 1fr); }
+.nota-demo { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: 14px; }
+
+/* Ficha de producto */
+.ficha { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-7); align-items: start; }
+.ficha .galeria { position: sticky; top: var(--sp-4); display: flex; align-items: center; justify-content: center; height: 640px; border: var(--borde); border-radius: var(--r-tarjeta); }
+.ficha .galeria .foto { height: calc(480px * var(--k, 1)); width: auto; max-width: 100%; object-fit: contain; }
+.ficha .galeria .Mascota { position: absolute; right: var(--sp-5); bottom: var(--sp-5); }
+.ficha .galeria .Etiqueta { position: absolute; left: var(--sp-5); top: var(--sp-5); font-size: 15px; padding: 5px 12px; }
+.ficha .galeria[data-disponible="no"] .foto { opacity: .4; }
+.ficha .info { display: flex; flex-direction: column; gap: var(--sp-5); }
+.ficha .nombre { font-family: var(--font-display); font-weight: 800; font-size: 56px; line-height: 1; letter-spacing: -.02em; }
+.ficha .meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); font-size: 15px; }
+.ficha .desc { font-size: 18px; max-width: 48ch; }
+.resumen-precio { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-5); border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); }
+.resumen-precio .fila { display: flex; justify-content: space-between; gap: var(--sp-3); font-size: 15px; }
+.resumen-precio .fila .monto { font-weight: 600; white-space: nowrap; }
+.resumen-precio .total { display: flex; align-items: center; justify-content: space-between; padding-top: var(--sp-3); margin-top: var(--sp-1); border-top: 2px dashed var(--c-tostado); }
+.resumen-precio .total .etq { font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+.resumen-precio .regla { font-size: 13px; }
+.acciones-ficha { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); }
+.bp-tablet .ficha, .bp-movil .ficha { grid-template-columns: minmax(0, 1fr); gap: var(--sp-5); }
+.bp-tablet .ficha .galeria, .bp-movil .ficha .galeria { position: relative; top: 0; }
+.bp-tablet .ficha .galeria { height: 460px; }
+.bp-tablet .ficha .galeria .foto { height: calc(360px * var(--k, 1)); }
+.bp-movil .ficha .galeria { height: 340px; }
+.bp-movil .ficha .galeria .foto { height: calc(260px * var(--k, 1)); }
+.bp-movil .ficha .nombre { font-size: 38px; }
+.bp-movil .ficha .desc { font-size: 16px; }
+
+/* Pedido demo */
+
+/* Ayuda */
+.faq { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--sp-6); align-items: start; }
+.faq .lista { display: flex; flex-direction: column; gap: var(--sp-3); }
+.acordeon-item { border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); }
+.acordeon-item summary { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: 68px; padding: var(--sp-3) var(--sp-5); font-family: var(--font-display); font-weight: 700; font-size: 20px; list-style: none; cursor: pointer; }
+.acordeon-item summary::-webkit-details-marker { display: none; }
+.acordeon-item p { padding: 0 var(--sp-5) var(--sp-5); max-width: 64ch; }
+.acordeon-item[open] { box-shadow: var(--sombra-dura); }
+.aside-ayuda { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-5); border: var(--borde); border-radius: var(--r-tarjeta); background: var(--c-menta); }
+.aside-ayuda .titulo { font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+.bp-tablet .faq, .bp-movil .faq { grid-template-columns: minmax(0, 1fr); }
+.bp-movil .acordeon-item summary { font-size: 18px; padding: var(--sp-3) var(--sp-4); }
+.bp-movil .acordeon-item p { padding: 0 var(--sp-4) var(--sp-4); }
+
+/* Privacidad */
+.legal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); gap: var(--sp-7); align-items: start; }
+.legal .indice { position: sticky; top: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-1); padding: var(--sp-4); border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); }
+.legal .indice .titulo { font-weight: 700; margin-bottom: var(--sp-2); }
+.legal .indice a { display: flex; align-items: center; min-height: 40px; padding: 0 var(--sp-2); border-radius: 8px; text-decoration: none; font-size: 15px; }
+.legal .indice a[aria-current="true"] { background: var(--c-tostado); color: var(--c-espuma); }
+.legal .contenido { display: flex; flex-direction: column; gap: var(--sp-5); max-width: 72ch; }
+.legal .contenido h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.15; }
+.legal .contenido section { display: flex; flex-direction: column; gap: var(--sp-3); }
+.legal .contenido ul { list-style: disc; padding-left: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
+.legal .actualizado { font-size: 14px; }
+.bp-tablet .legal, .bp-movil .legal { grid-template-columns: minmax(0, 1fr); }
+.bp-tablet .legal .indice, .bp-movil .legal .indice { position: static; }
+
+/* Contacto */
+.contacto { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--sp-6); align-items: start; }
+.form-sitio { display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-6); border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); }
+.form-sitio .dos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+.form-sitio .nota { font-size: 13px; }
+.enviado { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); padding: var(--sp-7) var(--sp-5); text-align: center; border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); }
+.enviado .titulo { font-family: var(--font-display); font-weight: 800; font-size: 32px; }
+.lista-sucursales-mini { display: flex; flex-direction: column; gap: var(--sp-3); }
+.bp-tablet .contacto, .bp-movil .contacto { grid-template-columns: minmax(0, 1fr); }
+.bp-movil .form-sitio { padding: var(--sp-5) var(--sp-4); }
+.bp-movil .form-sitio .dos { grid-template-columns: minmax(0, 1fr); }
+
+/* 404 */
+.error404 { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-4); min-height: 620px; padding-block: var(--sp-8); text-align: center; }
+.error404 .codigo { font-family: var(--font-display); font-weight: 800; font-size: 20px; }
+.bp-movil .error404 { min-height: 480px; }
+/* v1.1 · Rejilla de tarjetas fluida dentro de cada breakpoint */
+@media (min-width: 480px) { .bp-movil .grid-tarjetas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .bp-tablet .grid-tarjetas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1199px) { .bp-escritorio .grid-tarjetas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 480px) { .bp-movil .TarjetaBebida[data-variante="promo"] { grid-column: 1 / -1; } }

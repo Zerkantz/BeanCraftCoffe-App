@@ -1,0 +1,616 @@
+{
+  "Primitivos": {
+    "color": {
+      "tostado": {
+        "$type": "color",
+        "$value": "#2A1A12",
+        "$description": "Texto principal, bordes, botón principal, footer"
+      },
+      "verde": {
+        "$type": "color",
+        "$value": "#0B5C63",
+        "$description": "Marca, enlaces, foco, estado Listo, Abierta"
+      },
+      "espuma": {
+        "$type": "color",
+        "$value": "#FAFAF7",
+        "$description": "Fondo base del sitio, texto sobre oscuros"
+      },
+      "menta": {
+        "$type": "color",
+        "$value": "#DCEBE6",
+        "$description": "Fondos suaves, panel, estado Recibido"
+      },
+      "miel": {
+        "$type": "color",
+        "$value": "#F2B134",
+        "$description": "Acento cálido, botón acento, estado Preparando"
+      },
+      "fresa": {
+        "$type": "color",
+        "$value": "#FF6B9D",
+        "$description": "Stickers, etiquetas juveniles, ilustración"
+      },
+      "lila": {
+        "$type": "color",
+        "$value": "#B8A1FF",
+        "$description": "Stickers, estados destacados"
+      },
+      "limon": {
+        "$type": "color",
+        "$value": "#E8E56A",
+        "$description": "BarraNovedad, Marcatextos"
+      },
+      "cereza": {
+        "$type": "color",
+        "$value": "#C8102E",
+        "$description": "Solo promociones, descuentos, Cancelado y errores"
+      },
+      "blanco": {
+        "$type": "color",
+        "$value": "#FFFFFF",
+        "$description": "Tarjetas, campos, superficies del panel"
+      }
+    }
+  },
+  "Semanticos": {
+    "texto": {
+      "principal": {
+        "$type": "color",
+        "$value": "{Primitivos.color.tostado}",
+        "$description": "Todo el texto sobre claros"
+      },
+      "inverso": {
+        "$type": "color",
+        "$value": "{Primitivos.color.espuma}",
+        "$description": "Texto sobre tostado, verde y cereza"
+      },
+      "enlace": {
+        "$type": "color",
+        "$value": "{Primitivos.color.verde}",
+        "$description": "Enlaces"
+      }
+    },
+    "fondo": {
+      "base": {
+        "$type": "color",
+        "$value": "{Primitivos.color.espuma}",
+        "$description": "Fondo de página del sitio"
+      },
+      "superficie": {
+        "$type": "color",
+        "$value": "{Primitivos.color.blanco}",
+        "$description": "Tarjetas, campos, modales"
+      },
+      "suave": {
+        "$type": "color",
+        "$value": "{Primitivos.color.menta}",
+        "$description": "Panel, bloques informativos"
+      },
+      "promo": {
+        "$type": "color",
+        "$value": "{Primitivos.color.cereza}",
+        "$description": "MosaicoPromo, etiqueta de descuento"
+      },
+      "novedad": {
+        "$type": "color",
+        "$value": "{Primitivos.color.limon}",
+        "$description": "BarraNovedad, Marcatextos"
+      }
+    },
+    "borde": {
+      "fuerte": {
+        "$type": "color",
+        "$value": "{Primitivos.color.tostado}",
+        "$description": "Bordes 2 px del sitio"
+      },
+      "suave": {
+        "$type": "color",
+        "$value": "rgba(42, 26, 18, 0.2)",
+        "$description": "Tostado al 20 %: bordes del panel"
+      }
+    },
+    "foco": {
+      "anillo": {
+        "$type": "color",
+        "$value": "{Primitivos.color.verde}",
+        "$description": "Anillo de foco 3 px, separación 2 px"
+      }
+    },
+    "accion": {
+      "principal": {
+        "$type": "color",
+        "$value": "{Primitivos.color.tostado}",
+        "$description": "Botón principal, chip activo"
+      },
+      "acento": {
+        "$type": "color",
+        "$value": "{Primitivos.color.miel}",
+        "$description": "Botón acento"
+      }
+    },
+    "estado": {
+      "recibido": {
+        "$type": "color",
+        "$value": "{Primitivos.color.menta}",
+        "$description": "Texto tostado"
+      },
+      "preparando": {
+        "$type": "color",
+        "$value": "{Primitivos.color.miel}",
+        "$description": "Texto tostado"
+      },
+      "listo": {
+        "$type": "color",
+        "$value": "{Primitivos.color.verde}",
+        "$description": "Texto espuma"
+      },
+      "entregado": {
+        "$type": "color",
+        "$value": "{Primitivos.color.tostado}",
+        "$description": "Texto espuma"
+      },
+      "cancelado": {
+        "$type": "color",
+        "$value": "{Primitivos.color.cereza}",
+        "$description": "Texto espuma · solo librería en v1"
+      }
+    },
+    "error": {
+      "fondo": {
+        "$type": "color",
+        "$value": "{Primitivos.color.cereza}",
+        "$description": "Mensajes de error"
+      },
+      "texto": {
+        "$type": "color",
+        "$value": "{Primitivos.color.espuma}",
+        "$description": "Texto sobre error"
+      }
+    },
+    "velo": {
+      "$type": "color",
+      "$value": "rgba(42, 26, 18, 0.45)",
+      "$description": "Fondo detrás de modales y paneles laterales"
+    }
+  },
+  "Dimensiones": {
+    "sp": {
+      "1": {
+        "$type": "dimension",
+        "$value": "4px"
+      },
+      "2": {
+        "$type": "dimension",
+        "$value": "8px"
+      },
+      "3": {
+        "$type": "dimension",
+        "$value": "12px"
+      },
+      "4": {
+        "$type": "dimension",
+        "$value": "16px"
+      },
+      "5": {
+        "$type": "dimension",
+        "$value": "24px"
+      },
+      "6": {
+        "$type": "dimension",
+        "$value": "32px"
+      },
+      "7": {
+        "$type": "dimension",
+        "$value": "48px"
+      },
+      "8": {
+        "$type": "dimension",
+        "$value": "64px"
+      },
+      "9": {
+        "$type": "dimension",
+        "$value": "96px"
+      }
+    },
+    "radio": {
+      "etiqueta": {
+        "$type": "dimension",
+        "$value": "4px",
+        "$description": "Etiqueta de descuento"
+      },
+      "campo": {
+        "$type": "dimension",
+        "$value": "10px",
+        "$description": "Campos"
+      },
+      "panel": {
+        "$type": "dimension",
+        "$value": "12px",
+        "$description": "Tarjetas del panel"
+      },
+      "tarjeta": {
+        "$type": "dimension",
+        "$value": "16px",
+        "$description": "Tarjetas del sitio"
+      },
+      "pildora": {
+        "$type": "dimension",
+        "$value": "999px",
+        "$description": "Botones, chips, insignias"
+      }
+    },
+    "borde": {
+      "sitio": {
+        "$type": "dimension",
+        "$value": "2px",
+        "$description": "Tostado"
+      },
+      "panel": {
+        "$type": "dimension",
+        "$value": "1px",
+        "$description": "Tostado al 20 %"
+      }
+    },
+    "foco": {
+      "grosor": {
+        "$type": "dimension",
+        "$value": "3px"
+      },
+      "separacion": {
+        "$type": "dimension",
+        "$value": "2px"
+      }
+    },
+    "tactil": {
+      "minimo": {
+        "$type": "dimension",
+        "$value": "44px",
+        "$description": "Alto mínimo de objetivos táctiles"
+      }
+    }
+  },
+  "Tipografia": {
+    "Escritorio": {
+      "H1 hero": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "72px",
+          "lineHeight": 1,
+          "letterSpacing": "-2%"
+        }
+      },
+      "H2 seccion": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "48px",
+          "lineHeight": 1.05,
+          "letterSpacing": "-2%"
+        }
+      },
+      "H3 tarjeta": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 700,
+          "fontSize": "24px",
+          "lineHeight": 1.15,
+          "letterSpacing": "0%"
+        }
+      },
+      "Cuerpo": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 400,
+          "fontSize": "18px",
+          "lineHeight": 1.55,
+          "letterSpacing": "0%"
+        }
+      },
+      "Cuerpo pequeno": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 400,
+          "fontSize": "14px",
+          "lineHeight": 1.5,
+          "letterSpacing": "0%"
+        }
+      },
+      "Etiqueta": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 600,
+          "fontSize": "14px",
+          "lineHeight": 1.2,
+          "letterSpacing": "0%"
+        }
+      },
+      "Boton": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 700,
+          "fontSize": "15px",
+          "lineHeight": 1.2,
+          "letterSpacing": "0%"
+        }
+      },
+      "Logo": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 700,
+          "fontSize": "20px",
+          "lineHeight": 1,
+          "letterSpacing": "18%"
+        }
+      },
+      "Precio grande": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "40px",
+          "lineHeight": 1,
+          "letterSpacing": "-2%"
+        }
+      },
+      "Precio tarjeta": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "20px",
+          "lineHeight": 1,
+          "letterSpacing": "0%"
+        }
+      }
+    },
+    "Movil": {
+      "H1 hero": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "40px",
+          "lineHeight": 1,
+          "letterSpacing": "-2%"
+        }
+      },
+      "H2 seccion": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "30px",
+          "lineHeight": 1.05,
+          "letterSpacing": "-2%"
+        }
+      },
+      "H3 tarjeta": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 700,
+          "fontSize": "20px",
+          "lineHeight": 1.15,
+          "letterSpacing": "0%"
+        }
+      },
+      "Cuerpo": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 400,
+          "fontSize": "16px",
+          "lineHeight": 1.55,
+          "letterSpacing": "0%"
+        }
+      },
+      "Cuerpo pequeno": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 400,
+          "fontSize": "14px",
+          "lineHeight": 1.5,
+          "letterSpacing": "0%"
+        }
+      },
+      "Etiqueta": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 600,
+          "fontSize": "13.5px",
+          "lineHeight": 1.2,
+          "letterSpacing": "0%"
+        }
+      },
+      "Boton": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 700,
+          "fontSize": "15px",
+          "lineHeight": 1.2,
+          "letterSpacing": "0%"
+        }
+      },
+      "Logo": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 700,
+          "fontSize": "18px",
+          "lineHeight": 1,
+          "letterSpacing": "18%"
+        }
+      },
+      "Precio grande": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "30px",
+          "lineHeight": 1,
+          "letterSpacing": "-2%"
+        }
+      },
+      "Precio tarjeta": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "18px",
+          "lineHeight": 1,
+          "letterSpacing": "0%"
+        }
+      }
+    },
+    "Panel": {
+      "Titulo pagina": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "28px",
+          "lineHeight": 1.15,
+          "letterSpacing": "0%"
+        }
+      },
+      "Titulo tarjeta": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 700,
+          "fontSize": "18px",
+          "lineHeight": 1.2,
+          "letterSpacing": "0%"
+        }
+      },
+      "KPI": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Bricolage Grotesque",
+          "fontWeight": 800,
+          "fontSize": "32px",
+          "lineHeight": 1,
+          "letterSpacing": "0%"
+        }
+      },
+      "Tabla": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 400,
+          "fontSize": "14px",
+          "lineHeight": 1.4,
+          "letterSpacing": "0%"
+        }
+      },
+      "Encabezado tabla": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 600,
+          "fontSize": "13px",
+          "lineHeight": 1.2,
+          "letterSpacing": "0%"
+        }
+      },
+      "Nav": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Instrument Sans",
+          "fontWeight": 600,
+          "fontSize": "14px",
+          "lineHeight": 1.2,
+          "letterSpacing": "0%"
+        }
+      }
+    },
+    "Palabra serif escritorio H1": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Instrument Serif",
+        "fontWeight": 400,
+        "fontSize": "72px",
+        "lineHeight": 1,
+        "letterSpacing": "0%"
+      }
+    },
+    "Palabra serif escritorio H2": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Instrument Serif",
+        "fontWeight": 400,
+        "fontSize": "48px",
+        "lineHeight": 1.05,
+        "letterSpacing": "0%"
+      }
+    },
+    "Palabra serif movil H1": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Instrument Serif",
+        "fontWeight": 400,
+        "fontSize": "40px",
+        "lineHeight": 1,
+        "letterSpacing": "0%"
+      }
+    },
+    "Palabra serif movil H2": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Instrument Serif",
+        "fontWeight": 400,
+        "fontSize": "30px",
+        "lineHeight": 1.05,
+        "letterSpacing": "0%"
+      }
+    }
+  },
+  "Efectos": {
+    "Sombra dura": {
+      "$type": "shadow",
+      "$value": {
+        "color": "{Primitivos.color.tostado}",
+        "offsetX": "4px",
+        "offsetY": "4px",
+        "blur": "0px",
+        "spread": "0px"
+      }
+    }
+  },
+  "Movimiento": {
+    "dur-rapida": {
+      "$type": "duration",
+      "$value": "120ms"
+    },
+    "dur-normal": {
+      "$type": "duration",
+      "$value": "220ms"
+    },
+    "dur-lenta": {
+      "$type": "duration",
+      "$value": "420ms"
+    },
+    "ease": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.2,
+        0.8,
+        0.2,
+        1
+      ]
+    }
+  }
+}

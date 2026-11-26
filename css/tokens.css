@@ -1,0 +1,75 @@
+/* BeanCraft Web v1 · Tokens
+   Fuente: Guía de diseño front-end v1.0 (sección 2) + tokens.css del repo móvil.
+   Mismo nombre que las Variables de Figma: --c-tostado ↔ color/tostado, --sp-4 ↔ sp/4, --r-tarjeta ↔ radio/tarjeta.
+   Cero hex fuera de este archivo.
+   Fuentes: primero Google Fonts (mismo nombre que en Figma); si no hay red, las copias locales de fonts/ con prefijo BC. */
+
+@font-face { font-family: 'BC Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/instrument-serif-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'BC Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('../fonts/instrument-serif-latin-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'BC Bricolage Grotesque'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/bricolage-grotesque-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'BC Bricolage Grotesque'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/bricolage-grotesque-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'BC Bricolage Grotesque'; font-style: normal; font-weight: 800; font-display: swap; src: url('../fonts/bricolage-grotesque-latin-800-normal.woff2') format('woff2'); }
+@font-face { font-family: 'BC Instrument Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/instrument-sans-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'BC Instrument Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url('../fonts/instrument-sans-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'BC Instrument Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url('../fonts/instrument-sans-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'BC Instrument Sans'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/instrument-sans-latin-700-normal.woff2') format('woff2'); }
+
+:root {
+  /* Colección Figma: Primitivos */
+  --c-tostado: #2A1A12;
+  --c-verde: #0B5C63;
+  --c-espuma: #FAFAF7;
+  --c-menta: #DCEBE6;
+  --c-miel: #F2B134;
+  --c-fresa: #FF6B9D;
+  --c-lila: #B8A1FF;
+  --c-limon: #E8E56A;
+  --c-cereza: #C8102E;
+  --c-blanco: #FFFFFF;
+
+  /* Colección Figma: Semánticos (alias) */
+  --texto-principal: var(--c-tostado);
+  --texto-inverso: var(--c-espuma);
+  --texto-enlace: var(--c-verde);
+  --fondo-base: var(--c-espuma);
+  --fondo-superficie: var(--c-blanco);
+  --fondo-suave: var(--c-menta);
+  --fondo-promo: var(--c-cereza);
+  --fondo-novedad: var(--c-limon);
+  --borde-fuerte-color: var(--c-tostado);
+  --borde-suave-color: rgba(42, 26, 18, .2);
+  --foco-anillo: var(--c-verde);
+  --accion-principal: var(--c-tostado);
+  --accion-acento: var(--c-miel);
+  --estado-recibido: var(--c-menta);
+  --estado-preparando: var(--c-miel);
+  --estado-listo: var(--c-verde);
+  --estado-entregado: var(--c-tostado);
+  --estado-cancelado: var(--c-cereza);
+  --error-fondo: var(--c-cereza);
+  --error-texto: var(--c-espuma);
+  --velo: rgba(42, 26, 18, .45);
+
+  /* Tipografía */
+  --font-serif: 'Instrument Serif', 'BC Instrument Serif', Georgia, serif;
+  --font-display: 'Bricolage Grotesque', 'BC Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', 'BC Instrument Sans', system-ui, sans-serif;
+
+  /* Colección Figma: Dimensiones */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px;
+  --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
+  --r-etiqueta: 4px; --r-campo: 10px; --r-panel: 12px; --r-tarjeta: 16px; --r-pildora: 999px;
+  --borde: 2px solid var(--c-tostado);
+  --borde-panel: 1px solid var(--borde-suave-color);
+  --sombra-dura: 4px 4px 0 var(--c-tostado);
+  --foco-grosor: 3px; --foco-separacion: 2px;
+  --tactil-minimo: 44px;
+
+  /* Movimiento */
+  --dur-rapida: 120ms; --dur-normal: 220ms; --dur-lenta: 420ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

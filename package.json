@@ -1,0 +1,14 @@
+{
+  "name": "beancraft-web",
+  "version": "2.0.0",
+  "description": "BeanCraft Coffee · sitio de marca y panel del personal (SRS v1.3). App web en JavaScript con módulos ES, sin dependencias de ejecución.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/servir.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "e2e": "node tests/e2e/recorridos.mjs",
+    "proporcion": "node scripts/proporcion.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
