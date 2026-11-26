@@ -51,7 +51,7 @@
 .HeroInicio .TituloMixto[data-nivel="h1"] { font-size: clamp(64px, 6.4vw, 96px); line-height: .95; }
 .HeroInicio .subtitulo { max-width: 40ch; margin: 0; font-size: 20px; line-height: 1.5; }
 .HeroInicio .acciones-hero { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); }
-.HeroInicio .datos-hero { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 0; width: 100%; margin: var(--sp-4) 0 0; padding-top: var(--sp-5); border-top: 1.5px solid var(--c-tostado); }
+.HeroInicio .datos-hero { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 0; width: 100%; margin: var(--sp-4) 0 0; padding-top: var(--sp-5); border-top: var(--borde-panel); }
 .HeroInicio .datos-hero > div { display: flex; flex-direction: column; gap: 4px; padding: 0 var(--sp-6) 0 0; }
 .HeroInicio .datos-hero > div + div { padding-left: var(--sp-6); border-left: 1px solid color-mix(in srgb, var(--c-tostado) 25%, transparent); }
 .HeroInicio .datos-hero dt { font-size: 13.5px; }
@@ -74,6 +74,8 @@
 .Carrusel3D .escenario { position: relative; height: 560px; border-radius: 28px; background: var(--c-menta); overflow: hidden; touch-action: pan-y; cursor: grab; user-select: none; }
 .Carrusel3D .escenario:active { cursor: grabbing; }
 .Carrusel3D .escenario:focus-visible { outline: var(--foco-grosor) solid var(--foco-anillo); outline-offset: var(--foco-separacion); }
+.Carrusel3D .Pixeles .DetallePixel:first-child { left: 7%; top: 30%; width: 28px; height: 28px; }
+.Carrusel3D .Pixeles .DetallePixel:last-child { right: 8%; bottom: 42%; }
 .Carrusel3D[data-breakpoint="tablet"] .escenario { height: 460px; }
 .Carrusel3D[data-breakpoint="movil"] .escenario { height: 340px; border-radius: 22px; }
 .Carrusel3D .plataforma { position: absolute; left: 50%; bottom: 48px; width: 78%; height: 120px; transform: translateX(-50%); border: var(--borde); border-radius: 50%; background: var(--c-limon); }
@@ -95,14 +97,6 @@
 .Carrusel3D .e-nuevo { position: absolute; right: calc(6% + 84px); top: 28px; z-index: 30; }
 .Carrusel3D[data-breakpoint="movil"] .e-nuevo { right: calc(6% + 58px); top: 18px; }
 /* Controles sobre la vitrina: flechas y contador, arriba a la izquierda */
-.Carrusel3D .controles { position: absolute; z-index: 40; left: var(--sp-4); top: var(--sp-4); display: flex; align-items: center; gap: var(--sp-2); padding: 4px; border: var(--borde); border-radius: var(--r-pildora); background: var(--c-espuma); }
-.Carrusel3D .controles .IconoCirculo { width: 40px; height: 40px; border: 0; background: none; }
-.Carrusel3D .controles .IconoCirculo:hover { background: var(--c-menta); }
-.Carrusel3D .contador { min-width: 64px; text-align: center; font-size: 14px; font-variant-numeric: tabular-nums; }
-.Carrusel3D .contador strong { font-family: var(--font-display); font-size: 17px; }
-.Carrusel3D .instruccion { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.Carrusel3D[data-breakpoint="movil"] .controles { left: var(--sp-3); top: var(--sp-3); }
-.Carrusel3D[data-breakpoint="movil"] .controles .IconoCirculo { width: 36px; height: 36px; }
 @media (prefers-reduced-motion: reduce) { .Carrusel3D .vaso { transition: none; } }
 
 /* Pie de foto de la bebida al frente: nombre, precio y acciones, sin caja */
@@ -126,7 +120,7 @@
 
 /* ───────── Pilares de marca ───────── */
 .Pilares { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }
-.Pilares .pilar { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-5); border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-base); }
+.Pilares .pilar { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-5); border: 0; border-radius: var(--r-tarjeta); background: var(--fondo-base); }
 .Pilares .titulo { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 24px; }
 .Pilares .texto { margin: 0; font-size: 16px; }
 .bp-tablet .Pilares { gap: var(--sp-4); }
@@ -143,46 +137,54 @@
 
 /* ───────── Bebidas de la casa (hojas del repo) ───────── */
 .HojasCasa { display: flex; flex-direction: column; gap: var(--sp-5); }
-.HojasCasa .pestanas { display: flex; gap: var(--sp-2); overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.HojasCasa .pestanas { display: flex; gap: var(--sp-2); overflow-x: auto; scrollbar-width: none; padding: 5px; margin: -5px; }
 .HojasCasa .pestana { flex: none; min-height: 44px; padding: 0 var(--sp-4); border: var(--borde); border-radius: var(--r-pildora); background: var(--fondo-superficie); font: 600 15px var(--font-body); color: var(--c-tostado); cursor: pointer; }
 .HojasCasa .pestana[aria-selected="true"] { background: var(--c-tostado); color: var(--c-espuma); }
 .HojasCasa .pestana:focus-visible { outline: var(--foco-grosor) solid var(--foco-anillo); outline-offset: var(--foco-separacion); }
-.HojasCasa .hoja { display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-5); border: var(--borde); border-radius: var(--r-tarjeta); background: var(--fondo-superficie); }
-.HojasCasa .hoja[data-verde="si"] { background: var(--c-verde); color: var(--c-espuma); }
-.HojasCasa .cabeza-hoja { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); }
-.HojasCasa .cabeza-hoja .titulo { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 32px; line-height: 1.1; }
-.HojasCasa .cabeza-hoja .sub { margin: var(--sp-1) 0 0; font-size: 16px; }
-.HojasCasa .arriba { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); }
-.HojasCasa .abajo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+.HojasCasa .hoja { display: flex; flex-direction: column; border-radius: var(--r-tarjeta); background: var(--fondo-superficie); overflow: hidden; box-shadow: 0 8px 24px color-mix(in srgb, var(--c-tostado) 7%, transparent); }
+.HojasCasa .portada-hoja { position: relative; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(140px, 1fr); align-items: center; gap: var(--sp-6); padding: var(--sp-6) var(--sp-7) var(--sp-7); background: var(--c-tostado); color: var(--c-espuma); }
+.HojasCasa .hoja[data-verde="si"] .portada-hoja { background: var(--c-verde); }
+.HojasCasa .portada-hoja::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 20px; border-radius: 50% 50% 0 0 / 100% 100% 0 0; background: var(--fondo-superficie); pointer-events: none; }
+.HojasCasa .contenido-hoja { display: flex; flex-direction: column; gap: var(--sp-5); min-width: 0; }
+.HojasCasa .cabeza-hoja .titulo { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 38px; line-height: 1.1; color: var(--c-limon); }
+.HojasCasa .cabeza-hoja .sub { margin: var(--sp-2) 0 0; font-size: 16px; }
+.HojasCasa .arriba { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); }
+.HojasCasa .abajo { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); padding: var(--sp-5); }
 .HojasCasa a { color: var(--c-tostado); text-decoration: none; }
-.HojasCasa .item-lista { display: flex; align-items: center; gap: var(--sp-3); min-width: 0; padding: var(--sp-3); border: var(--borde); border-radius: var(--r-panel); background: var(--fondo-base); }
-.HojasCasa .item-lista:hover, .HojasCasa .item-tile:hover { box-shadow: var(--sombra-dura); }
-.HojasCasa .item-lista:focus-visible, .HojasCasa .item-tile:focus-visible { outline: var(--foco-grosor) solid var(--c-limon); outline-offset: var(--foco-separacion); }
-.HojasCasa .item-lista .mini { flex: none; display: flex; align-items: center; justify-content: center; width: 96px; height: 96px; border-radius: var(--r-campo); overflow: hidden; }
-.HojasCasa .item-lista .mini .FotoProducto { max-width: 88px; max-height: 88px; width: auto; height: auto; }
-.HojasCasa .item-lista .textos { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.HojasCasa .item-lista { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-width: 0; min-height: 56px; padding: var(--sp-3) var(--sp-4); border: 1px solid color-mix(in srgb, var(--c-espuma) 25%, transparent); border-radius: var(--r-campo); background: color-mix(in srgb, var(--c-espuma) 8%, transparent); color: var(--c-espuma); transition: background var(--dur-normal), color var(--dur-normal), transform var(--dur-normal); }
+.HojasCasa .item-lista:hover { background: var(--c-limon); color: var(--c-tostado); transform: translateX(3px); }
+.HojasCasa .item-tile:hover .nombre { text-decoration: underline; text-underline-offset: 3px; }
+.HojasCasa .item-tile:focus-visible { outline: var(--foco-grosor) solid var(--foco-anillo); outline-offset: var(--foco-separacion); }
+.HojasCasa .item-lista:focus-visible, .HojasCasa .destacado-hoja:focus-visible { outline: var(--foco-grosor) solid var(--c-limon); outline-offset: var(--foco-separacion); }
 .HojasCasa .item-lista .nombre { font-weight: 700; font-size: 17px; }
-.HojasCasa .item-lista .desc { font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.HojasCasa .item-lista .precio { font-size: 14px; }
-.HojasCasa .item-lista > .Icono { flex: none; }
-.HojasCasa .item-tile { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; padding: var(--sp-3); border: var(--borde); border-radius: var(--r-panel); background: var(--fondo-base); }
-.HojasCasa .item-tile .imagen { position: relative; display: flex; align-items: flex-end; justify-content: center; height: 196px; padding-top: var(--sp-3); border-radius: var(--r-campo); overflow: hidden; }
-.HojasCasa .item-tile.destacado .imagen { height: 240px; }
-.HojasCasa .item-tile .imagen .FotoProducto { max-width: 88%; max-height: 100%; width: auto; height: auto; }
-.HojasCasa .item-tile .Etiqueta { position: absolute; left: var(--sp-2); top: var(--sp-2); }
+.HojasCasa .item-lista .precio { flex: none; padding: 3px 9px; border-radius: var(--r-pildora); background: var(--c-limon); color: var(--c-tostado); font-size: 14px; }
+.HojasCasa .destacado-hoja { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); min-width: 0; padding-bottom: var(--sp-4); color: var(--c-limon); text-align: center; font-size: 14px; }
+.HojasCasa .destacado-hoja .foto-destacada { width: auto; max-width: 85%; height: 260px; object-fit: contain; filter: drop-shadow(0 12px 8px color-mix(in srgb, var(--c-tostado) 30%, transparent)); transition: transform var(--dur-lenta) var(--ease); }
+.HojasCasa .destacado-hoja .Mascota { position: absolute; right: 0; bottom: var(--sp-6); }
+.HojasCasa .item-tile { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); min-width: 0; padding: var(--sp-3); border: 0; border-radius: var(--r-panel); background: none; text-align: center; }
+.HojasCasa .item-tile .imagen { position: relative; isolation: isolate; display: flex; align-items: center; justify-content: center; width: 100%; height: 220px; padding: var(--sp-3) 0; }
+.HojasCasa .item-tile .imagen::after { content: ''; position: absolute; left: 22%; right: 22%; bottom: var(--sp-2); height: 12px; background: var(--c-tostado); opacity: .12; filter: blur(5px); border-radius: 50%; z-index: -1; }
+.HojasCasa .item-tile .imagen .FotoProducto { max-width: 72%; max-height: 90%; width: auto; height: auto; transform: rotate(-4deg); filter: drop-shadow(0 8px 6px color-mix(in srgb, var(--c-tostado) 16%, transparent)); transition: transform var(--dur-lenta) var(--ease); }
+.HojasCasa .item-tile:nth-child(2) .FotoProducto { transform: translateY(-4px) rotate(4deg); }
+.HojasCasa .item-tile:hover .FotoProducto, .HojasCasa .item-tile:focus-visible .FotoProducto, .HojasCasa .destacado-hoja:hover .foto-destacada { transform: translateY(-8px) rotate(0deg) scale(1.04); }
 .HojasCasa .item-tile .nombre { font-weight: 700; font-size: 17px; }
-.HojasCasa .item-tile .precio { font-size: 14px; }
-.bp-tablet .HojasCasa .arriba { grid-template-columns: minmax(0, 1fr); }
-.bp-tablet .HojasCasa .item-tile .imagen, .bp-tablet .HojasCasa .item-tile.destacado .imagen { height: 180px; }
-.bp-movil .HojasCasa .hoja { padding: var(--sp-4); }
+.HojasCasa .item-tile .precio { font-size: 14px; color: var(--c-verde); }
+.bp-tablet .HojasCasa .portada-hoja { padding-inline: var(--sp-5); }
+.bp-movil .HojasCasa .portada-hoja { grid-template-columns: minmax(0, 1fr) 80px; gap: var(--sp-3); padding: var(--sp-5) var(--sp-4) var(--sp-6); }
+.bp-movil .HojasCasa .contenido-hoja { gap: var(--sp-4); }
 .bp-movil .HojasCasa .cabeza-hoja .titulo { font-size: 24px; }
-.bp-movil .HojasCasa .cabeza-hoja .Mascota { width: 56px !important; height: 56px !important; }
-.bp-movil .HojasCasa .arriba { grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); }
-.bp-movil .HojasCasa .item-lista .mini { width: 72px; height: 72px; }
-.bp-movil .HojasCasa .item-lista .mini .FotoProducto { max-width: 64px; max-height: 64px; }
-.bp-movil .HojasCasa .abajo { display: flex; gap: var(--sp-3); overflow-x: auto; scrollbar-width: none; margin-right: calc(var(--sp-4) * -1); padding-right: var(--sp-4); scroll-snap-type: x mandatory; }
-.bp-movil .HojasCasa .abajo .item-tile { flex: 0 0 72%; scroll-snap-align: start; }
-.bp-movil .HojasCasa .item-tile .imagen, .bp-movil .HojasCasa .item-tile.destacado .imagen { height: 170px; }
+.bp-movil .HojasCasa .cabeza-hoja .sub { font-size: 14px; }
+.bp-movil .HojasCasa .item-lista { gap: 6px; padding: var(--sp-2); }
+.bp-movil .HojasCasa .item-lista .nombre { min-width: 0; overflow-wrap: anywhere; font-size: 14px; }
+.bp-movil .HojasCasa .item-lista .precio { padding: 2px 5px; font-size: 13px; }
+.bp-movil .HojasCasa .destacado-hoja .foto-destacada { width: 80px; height: 150px; max-width: 100%; }
+.bp-movil .HojasCasa .destacado-hoja > span:not(.Mascota) { font-size: 12px; }
+.bp-movil .HojasCasa .destacado-hoja .Mascota { position: static; width: 48px !important; height: 48px !important; }
+.bp-movil .HojasCasa .abajo { gap: 6px; padding: var(--sp-3) var(--sp-2); }
+.bp-movil .HojasCasa .item-tile { padding: var(--sp-2) 2px; }
+.bp-movil .HojasCasa .item-tile .imagen { height: 110px; }
+.bp-movil .HojasCasa .item-tile .nombre { font-size: 14px; line-height: 1.25; overflow-wrap: anywhere; }
+.bp-movil .HojasCasa .item-tile .DetallePixel { width: 14px; height: 14px; }
 
 /* ───────── v3 · Explorador de combinaciones: riel de bebidas, vitrina fija y pasos numerados ───────── */
 .Explorador { display: flex; flex-direction: column; gap: var(--sp-7); }
@@ -514,3 +516,23 @@
 .TooltipSidebar[data-lado="derecha"]::before { left: -7px; top: 50%; transform: translateY(-50%) rotate(45deg); }
 .TooltipSidebar[data-lado="abajo"]::before { left: calc(50% + var(--flecha, 0px)); top: -7px; transform: translateX(-50%) rotate(135deg); }
 @keyframes aparece-tip { from { opacity: 0; } to { opacity: 1; } }
+
+/* Las animaciones se ejecutan con Anime.js local; CSS conserva estados y accesibilidad. */
+.Carrusel3D[data-motor="animejs"] .vaso { transition: none; }
+.TarjetaBebida .foto, .HojasCasa .FotoProducto, .opcion-bebida .FotoProducto { will-change: transform; }
+.acciones-ficha [data-pedir-app] { opacity: .7; cursor: default; }
+#marca { background: var(--c-menta); }
+#marca .cabeza-seccion em { color: var(--c-verde); }
+.Pilares .pilar { border: var(--borde); background: var(--c-espuma); }
+.Pilares .pilar[data-acento="miel"] { background: color-mix(in srgb, var(--c-miel) 22%, var(--c-espuma)); }
+.Pilares .pilar[data-acento="lila"] { background: color-mix(in srgb, var(--c-lila) 26%, var(--c-espuma)); }
+.Pilares .pilar[data-acento="fresa"] { background: color-mix(in srgb, var(--c-fresa) 19%, var(--c-espuma)); }
+.arte-pilar { position: relative; display: grid; place-items: center; width: 100%; min-height: 128px; }
+.arte-pilar .Pixeles .DetallePixel:first-child { top: 12%; left: 10%; }
+.arte-pilar .Pixeles .DetallePixel:last-child { right: 12%; bottom: 20%; }
+.bp-movil .Pilares .pilar .arte-pilar { grid-area: m; min-height: 104px; }
+.bp-movil .Pilares .pilar .arte-pilar .DetallePixel { width: 14px; height: 14px; }
+@media (prefers-reduced-motion: reduce) {
+  .TarjetaBebida .foto, .HojasCasa .FotoProducto { will-change: auto; }
+  .TarjetaBebida:hover .foto, .TarjetaBebida:focus-within .foto, .HojasCasa .item-tile:hover .FotoProducto, .HojasCasa .item-tile:focus-visible .FotoProducto, .HojasCasa .destacado-hoja:hover .foto-destacada { transform: none; }
+}

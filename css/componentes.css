@@ -178,47 +178,50 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .bp-movil .GrupoOpciones .chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: var(--sp-1); scrollbar-width: none; }
 
 /* TarjetaBebida */
-.TarjetaBebida { position: relative; display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; padding: 0; border: 0; background: none; }
+/* Los detalles viven dentro de la zona de imagen y no interceptan el enlace. */
+.Pixeles { position: absolute; inset: 0; pointer-events: none; }
+.DetallePixel { display: block; position: absolute; width: 24px; height: 24px; pointer-events: none; }
+.DetallePixel[data-color="lila"] { color: var(--c-lila); }
+.DetallePixel[data-color="fresa"] { color: var(--c-fresa); }
+.DetallePixel[data-color="limon"] { color: var(--c-limon); }
+.DetallePixel[data-color="miel"] { color: var(--c-miel); }
+.Pixeles .DetallePixel:first-child { left: 7%; top: 20%; }
+.Pixeles .DetallePixel:last-child { right: 7%; bottom: 20%; width: 18px; height: 18px; }
+.TarjetaBebida { position: relative; display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; padding: 0; border: 0; background: none; }
 .TarjetaBebida[data-estado="cargando"] { pointer-events: none; }
-.TarjetaBebida .imagen { position: relative; display: flex; align-items: flex-end; justify-content: center; height: 252px; padding-top: var(--sp-5); border: var(--borde); border-radius: 22px; }
+.TarjetaBebida .enlace-tarjeta { display: flex; flex-direction: column; gap: var(--sp-3); height: 100%; min-width: 0; padding-top: var(--sp-6); border-radius: var(--r-tarjeta); color: var(--c-tostado); text-decoration: none; }
+.TarjetaBebida .enlace-tarjeta:focus-visible { outline: var(--foco-grosor) solid var(--foco-anillo); outline-offset: 5px; }
+.TarjetaBebida .imagen { position: relative; display: flex; align-items: flex-end; justify-content: center; height: 186px; border: 0; border-radius: var(--r-tarjeta); }
 .TarjetaBebida .imagen[data-fondo="miel"], .imagen-fondo[data-fondo="miel"] { background: var(--c-miel); }
 .TarjetaBebida .imagen[data-fondo="fresa"], .imagen-fondo[data-fondo="fresa"] { background: var(--c-fresa); }
 .TarjetaBebida .imagen[data-fondo="menta"], .imagen-fondo[data-fondo="menta"] { background: var(--c-menta); }
 .TarjetaBebida .imagen[data-fondo="lila"], .imagen-fondo[data-fondo="lila"] { background: var(--c-lila); }
 .TarjetaBebida .imagen[data-fondo="limon"], .imagen-fondo[data-fondo="limon"] { background: var(--c-limon); }
-.TarjetaBebida .foto { width: auto; max-width: 84%; height: calc(190px * var(--k, 1)); object-fit: contain; transform-origin: 50% 100%; transition: transform var(--dur-normal) var(--ease); }
-.TarjetaBebida:hover .foto, .TarjetaBebida[data-estado="hover"] .foto { transform: translateY(-14px) scale(1.06); }
-.TarjetaBebida .sticker { position: absolute; right: var(--sp-2); top: var(--sp-2); }
-.TarjetaBebida .imagen .Etiqueta { position: absolute; left: var(--sp-3); top: var(--sp-3); }
-.TarjetaBebida .imagen .Etiqueta[data-tipo="agotado"] { top: auto; bottom: var(--sp-3); }
-.TarjetaBebida .calificacion { position: absolute; left: var(--sp-3); bottom: var(--sp-3); display: inline-flex; align-items: center; gap: 3px; padding: 2px 10px; border: var(--borde); border-radius: var(--r-pildora); background: var(--c-espuma); font-size: 13px; font-weight: 700; white-space: nowrap; }
-.TarjetaBebida .cuerpo { display: flex; flex-direction: column; gap: 6px; flex: 1; padding: 0 2px; }
+.TarjetaBebida .foto { width: auto; max-width: 72%; height: calc(220px * var(--k, 1)); object-fit: contain; transform: translateY(-8px); filter: drop-shadow(0 8px 6px color-mix(in srgb, var(--c-tostado) 14%, transparent)); transform-origin: 50% 100%; transition: transform var(--dur-normal) var(--ease); }
+.TarjetaBebida:hover .foto, .TarjetaBebida:focus-within .foto, .TarjetaBebida[data-estado="hover"] .foto { transform: translateY(-12px); }
+.TarjetaBebida .sticker { position: absolute; right: var(--sp-2); bottom: var(--sp-2); }
+.TarjetaBebida .Pixeles .DetallePixel:last-child { bottom: 44%; }
+.TarjetaBebida .cuerpo { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 var(--sp-2) var(--sp-2); text-align: center; }
 .TarjetaBebida .categoria { margin: 0; font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--c-verde); }
-.TarjetaBebida .nombre { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 22px; line-height: 1.12; }
-.TarjetaBebida .nombre a { text-decoration: none; }
-.TarjetaBebida .desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0; font-size: 14.5px; line-height: 1.4; }
-.TarjetaBebida .pie-tarjeta { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-2); margin-top: auto; padding-top: var(--sp-3); border-top: 1px solid color-mix(in srgb, var(--c-tostado) 22%, transparent); }
+.TarjetaBebida .nombre { margin: 0; max-width: 100%; overflow-wrap: anywhere; font-family: var(--font-display); font-weight: 800; font-size: 21px; line-height: 1.2; }
 .TarjetaBebida .precio { margin: 0; font-size: 14px; }
-.TarjetaBebida .monto { font-family: var(--font-display); font-weight: 800; font-size: 24px; }
-.TarjetaBebida .ver { display: inline-flex; align-items: center; gap: 2px; font-weight: 700; font-size: 14px; white-space: nowrap; }
-.TarjetaBebida .ver .Icono, .TarjetaBebida .ver svg { transition: transform var(--dur-normal) var(--ease); }
-.TarjetaBebida:hover .ver svg { transform: translateX(4px); }
-.TarjetaBebida:hover .nombre a { text-decoration: underline; text-underline-offset: 3px; }
-.TarjetaBebida .leches { display: flex; align-items: center; gap: 4px; margin-top: 2px; font-size: 13px; }
-.TarjetaBebida .leches .texto { margin-left: var(--sp-1); }
+.TarjetaBebida .monto { font-family: var(--font-body); font-weight: 600; font-size: 16px; }
+.TarjetaBebida .Estrellas { flex-wrap: wrap; justify-content: center; }
+.TarjetaBebida .enlace-tarjeta:hover .nombre { text-decoration: underline; text-underline-offset: 3px; }
 .punto { width: 14px; height: 14px; border: var(--borde); border-radius: 50%; }
 .punto[data-color="espuma"] { background: var(--c-espuma); }
 .punto[data-color="blanco"] { background: var(--c-blanco); }
 .punto[data-color="miel"] { background: var(--c-miel); }
 .punto[data-color="fresa"] { background: var(--c-fresa); }
 .TarjetaBebida[data-variante="no-disponible"] .foto, .TarjetaBebida[data-variante="no-disponible"] .sticker { opacity: .4; }
-.TarjetaBebida[data-variante="promo"] { grid-column: span 2; flex-direction: row; align-items: stretch; gap: 0; border: var(--borde); border-radius: 22px; background: var(--fondo-promo); color: var(--texto-inverso); }
-.TarjetaBebida[data-variante="promo"] .imagen { border: 0; border-right: var(--borde); border-radius: 21px 0 0 21px; }
+.TarjetaBebida[data-variante="promo"] { grid-column: span 2; flex-direction: row; align-items: stretch; gap: 0; border: 0; border-radius: 22px; background: var(--fondo-promo); color: var(--texto-inverso); }
+.TarjetaBebida[data-variante="promo"] .imagen { border: 0; border-radius: 21px 0 0 21px; }
+.TarjetaBebida[data-variante="promo"] .imagen .Etiqueta { position: absolute; left: var(--sp-3); top: var(--sp-3); }
 .TarjetaBebida[data-variante="promo"] .categoria { color: var(--c-espuma); opacity: .9; }
 .TarjetaBebida[data-variante="promo"]:hover .foto { transform: none; }
 .TarjetaBebida[data-variante="promo"] .imagen { flex: 0 0 44%; height: auto; min-height: 260px; }
 .TarjetaBebida[data-variante="promo"] .foto { height: calc(220px * var(--k, 1)); }
-.TarjetaBebida[data-variante="promo"] .cuerpo { justify-content: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-5) var(--sp-3) var(--sp-3); }
+.TarjetaBebida[data-variante="promo"] .cuerpo { align-items: flex-start; text-align: left; flex: 1; justify-content: center; gap: var(--sp-3); padding: var(--sp-5); }
 .TarjetaBebida[data-variante="promo"] .titulo-promo { font-family: var(--font-display); font-weight: 800; font-size: 30px; line-height: 1.05; color: var(--c-limon); }
 .TarjetaBebida[data-variante="promo"] .monto { font-size: 26px; }
 .TarjetaBebida[data-variante="promo"] > .Mascota { position: absolute; right: -10px; bottom: -14px; }
@@ -569,7 +572,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .Select .control, .Filtro .control { cursor: pointer; font: inherit; color: inherit; }
 .Select .opcion, .Filtro .opcion { cursor: pointer; }
 .Select .opcion:hover, .Filtro .opcion:hover { background: var(--fondo-base); }
-.TarjetaBebida[data-ir], .FilaTabla[data-ir], .TarjetaPedido, .OpcionQuiz, .Velo[data-ir] { cursor: pointer; }
+.TarjetaBebida .enlace-tarjeta, .FilaTabla[data-ir], .TarjetaPedido, .OpcionQuiz, .Velo[data-ir] { cursor: pointer; }
 .TarjetaPedido:hover { border-color: var(--c-tostado); }
 .zona-toast-proto { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 200; }
 .zona-toast { position: absolute; right: var(--sp-6); bottom: var(--sp-6); z-index: 95; }

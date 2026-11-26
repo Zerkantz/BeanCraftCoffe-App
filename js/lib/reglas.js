@@ -84,7 +84,7 @@ export function estadoCupon(c, fecha = ahora()) {
 }
 
 // Validaciones con los mismos límites que data/limits.js del repo.
-export const LIMITES = { nombre: 60, telefono: 10, correo: 254, contrasenaMin: 6, contrasena: 72, busqueda: 80, mensaje: 500 };
+export const LIMITES = { nombre: 100, telefono: 10, correo: 100, contrasenaMin: 6, contrasena: 50, busqueda: 50, mensaje: 200 };
 export const correoValido = c => c.length <= LIMITES.correo && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c);
 export const contrasenaValida = c => c.length >= LIMITES.contrasenaMin && c.length <= LIMITES.contrasena;
 export const telefonoValido = t => /^\d{10}$/.test(t.replace(/\s/g, ''));

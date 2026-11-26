@@ -7,6 +7,7 @@ import { SUC } from '../data/sucursales.js';
 import { qrSvg } from '../lib/qr.js';
 import { foto as ilustracion } from '../lib/foto.js';
 import { puedeVer } from '../auth/permisos.js';
+import { rangoRapido, fechaRegistro, fechaValida } from '../lib/consultas-panel.js';
 
 export const R = '';
 export const mxn = (n, dec = 0) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
@@ -54,17 +55,24 @@ export function InsigniaHorario(abierta, texto) {
   return `<span class="InsigniaHorario"${attrs({ estado: abierta ? 'abierta' : 'cerrada' })}>${ic(abierta ? 'reloj' : 'x', 14)}${texto || (abierta ? 'Abierta' : 'Cerrada')}</span>`;
 }
 
-export function Campo({ tipo = 'texto', etiqueta, valor = '', placeholder = '', estado, ayuda, error, densidad = 'sitio', opcional, ancho, nombre = '' } = {}) {
+export function Campo({ tipo = 'texto', etiqueta, valor = '', placeholder = '', estado, ayuda, error, densidad = 'sitio', opcional, ancho, nombre = '', maximo } = {}) {
   const st = estado || (error ? 'error' : valor ? 'lleno' : 'vacio');
   const icIzq = { busqueda: 'buscar', fecha: 'calendario', hora: 'reloj' }[tipo];
   const icDer = tipo === 'contrasena' ? 'ojo' : null;
-  const tipoInput = { correo: 'email', contrasena: 'password', busqueda: 'search', numero: 'text' }[tipo] || 'text';
+  const tipoInput = { correo: 'email', contrasena: 'password', busqueda: 'search', numero: 'text', fecha: 'date', hora: 'time' }[tipo] || 'text';
+  const limite = maximo ?? (tipo === 'area' ? 200 : ['contrasena', 'busqueda', 'numero', 'fecha', 'hora'].includes(tipo) ? 50 : 100);
+  const restriccion = ` maxlength="${limite}"${tipo === 'fecha' ? ' min="1900-01-01" max="2100-12-31"' : ''}${tipo === 'numero' ? ' inputmode="decimal"' : ''}`;
   const ro = st === 'deshabilitado' || st === 'solo-lectura' ? ' readonly' : '';
   const lab = etiqueta || placeholder;
+  if (tipo === 'fecha' && valor && !fechaValida(valor)) valor = fechaRegistro({ fecha: valor });
+  if (tipo === 'hora' && valor) {
+    const h = /^(\d{1,2}):(\d{2})\s*(am|pm)?$/i.exec(valor);
+    if (h) valor = `${String(h[3] ? (Number(h[1]) % 12) + (h[3].toLowerCase() === 'pm' ? 12 : 0) : Number(h[1])).padStart(2, '0')}:${h[2]}`;
+  }
   const control = tipo === 'area'
-    ? `<textarea class="valor" rows="3" placeholder="${placeholder}" aria-label="${lab}"${nombre ? ` name="${nombre}"` : ''}${ro}>${valor}</textarea>`
-    : `<input class="valor" type="${tipoInput}" value="${tipo === 'contrasena' && valor ? 'contrasena123' : valor}" placeholder="${placeholder}" aria-label="${lab}"${nombre ? ` name="${nombre}"` : ''}${ro}>`;
-  return `<label class="Campo"${attrs({ tipo, estado: st, densidad, ancho })}>${etiqueta ? `<span class="etiqueta">${etiqueta}${opcional ? ' <span class="opcional">(opcional)</span>' : ''}</span>` : ''}<span class="control">${icIzq ? ic(icIzq, 18) : ''}${control}${icDer ? `<span class="accion" role="button" aria-label="Mostrar contraseña">${ic(icDer, 18)}</span>` : ''}</span>${error ? MensajeError(error) : ayuda ? `<span class="ayuda">${ayuda}</span>` : ''}</label>`;
+    ? `<textarea class="valor" rows="3" placeholder="${placeholder}" aria-label="${lab}"${nombre ? ` name="${nombre}"` : ''}${restriccion}${ro}>${valor}</textarea>`
+    : `<input class="valor" type="${tipoInput}" value="${tipo === 'contrasena' && valor ? 'contrasena123' : valor}" placeholder="${placeholder}" aria-label="${lab}"${nombre ? ` name="${nombre}"` : ''}${restriccion}${ro}>`;
+  return `<label class="Campo"${attrs({ tipo, estado: st, densidad, ancho })}>${etiqueta ? `<span class="etiqueta">${etiqueta}${opcional ? ' <span class="opcional">(opcional)</span>' : ''}</span>` : ''}<span class="control">${icIzq ? ic(icIzq, 18) : ''}${control}${icDer ? `<span class="accion" role="button" aria-label="Mostrar contraseña">${ic(icDer, 18)}</span>` : ''}</span>${error ? MensajeError(error) : ayuda ? `<span class="ayuda">${ayuda}</span>` : ''}${tipo === 'area' ? `<span class="contador-campo"><span data-cuenta>${String(valor).length}</span> / ${limite} caracteres</span>` : ''}</label>`;
 }
 
 export function Select({ etiqueta, valor, estado = 'cerrado', opciones = [], error, densidad = 'sitio', icono, ancho } = {}) {
@@ -113,7 +121,21 @@ export function GrupoBebidas(lista, selId) {
   return `<div class="GrupoOpciones" data-grupo="bebida" role="radiogroup" aria-label="Bebida"><div class="cabeza"><span class="titulo">Bebida</span><span class="nota">Precio base</span></div><div class="chips">${lista.map(p => Chip({ texto: p.nombre, sel: p.id === selId, x: ` data-base="${p.precio}" data-id="${p.id}" data-nombre="${p.nombre}"` }).replace('</button>', `<span class="costo">${mxn(p.precio)}</span></button>`)).join('')}</div></div>`;
 }
 
-const LECHES = [['entera', 'espuma'], ['deslactosada', 'blanco'], ['avena', 'miel'], ['almendra', 'fresa']];
+// Siluetas sobre una cuadrícula: sin curvas ni rotaciones que suavicen los píxeles.
+const PIXELES = {
+  destello: 'M7 0h2v5h2v2h5v2h-5v2H9v5H7v-5H5V9H0V7h5V5h2Z',
+  corazon: 'M2 2h4v2h4V2h4v2h2v6h-2v2h-2v2h-2v2H6v-2H4v-2H2v-2H0V4h2Z',
+  rombo: 'M6 0h4v2h2v2h2v2h2v4h-2v2h-2v2h-2v2H6v-2H4v-2H2v-2H0V6h2V4h2V2h2Z',
+  escalones: 'M0 12h4V8h4V4h4V0h4v4h-4v4H8v4H4v4H0Z',
+};
+export function DetallePixel(forma = 'destello', color = 'lila') {
+  return `<svg class="DetallePixel" data-forma="${forma}" data-color="${color}" viewBox="0 0 16 16" width="24" height="24" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><path d="${PIXELES[forma]}"/></svg>`;
+}
+export function Pixeles(variante = 0) {
+  const pares = [['destello', 'lila', 'corazon', 'fresa'], ['rombo', 'miel', 'escalones', 'limon'], ['corazon', 'fresa', 'rombo', 'lila'], ['escalones', 'limon', 'destello', 'miel']];
+  const [a, ca, b, cb] = pares[variante % pares.length];
+  return `<span class="Pixeles" aria-hidden="true">${DetallePixel(a, ca)}${DetallePixel(b, cb)}</span>`;
+}
 export const fichaDe = p => `#/producto/${p.slug}`;
 export function TarjetaBebida(p, { variante = 'normal', estado = 'normal', promo } = {}) {
   if (variante === 'promo') {
@@ -121,10 +143,8 @@ export function TarjetaBebida(p, { variante = 'normal', estado = 'normal', promo
   }
   const nd = variante === 'no-disponible';
   const link = fichaDe(p);
-  const opciones = p.personalizable
-    ? `<div class="leches">${LECHES.map(([l, c]) => `<span class="punto" data-color="${c}" title="${l}"></span>`).join('')}<span class="texto">3 tamaños · 4 leches · 4 endulzantes</span></div>`
-    : `<div class="leches"><span class="texto">Pieza individual · recién horneada</span></div>`;
-  return `<article class="TarjetaBebida"${attrs({ variante, estado })} data-categoria="${p.categoria}" data-nombre="${p.nombre.toLowerCase()}" data-ir="${link}"><div class="imagen" data-fondo="${p.fondo}">${ilustracion(p, 190)}${Mascota(p.mascota, { tam: 48, fondo: 'claro' }).replace('class="Mascota"', 'class="Mascota sticker"')}<span class="calificacion">${ic('estrella', 14)}${p.cal.toFixed(1)}</span>${p.frappe ? Etiqueta({ tipo: 'info', texto: 'Frappé' }) : ''}${nd ? Etiqueta({ tipo: 'agotado', texto: 'No disponible hoy' }) : ''}</div><div class="cuerpo"><p class="categoria">${p.categoria}</p><h3 class="nombre"><a href="${link}">${p.nombre}</a></h3><p class="desc">${p.desc}</p>${opciones}<div class="pie-tarjeta"><p class="precio">${p.personalizable ? 'desde ' : ''}<span class="monto">${mxn(p.precio)}</span></p><span class="ver">Ver ficha${ic('chevron-der', 16)}</span></div></div></article>`;
+  const variantePixel = [...p.id].reduce((s, c) => s + c.charCodeAt(0), 0);
+  return `<article class="TarjetaBebida"${attrs({ variante, estado })} data-categoria="${p.categoria}" data-nombre="${p.nombre.toLowerCase()}"><a class="enlace-tarjeta" href="${link}" aria-label="Ver especificaciones de ${p.nombre}"><div class="imagen" data-fondo="${p.fondo}">${Pixeles(variantePixel)}${ilustracion(p, 220)}${Mascota(p.mascota, { tam: 48, fondo: 'claro' }).replace('class="Mascota"', 'class="Mascota sticker"')}</div><div class="cuerpo"><h3 class="nombre">${p.nombre}</h3>${Estrellas(p.cal, { tam: 14 })}<p class="precio">${p.personalizable ? 'desde ' : ''}<span class="monto">${mxn(p.precio)}</span></p>${nd ? Etiqueta({ tipo: 'agotado', texto: 'No disponible hoy' }) : ''}</div></a></article>`;
 }
 
 export function MosaicoPromo(pr, { tam = 'mediano' } = {}) {
@@ -176,11 +196,12 @@ export function TarjetaPedido(ped, { estado = 'normal', mostrarSuc = false } = {
   return `<article class="TarjetaPedido"${attrs({ estado: ped.estado, programado: ped.programado ? 'si' : null, interaccion: estado })} data-id="${ped.id}" tabindex="0" aria-label="Pedido ${ped.id}, ${ped.cliente}"><div class="cabeza"><span class="numero">#${ped.id}</span><span class="hora">${ic('reloj', 14)}${ped.hora} am</span></div><p class="cliente">${ped.cliente}${mostrarSuc && ped.suc ? `<span class="suc-pedido">${ic('tienda', 14)}${SUC[ped.suc].nombre}</span>` : ''}</p><ul class="lineas">${ped.lineas.map(l => `<li><strong>${l.cant} × ${P[l.prod].nombre}</strong><span>${resumenLinea(l)}</span></li>`).join('')}</ul><div class="etiquetas">${ped.programado ? Etiqueta({ tipo: 'info', texto: ped.recoger.replace('Programado · ', 'Programado '), icono: 'reloj' }) : ''}${ped.cupon ? Etiqueta({ tipo: 'cupon', texto: ped.cupon.codigo, icono: 'cupon' }) : ''}</div><div class="pie"><div class="total"><span class="monto">${mxn(t.total, 2)}</span><span class="pago">${ped.pago}</span></div>${e.accion ? Boton({ tipo: ped.estado === 'listo' ? 'acento' : 'principal', texto: e.accion, tam: 40, ancho: 'completo', estado: estado === 'presionado' ? 'presionado' : 'normal', x: ' data-avanzar' }) : ped.cal ? Estrellas(ped.cal, { tam: 14 }) : '<span class="sin-cal">Sin calificar</span>'}</div></article>`;
 }
 
-export function Filtro({ tipo = 'sucursal', etiqueta, valor, estado = 'cerrado', opciones = [], icono = 'tienda', ir } = {}) {
+export function Filtro({ tipo = 'sucursal', etiqueta, valor, estado = 'cerrado', opciones = [], icono = 'tienda', ir, desde, hasta } = {}) {
   const abierto = estado === 'abierto';
   let pop;
   if (tipo === 'fechas') {
-    pop = `<div class="popover fechas"${abierto ? '' : ' hidden'}><div class="chips" role="radiogroup" aria-label="Rango">${['Hoy', 'Ayer', 'Últimos 7 días', 'Este mes', 'Personalizado'].map(o => Chip({ texto: o, sel: o === valor || (o === 'Últimos 7 días' && !['Hoy', 'Ayer', 'Este mes', 'Personalizado'].includes(valor)), tam: 40, x: ` data-valor="${o}"` })).join('')}</div><div class="rango">${Campo({ tipo: 'fecha', etiqueta: 'Desde', valor: '14 nov 2026', densidad: 'panel' })}${Campo({ tipo: 'fecha', etiqueta: 'Hasta', valor: '20 nov 2026', densidad: 'panel' })}</div><div class="acciones">${Boton({ tipo: 'secundario', texto: 'Limpiar', tam: 40, x: ' data-cerrar-popover' })}${Boton({ tipo: 'principal', texto: 'Aplicar', tam: 40, x: ' data-aplicar' })}</div></div>`;
+    const inicial = rangoRapido('Últimos 7 días');
+    pop = `<div class="popover fechas"${abierto ? '' : ' hidden'}><p class="titulo-fechas">Elige el período</p><div class="chips" role="radiogroup" aria-label="Rango">${['Hoy', 'Ayer', 'Últimos 7 días', 'Este mes'].map(o => Chip({ texto: o, sel: o === valor, tam: 40, x: ` data-rango-rapido="${o}"` })).join('')}</div><div class="rango">${Campo({ tipo: 'fecha', etiqueta: 'Desde', nombre: 'desde', valor: desde || inicial.desde, densidad: 'panel' })}${Campo({ tipo: 'fecha', etiqueta: 'Hasta', nombre: 'hasta', valor: hasta || inicial.hasta, densidad: 'panel' })}</div><p class="error-fechas" role="alert" hidden></p><div class="acciones">${Boton({ tipo: 'secundario', texto: 'Cancelar', tam: 40, x: ' data-cerrar-popover' })}${Boton({ tipo: 'principal', texto: 'Aplicar fechas', tam: 40, x: ' data-aplicar' })}</div></div>`;
   } else {
     const ops = opciones.length ? opciones : [valor];
     pop = `<ul class="popover lista" role="listbox"${abierto ? '' : ' hidden'}>${ops.map(o => `<li class="opcion"${attrs({ seleccionada: o === valor ? 'si' : null })} role="option" tabindex="0">${o === valor ? ic('check', 16) : '<span class="hueco"></span>'}${o}</li>`).join('')}</ul>`;
@@ -195,7 +216,7 @@ export function Paginacion({ desde = 1, hasta = 10, total = 25, pagina = 1, pagi
 }
 
 export function TarjetaQR(codigo, { generado = true } = {}) {
-  return `<div class="TarjetaQR"${attrs({ generado: generado ? 'si' : 'no' })}>${generado ? qrSvg(codigo, 200) : `<div class="qr-vacio">${ic('qr', 48)}<span>El QR se genera al guardar el cupón</span></div>`}<span class="codigo">${codigo || 'SIN CÓDIGO'}</span><span class="nota">${generado ? `Este QR contiene el código ${codigo}. Se escanea en la app (RF-06).` : 'Escribe un código para ver la vista previa.'}</span><div class="acciones">${Boton({ tipo: 'secundario', texto: 'Descargar QR', icono: 'descargar', tam: 40, estado: generado ? 'normal' : 'deshabilitado' })}${Boton({ tipo: 'texto', texto: 'Copiar código', icono: 'copiar', tam: 40, estado: generado ? 'normal' : 'deshabilitado' })}</div></div>`;
+  return `<div class="TarjetaQR"${attrs({ generado: generado ? 'si' : 'no' })}>${generado ? qrSvg(codigo, 200) : `<div class="qr-vacio">${ic('qr', 48)}<span>El QR se genera al guardar el cupón</span></div>`}<span class="codigo">${codigo || 'SIN CÓDIGO'}</span><span class="nota">${generado ? `Este QR contiene el código ${codigo}. Se escanea en la app.` : 'Escribe un código para ver la vista previa.'}</span><div class="acciones">${Boton({ tipo: 'secundario', texto: 'Descargar QR', icono: 'descargar', tam: 40, estado: generado ? 'normal' : 'deshabilitado' })}${Boton({ tipo: 'texto', texto: 'Copiar código', icono: 'copiar', tam: 40, estado: generado ? 'normal' : 'deshabilitado' })}</div></div>`;
 }
 
 /* ───────────── Organismos ───────────── */
@@ -288,8 +309,8 @@ export function GraficaLinea(datos, { titulo, alto = 240, ancho = 640, estado = 
   if (estado === 'sin-datos') return `<div class="GraficaLinea" data-estado="sin-datos">${EstadoVacio({ mascota: 'hielito', titulo: 'Sin ventas en este rango', texto: 'Prueba con otro rango de fechas o con todas las sucursales.', contexto: 'panel' })}</div>`;
   if (estado === 'cargando') return `<div class="GraficaLinea" data-estado="cargando"><span class="esqueleto bloque" style="height:${alto}px"></span></div>`;
   const pl = 64, pr = 24, pt = 24, pb = 36, W = ancho, H = alto;
-  const max = Math.max(...datos.map(d => d[1])), top = Math.ceil(max / 500) * 500;
-  const x = i => pl + (i * (W - pl - pr)) / (datos.length - 1), y = v => pt + (1 - v / top) * (H - pt - pb);
+  const max = Math.max(...datos.map(d => d[1])), top = Math.max(500, Math.ceil(max / 500) * 500);
+  const x = i => datos.length === 1 ? (pl + W - pr) / 2 : pl + (i * (W - pl - pr)) / (datos.length - 1), y = v => pt + (1 - v / top) * (H - pt - pb);
   const ticks = [0, top / 4, top / 2, (3 * top) / 4, top];
   const path = datos.map((d, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(d[1]).toFixed(1)}`).join('');
   const last = datos.at(-1);

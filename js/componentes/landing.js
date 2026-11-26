@@ -4,7 +4,7 @@ import { ic } from '../lib/iconos.js';
 import { foto } from '../lib/foto.js';
 import { P, PRODUCTOS, OPCIONES, precioLinea, costo, etiqueta } from '../data/catalogo.js';
 import { MASCOTAS, CATEGORIA_ESTILO } from '../data/experiencia.js';
-import { Boton, Chip, Etiqueta, Mascota, Marcatextos, GrupoOpciones, TituloMixto, mxn, fichaDe } from './base.js';
+import { Boton, Chip, Etiqueta, Mascota, Marcatextos, GrupoOpciones, TituloMixto, mxn, fichaDe, Pixeles } from './base.js';
 
 const attrs = o => Object.entries(o).filter(([, v]) => v !== undefined && v !== null && v !== false).map(([k, v]) => ` data-${k}="${v}"`).join('');
 
@@ -42,10 +42,10 @@ export function Carrusel3D(ids, { bp = 'escritorio', paso = 0 } = {}) {
   return `<div class="Carrusel3D"${attrs({ breakpoint: bp })} data-carrusel data-paso="${paso}" data-ids="${ids.join(',')}" role="region" aria-roledescription="carrusel" aria-label="Bebidas de la casa">
 <div class="escenario" data-escenario tabindex="0" aria-label="Gira o toca tu bebida. Usa las flechas izquierda y derecha del teclado para cambiar.">
 <div class="plataforma" aria-hidden="true"><span class="aro"></span></div>
+${Pixeles(0)}
 <div class="anillo" data-anillo>${vasos}</div>
 ${Mascota('grano', { tam: Math.round(96 * m), rot: -2 }).replace('class="Mascota"', 'class="Mascota m-izq"')}${Mascota('espuma', { tam: Math.round(90 * m), rot: 2 }).replace('class="Mascota"', 'class="Mascota m-der"')}${Mascota('taza', { tam: Math.round(76 * m), holo: true, rot: 2 }).replace('class="Mascota"', 'class="Mascota m-arriba"')}${Etiqueta({ tipo: 'nuevo', texto: '¡Nuevo!', rot: 2 }).replace('class="Etiqueta"', 'class="Etiqueta e-nuevo"')}
 </div>
-<div class="controles"><button type="button" class="IconoCirculo" data-tam="44" data-girar="-1" aria-label="Bebida anterior">${ic('chevron-izq', 20)}</button><span class="contador" data-contador><strong>${String(frente + 1).padStart(2, '0')}</strong> / ${String(total).padStart(2, '0')}</span><button type="button" class="IconoCirculo" data-tam="44" data-girar="1" aria-label="Bebida siguiente">${ic('chevron-der', 20)}</button><span class="instruccion">Arrastra o toca un vaso</span></div>
 <p class="solo-lectores" aria-live="polite" data-anuncio>${p.nombre}, desde ${mxn(p.precio)}</p>
 </div>`;
 }
@@ -59,16 +59,16 @@ export function FichaCarrusel(p) {
 
 /* ───────────── Pilares de marca ───────────── */
 export function Pilares(items) {
-  return `<div class="Pilares">${items.map(([mascota, titulo, texto]) => `<article class="pilar">${Mascota(mascota, { tam: 104 })}<h3 class="titulo">${titulo}</h3><p class="texto">${texto}</p></article>`).join('')}</div>`;
+  return `<div class="Pilares">${items.map(([mascota, titulo, texto], i) => `<article class="pilar" data-acento="${['miel','lila','fresa'][i % 3]}"><div class="arte-pilar">${Pixeles(i)}${Mascota(mascota, { tam: 104 })}</div><h3 class="titulo">${titulo}</h3><p class="texto">${texto}</p></article>`).join('')}</div>`;
 }
 
 /* ───────────── Bebidas de la casa (hojas del repo) ───────────── */
-const filaCasa = p => `<a class="item-lista" href="${fichaDe(p)}"><span class="mini imagen-fondo" data-fondo="${p.fondo}">${foto(p, 88, 'foto-mini')}</span><span class="textos"><span class="nombre">${p.nombre}</span><span class="desc">${p.desc}</span><span class="precio">${p.personalizable ? 'desde ' : ''}<strong>${mxn(p.precio)}</strong></span></span>${ic('chevron-der', 20)}</a>`;
-const tileCasa = (p, destacado) => `<a class="item-tile${destacado ? ' destacado' : ''}" href="${fichaDe(p)}"><span class="imagen imagen-fondo" data-fondo="${p.fondo}">${foto(p, destacado ? 220 : 170, 'foto-tile')}${destacado ? Etiqueta({ tipo: 'nuevo', texto: 'De la casa', rot: -2 }) : ''}</span><span class="nombre">${p.nombre}</span><span class="precio">${p.personalizable ? 'desde ' : ''}<strong>${mxn(p.precio)}</strong></span></a>`;
+const filaCasa = p => `<a class="item-lista" href="${fichaDe(p)}"><span class="nombre">${p.nombre}</span><span class="precio"><strong>${mxn(p.precio)}</strong></span></a>`;
+const tileCasa = (p, destacado, variantePixel) => `<a class="item-tile${destacado ? ' destacado' : ''}" href="${fichaDe(p)}"><span class="imagen">${Pixeles(variantePixel)}${foto(p, destacado ? 220 : 170, 'foto-tile')}</span><span class="nombre">${p.nombre}</span><span class="precio">${p.personalizable ? 'desde ' : ''}<strong>${mxn(p.precio)}</strong></span></a>`;
 
 export function HojasCasa(hojas, { activa = hojas[0].id } = {}) {
   const tabs = `<div class="pestanas" role="tablist" aria-label="Bebidas de la casa">${hojas.map(h => `<button type="button" role="tab" class="pestana" id="tab-${h.id}" aria-controls="hoja-${h.id}" aria-selected="${h.id === activa}" data-hoja="${h.id}"${h.id === activa ? '' : ' tabindex="-1"'}>${h.tab}</button>`).join('')}</div>`;
-  const hojasHtml = hojas.map(h => `<section class="hoja" id="hoja-${h.id}" role="tabpanel" aria-labelledby="tab-${h.id}" data-verde="${h.verde ? 'si' : 'no'}"${h.id === activa ? '' : ' hidden'}><div class="cabeza-hoja"><div><h3 class="titulo">${h.titulo}</h3><p class="sub">${h.sub}</p></div>${Mascota(h.mascota, { tam: 72, fondo: h.verde ? 'oscuro' : 'claro', rot: 2 })}</div><div class="arriba">${h.listIds.map(id => filaCasa(P[id])).join('')}</div><div class="abajo">${h.tileIds.map(id => tileCasa(P[id], id === h.heroId)).join('')}</div></section>`).join('');
+  const hojasHtml = hojas.map(h => `<section class="hoja" id="hoja-${h.id}" role="tabpanel" aria-labelledby="tab-${h.id}" data-verde="${h.verde ? 'si' : 'no'}"${h.id === activa ? '' : ' hidden'}><div class="portada-hoja"><div class="contenido-hoja"><div class="cabeza-hoja"><div><h3 class="titulo">${h.titulo}</h3><p class="sub">${h.sub}</p></div></div><div class="arriba">${h.listIds.map(id => filaCasa(P[id])).join('')}</div></div><a class="destacado-hoja" href="${fichaDe(P[h.heroId])}" aria-label="Ver especificaciones de ${P[h.heroId].nombre}">${foto(P[h.heroId], 260, 'foto-destacada')}<span>Conoce tu próximo favorito</span>${Mascota(h.mascota, { tam: 72, fondo: 'oscuro', rot: 2 })}</a></div><div class="abajo">${h.tileIds.map((id, i) => tileCasa(P[id], id === h.heroId, i + 1)).join('')}</div></section>`).join('');
   return `<div class="HojasCasa" data-hojas>${tabs}${hojasHtml}</div>`;
 }
 
@@ -91,7 +91,7 @@ export function Explorador(sel = SEL_INICIAL, { bp = 'escritorio', compacto = fa
   const receta = [etiqueta('tamano', sel.tam), etiqueta('leche', sel.leche), etiqueta('endulzante', sel.endu), ...(sel.extras.length ? sel.extras.map(e => etiqueta('extras', e)) : ['sin extras'])];
   const tira = `<div class="GrupoOpciones rail-bases" data-grupo="bebida"><div class="cabeza"><span class="titulo"><span class="num">1</span>Elige tu bebida base</span><span class="nota">${BASES.length} bebidas personalizables · desliza para ver todas</span></div><div class="tira-bebidas" role="radiogroup" aria-label="Bebida base">${BASES.map(b => `<button type="button" class="opcion-bebida" role="radio" aria-checked="${b.id === sel.prod}" data-seleccionado="${b.id === sel.prod ? 'si' : 'no'}" data-base-id="${b.id}"><span class="mini imagen-fondo" data-fondo="${b.fondo}">${foto(b, 84, 'foto-mini')}</span><span class="nombre">${b.nombre}</span><span class="precio">${mxn(b.precio)}</span></button>`).join('')}</div></div>`;
   const paso = (n, grupo, valor) => `<div class="paso-opcion"><span class="num" aria-hidden="true">${n}</span>${GrupoOpciones(grupo, valor)}</div>`;
-  const vista = `<div class="vista" aria-live="polite"><div class="imagen imagen-fondo" data-fondo="${p.fondo}">${foto(p, bp === 'movil' ? 220 : 320, 'foto-vista')}${Mascota(p.mascota, { tam: bp === 'movil' ? 64 : 84, fondo: 'oscuro', rot: 2 })}</div><div class="receta"><p class="etq">Tu combinación</p><h3 class="nombre">${p.nombre}</h3><p class="linea">${receta.join(' · ')}</p></div><div class="resumen-precio">${filas.map(([k, a, b]) => `<div class="fila" data-fila="${k}"><span>${a}</span><span class="monto">${b}</span></div>`).join('')}<div class="total"><span class="etq">Precio de referencia</span><span data-total>${Marcatextos(mxn(total, 2) + ' MXN', 'grande')}</span></div><p class="regla">${ic('info', 16)}<span>Base + tamaño + leche + endulzante + extras (RN-02). El pedido y los cupones se manejan en la app.</span></p></div>${Boton({ tipo: 'texto', texto: 'Empezar de nuevo', icono: 'x', x: ' data-explorador-reiniciar' })}</div>`;
+  const vista = `<div class="vista" aria-live="polite"><div class="imagen imagen-fondo" data-fondo="${p.fondo}">${foto(p, bp === 'movil' ? 220 : 320, 'foto-vista')}${Mascota(p.mascota, { tam: bp === 'movil' ? 64 : 84, fondo: 'oscuro', rot: 2 })}</div><div class="receta"><p class="etq">Tu combinación</p><h3 class="nombre">${p.nombre}</h3><p class="linea">${receta.join(' · ')}</p></div><div class="resumen-precio">${filas.map(([k, a, b]) => `<div class="fila" data-fila="${k}"><span>${a}</span><span class="monto">${b}</span></div>`).join('')}<div class="total"><span class="etq">Precio de referencia</span><span data-total>${Marcatextos(mxn(total, 2) + ' MXN', 'grande')}</span></div><p class="regla">${ic('info', 16)}<span>Base + tamaño + leche + endulzante + extras. El pedido y los cupones se manejan en la app.</span></p></div>${Boton({ tipo: 'texto', texto: 'Empezar de nuevo', icono: 'x', x: ' data-explorador-reiniciar' })}</div>`;
   return `<div class="Explorador"${attrs({ breakpoint: bp, compacto: compacto ? 'si' : null })} data-explorador='${JSON.stringify(sel)}' id="explorador">${tira}<div class="mesa">${vista}<div class="controles">${paso(2, 'tamano', sel.tam)}${paso(3, 'leche', sel.leche)}${paso(4, 'endulzante', sel.endu)}${paso(5, 'extras', sel.extras)}</div></div></div>`;
 }
 

@@ -16,10 +16,21 @@ import { avanzarPedido, activarCupon, activarUsuario, mostrarComentario } from '
 import { reiniciarDatos } from './estado.js';
 import { FRASES_ACCESO } from '../vistas/acceso.js';
 import { leerRuta, ir, actualizarParams } from './router.js';
+import { fechaValida, rangoRapido } from '../lib/consultas-panel.js';
+import { animate, stagger } from '../vendor/anime.esm.min.js';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reducido = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const movimientosHover = new WeakMap();
+function animarHover(ev, encima) {
+  const tarjeta = ev.target.closest('.enlace-tarjeta, .item-tile, .destacado-hoja, .opcion-bebida');
+  if (!tarjeta || tarjeta.contains(ev.relatedTarget)) return;
+  const foto = $('.FotoProducto', tarjeta); if (!foto) return;
+  const anterior = movimientosHover.get(foto); anterior?.cancel(); animacionesPagina.delete(anterior);
+  const animacion = animate(foto, { y: encima ? -14 : 0, rotate: encima ? 2 : 0, scale: encima ? 1.06 : 1, duration: 220, ease: 'outQuad', onComplete: () => animacionesPagina.delete(animacion) });
+  movimientosHover.set(foto, animacion); animacionesPagina.add(animacion);
+}
 let CTX = { bp: 'escritorio', ruta: null, render: () => {}, coords: null };
 
 /* ───────────── Avisos ───────────── */
@@ -127,11 +138,11 @@ function cargarCombo(id) {
 }
 
 /* ───────────── Carrusel 3D ───────────── */
-function pintarCarrusel(car, arrastre = 0) {
+function pintarCarrusel(car, arrastre = 0, pasoAnimado) {
   const ids = car.dataset.ids.split(','), total = ids.length, paso = Number(car.dataset.paso);
   const frente = L.indiceDe(paso, total);
   $$('.vaso', car).forEach((v, i) => {
-    const pos = L.posicionVaso(i, paso, total, CTX.bp, arrastre);
+    const pos = L.posicionVaso(i, pasoAnimado ?? paso, total, CTX.bp, arrastre);
     v.style.transform = pos.transform; v.style.opacity = pos.opacidad; v.style.zIndex = pos.z;
     const alFrente = i === frente && arrastre === 0;
     v.classList.toggle('al-frente', alFrente);
@@ -141,11 +152,19 @@ function pintarCarrusel(car, arrastre = 0) {
   if (arrastre !== 0) return;
   const p = P[ids[frente]];
   const an = $('[data-anuncio]', car); if (an) an.textContent = `${p.nombre}, desde ${mxn(p.precio)}`;
-  const cn = $('[data-contador]', car); if (cn) cn.innerHTML = `<strong>${String(frente + 1).padStart(2, '0')}</strong> / ${String(total).padStart(2, '0')}`;
   const ficha = $('[data-ficha-carrusel]');
   if (ficha && ficha.dataset.id !== p.id) { const n = document.createElement('div'); n.innerHTML = L.FichaCarrusel(p); ficha.replaceWith(n.firstElementChild); }
 }
-function girar(car, delta) { car.dataset.paso = String(Number(car.dataset.paso) + delta); pintarCarrusel(car); }
+const giros = new WeakMap();
+function girar(car, delta) {
+  const previo = giros.get(car), desde = previo?.reloj.paso ?? Number(car.dataset.paso);
+  previo?.animacion.cancel();
+  car.dataset.paso = String(Math.round(Number(car.dataset.paso)) + delta);
+  const reloj = { paso: desde };
+  pintarCarrusel(car, 0, desde);
+  const animacion = animate(reloj, { paso: Number(car.dataset.paso), duration: 650, ease: 'outCubic', onUpdate: () => pintarCarrusel(car, 0, reloj.paso), onComplete: () => { giros.delete(car); pintarCarrusel(car); } });
+  giros.set(car, { reloj, animacion });
+}
 function girarA(car, idx) {
   const total = car.dataset.ids.split(',').length, paso = Number(car.dataset.paso);
   let d = idx - L.indiceDe(paso, total);
@@ -155,8 +174,9 @@ function girarA(car, idx) {
 }
 function montarCarrusel(car) {
   const esc = $('[data-escenario]', car);
+  car.dataset.motor = 'animejs';
   let x0 = null, dx = 0, movido = false;
-  esc.addEventListener('pointerdown', e => { if (e.button !== 0) return; x0 = e.clientX; dx = 0; movido = false; });
+  esc.addEventListener('pointerdown', e => { if (e.button !== 0) return; giros.get(car)?.animacion.cancel(); giros.delete(car); x0 = e.clientX; dx = 0; movido = false; });
   esc.addEventListener('pointermove', e => {
     if (x0 === null) return;
     dx = e.clientX - x0;
@@ -175,6 +195,14 @@ function montarCarrusel(car) {
   esc.addEventListener('pointerup', fin);
   esc.addEventListener('pointercancel', fin);
   esc.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { e.preventDefault(); girar(car, -1); } if (e.key === 'ArrowRight') { e.preventDefault(); girar(car, 1); } });
+  let encima = false;
+  car.addEventListener('pointerenter', () => { encima = true; });
+  car.addEventListener('pointerleave', () => { encima = false; });
+  const intervalo = setInterval(() => {
+    const r = car.getBoundingClientRect();
+    if (car.isConnected && !encima && !car.contains(document.activeElement) && !document.hidden && r.bottom > 0 && r.top < innerHeight) girar(car, 1);
+  }, 4500);
+  limpiezasMovimiento.push(() => { clearInterval(intervalo); giros.get(car)?.animacion.cancel(); });
 }
 
 /* ───────────── Resultados en vivo (Bebidas y Sucursales) ───────────── */
@@ -230,10 +258,14 @@ function alternar(el) {
 }
 function filtrarTablero() {
   const q = ($('[data-buscar-pedido] input') || { value: '' }).value.trim().toLowerCase();
-  const f = $('.BarraSuperiorPanel .Filtro .control .valor');
+  const f = $('.BarraSuperiorPanel .Filtro[data-tipo="sucursal"] .control .valor');
   const suc = f && !/Todas|tu sucursal/.test(f.textContent) ? f.textContent.trim() : '';
   $$('.TarjetaPedido').forEach(c => { const ok = (!q || c.textContent.toLowerCase().includes(q)) && (!suc || ($('.suc-pedido', c) || { textContent: '' }).textContent.includes(suc)); c.hidden = !ok; });
-  $$('.ColumnaPedidos').forEach(col => { const n = $$('.TarjetaPedido', col).filter(c => !c.hidden).length; const k = $('.conteo', col); if (k) k.textContent = n; });
+  $$('.ColumnaPedidos').forEach(col => {
+    const n = $$('.TarjetaPedido', col).filter(c => !c.hidden).length;
+    const k = $('.conteo', col); if (k) k.textContent = n;
+    const cifra = $(`[data-conteo-estado="${col.dataset.estado}"]`); if (cifra) cifra.textContent = n;
+  });
 }
 
 
@@ -289,6 +321,8 @@ function ocultarTip() { const tip = $('.TooltipSidebar'); if (tip) tip.hidden = 
 /* ───────────── Escuchas globales (una vez) ───────────── */
 export function iniciarInteracciones({ render, alCoords }) {
   CTX.render = render; CTX.alCoords = alCoords;
+  document.addEventListener('mouseover', ev => animarHover(ev, true));
+  document.addEventListener('mouseout', ev => animarHover(ev, false));
 
   document.addEventListener('click', ev => {
     const t = ev.target;
@@ -299,6 +333,15 @@ export function iniciarInteracciones({ render, alCoords }) {
     if (ext) { ev.preventDefault(); toast(EXTERNOS[ext.dataset.externo], 'info'); return; }
     if (t.closest('[aria-disabled="true"]')) { ev.preventDefault(); return; }
 
+    const agrupar = t.closest('[data-agrupar-fechas]');
+    if (agrupar) { actualizarParams({ agrupar: agrupar.dataset.agruparFechas }); CTX.render({ conservarScroll: true }); return; }
+    const rapido = t.closest('[data-rango-rapido]');
+    if (rapido) {
+      const f = rapido.closest('.Filtro'), rango = rangoRapido(rapido.dataset.rangoRapido);
+      $('[name="desde"]', f).value = rango.desde; $('[name="hasta"]', f).value = rango.hasta;
+      seleccionarChip(rapido); $('.error-fechas', f).hidden = true; return;
+    }
+
     // Menú móvil
     const bm = t.closest('[data-alternar-menu]');
     if (bm) { const cab = bm.closest('.Cabecera'), nav = $('.menu-movil', cab), ab = nav.hidden; nav.hidden = !ab; cab.dataset.menu = ab ? 'abierto' : 'cerrado'; bm.setAttribute('aria-expanded', ab); bm.setAttribute('aria-label', ab ? 'Cerrar menú' : 'Abrir menú'); $('.ic-abrir', bm).hidden = ab; $('.ic-cerrar', bm).hidden = !ab; return; }
@@ -306,8 +349,6 @@ export function iniciarInteracciones({ render, alCoords }) {
     // Carrusel
     const car = t.closest('[data-carrusel]');
     if (car) {
-      const g = t.closest('[data-girar]');
-      if (g) { girar(car, Number(g.dataset.girar)); return; }
       const v = t.closest('.vaso');
       if (v) { if ($('[data-escenario]', car).dataset.movido === '1') return; if (v.classList.contains('al-frente')) ir(fichaDe(P[v.dataset.id])); else girarA(car, Number(v.dataset.idx)); return; }
     }
@@ -343,7 +384,7 @@ export function iniciarInteracciones({ render, alCoords }) {
       return;
     }
     const card = t.closest('.TarjetaPedido');
-    if (card && t.closest('[data-tablero]')) { ir(`#/panel/pedidos?pedido=${card.dataset.id}`); return; }
+    if (card && t.closest('[data-tablero]')) { actualizarParams({ pedido: card.dataset.id }); CTX.render({ conservarScroll: true }); return; }
     const ac = t.closest('[data-activar-cupon]'); if (ac) { toast(activarCupon(ac.dataset.activarCupon)); CTX.render({ conservarScroll: true }); return; }
     const au = t.closest('[data-activar-usuario]'); if (au) { toast(activarUsuario(au.dataset.activarUsuario)); CTX.render({ conservarScroll: true }); return; }
     const mc = t.closest('[data-mostrar-comentario]'); if (mc) { toast(mostrarComentario(mc.dataset.mostrarComentario)); CTX.render({ conservarScroll: true }); return; }
@@ -410,13 +451,29 @@ export function iniciarInteracciones({ render, alCoords }) {
       op.dataset.seleccionada = 'si'; const h = op.querySelector('.hueco'); if (h) h.outerHTML = ic('check', 16);
       $('.control .valor', box).textContent = op.textContent.trim();
       lista.hidden = true; box.dataset.estado = 'aplicado'; $('.control', box).setAttribute('aria-expanded', 'false');
+      if (document.body.classList.contains('zona-panel') && ['resumen', 'pedidos', 'calificaciones', 'notificaciones'].includes(CTX.ruta?.partes[1]) && ['sucursal', 'producto'].includes(box.dataset.tipo)) {
+        actualizarParams({ [box.dataset.tipo === 'sucursal' ? 'sucursal' : 'producto']: op.textContent.trim() });
+        CTX.render({ conservarScroll: true }); return;
+      }
       if ($('[data-tablero]')) filtrarTablero();
       else if (box.closest('.BarraSuperiorPanel')) toast(`Filtro aplicado: ${op.textContent.trim()}.`, 'info');
       return;
     }
-    if (t.closest('[data-aplicar]')) { const f = t.closest('.Filtro'); $('.popover', f).hidden = true; f.dataset.estado = 'aplicado'; if (f.dataset.rango) $('.control .valor', f).textContent = f.dataset.rango; toast('Rango de fechas aplicado.', 'info'); return; }
-    if (t.closest('[data-cerrar-popover]')) { const f = t.closest('.Filtro'); $('.popover', f).hidden = true; f.dataset.estado = 'cerrado'; return; }
-    if (!t.closest('.Select, .Filtro')) $$('.Select .menu:not([hidden]), .Filtro .popover:not([hidden])').forEach(p => { p.hidden = true; const b = p.parentElement; if (b.dataset.estado === 'abierto') b.dataset.estado = 'cerrado'; });
+    if (t.closest('[data-aplicar]')) {
+      const f = t.closest('.Filtro'), desde = $('[name="desde"]', f), hasta = $('[name="hasta"]', f);
+      if (!desde || !hasta) return;
+      const error = $('.error-fechas', f);
+      if (!fechaValida(desde.value) || !fechaValida(hasta.value) || desde.value > hasta.value) {
+        error.textContent = !desde.value || !hasta.value ? 'Elige la fecha inicial y la final.' : !fechaValida(desde.value) || !fechaValida(hasta.value) ? 'Usa fechas válidas entre 1900 y 2100.' : 'La fecha final debe ser igual o posterior a la inicial.';
+        error.hidden = false; (fechaValida(desde.value) ? hasta : desde).focus(); return;
+      }
+      actualizarParams({ desde: desde.value, hasta: hasta.value, estado: null });
+      CTX.render({ conservarScroll: true });
+      $('.Filtro[data-tipo="fechas"] > .control')?.focus({ preventScroll: true });
+      return;
+    }
+    if (t.closest('[data-cerrar-popover]')) { const f = t.closest('.Filtro'); $('.popover', f).hidden = true; f.dataset.estado = 'cerrado'; $('.control', f).setAttribute('aria-expanded', 'false'); $('.control', f).focus(); return; }
+    if (!t.closest('.Select, .Filtro')) $$('.Select .menu:not([hidden]), .Filtro .popover:not([hidden])').forEach(p => { p.hidden = true; const b = p.parentElement; if (b.dataset.estado === 'abierto') b.dataset.estado = 'cerrado'; $('.control', b).setAttribute('aria-expanded', 'false'); });
 
     // Paginación
     const pag = t.closest('.Paginacion');
@@ -486,6 +543,10 @@ export function iniciarInteracciones({ render, alCoords }) {
 
   document.addEventListener('input', ev => {
     const t = ev.target;
+    if (t.matches('input[maxlength],textarea[maxlength]')) {
+      if (t.value.length > t.maxLength) t.value = t.value.slice(0, t.maxLength);
+      const cuenta = $('[data-cuenta]', t.closest('.Campo')); if (cuenta) cuenta.textContent = t.value.length;
+    }
     if (t.closest('[data-buscar]')) { clearTimeout(tBusqueda); tBusqueda = setTimeout(() => { actualizarParams({ q: t.value.slice(0, LIMITES.busqueda) }); refrescarBebidas(); }, 160); return; }
     if (t.closest('[data-buscar-sucursal]')) { clearTimeout(tBusqueda); tBusqueda = setTimeout(() => { actualizarParams({ q: t.value.slice(0, LIMITES.busqueda), estado: null }); refrescarSucursales(); }, 160); return; }
     if (t.closest('[data-buscar-pedido]')) { filtrarTablero(); return; }
@@ -499,9 +560,18 @@ export function iniciarInteracciones({ render, alCoords }) {
     }
   });
   document.addEventListener('change', ev => {
+    if (ev.target.matches('.Filtro[data-tipo="fechas"] input')) {
+      const f = ev.target.closest('.Filtro');
+      $$('.Chip', f).forEach(chip => { chip.dataset.seleccionado = 'no'; chip.setAttribute('aria-checked', 'false'); });
+      $('.error-fechas', f).hidden = true;
+    }
     if (ev.target.matches('[data-orden-menu]')) { actualizarParams({ orden: ev.target.value === 'populares' ? null : ev.target.value }); refrescarBebidas(); }
   });
   document.addEventListener('keydown', ev => {
+    if (ev.key === 'Escape') {
+      const pop = $('.Filtro .popover:not([hidden]), .Select .menu:not([hidden])');
+      if (pop) { ev.preventDefault(); pop.hidden = true; pop.parentElement.dataset.estado = 'cerrado'; const control = $('.control', pop.parentElement); control.setAttribute('aria-expanded', 'false'); control.focus(); return; }
+    }
     if (ev.key === 'Escape') { const velo = $('.Velo[data-ir]'); if (velo) { ir(velo.dataset.ir); return; } const menu = $('.Cabecera[data-menu="abierto"] [data-alternar-menu]'); if (menu) menu.click(); }
     if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.matches('.Casilla, .Radio, .Interruptor, .opcion, .TarjetaPedido, .Campo .accion')) { ev.preventDefault(); ev.target.click(); }
     if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.closest && ev.target.closest('.MapaIlustrado .pin')) { ev.preventDefault(); resaltarSucursal(ev.target.closest('.pin').dataset.sucursal, { desplazar: true }); }
@@ -512,11 +582,40 @@ export function iniciarInteracciones({ render, alCoords }) {
 
 /* ───────────── Después de cada render ───────────── */
 let turno = 0;
+const animacionesPagina = new Set();
+let limpiezasMovimiento = [];
+function montarMovimiento(raiz) {
+  animacionesPagina.forEach(a => a.revert()); animacionesPagina.clear();
+  limpiezasMovimiento.forEach(fn => fn()); limpiezasMovimiento = [];
+  raiz.dataset.animaciones = 'animejs';
+  const ejecutar = (objetivos, opciones) => {
+    const elementos = typeof objetivos === 'string' ? $$(objetivos, raiz) : objetivos;
+    if (!elementos.length) return;
+    const animacion = animate(elementos, opciones); animacionesPagina.add(animacion); return animacion;
+  };
+  ejecutar('.HeroInicio .texto-hero > *', { opacity: [.35, 1], y: [26, 0], delay: stagger(85), duration: 650, ease: 'outCubic' });
+  ejecutar('.HeroInicio .vitrina', { opacity: [.4, 1], scale: [.96, 1], duration: 800, ease: 'outCubic' });
+  ejecutar('.Carrusel3D .foto-vaso', { y: [-10, 12], delay: stagger(180), duration: 2100, alternate: true, loop: true, ease: 'inOutSine' });
+  ejecutar('.Carrusel3D .Mascota, #marca .Mascota', { y: [-4, 4], rotate: [-2, 2], delay: stagger(160), duration: 2600, alternate: true, loop: true, ease: 'inOutSine' });
+  ejecutar('.Carrusel3D .DetallePixel, #marca .DetallePixel', { scale: [.85, 1.12], opacity: [.65, 1], duration: 1400, alternate: true, loop: true, ease: 'inOutSine' });
+  if ('IntersectionObserver' in window) {
+    const observador = new IntersectionObserver(entradas => {
+      entradas.forEach(({target,isIntersecting}) => {
+        if (!isIntersecting) return;
+        ejecutar([target], { opacity: [.45, 1], y: [24, 0], duration: 650, ease: 'outCubic' });
+        observador.unobserve(target);
+      });
+    }, { threshold: .12 });
+    $$('.HeroInicio ~ .seccion .cabeza-seccion, .Pilares .pilar, #quiz .Quiz, .fila-sucursales .TarjetaSucursal', raiz).forEach(e => observador.observe(e));
+    limpiezasMovimiento.push(() => observador.disconnect());
+  }
+}
 export function montar(raiz, { ruta, bp, coords }) {
   CTX.ruta = ruta; CTX.bp = bp; CTX.coords = coords;
   // Estados de espera que avanzan solos (p. ej., "Generando respaldo" → "Éxito"), solo si la pantalla sigue abierta.
   const mio = ++turno;
   $$('[data-auto-ir]', raiz).forEach(el => setTimeout(() => { if (mio === turno) ir(el.dataset.autoIr, { reemplazar: true }); }, Number(el.dataset.ms || 2000)));
+  montarMovimiento(raiz);
   $$('[data-carrusel]', raiz).forEach(montarCarrusel);
   $$('[data-explorador]', raiz).forEach(ex => requestAnimationFrame(() => centrarBase(ex)));
   $$('[data-paginada]', raiz).forEach(t => paginar(t, 1));

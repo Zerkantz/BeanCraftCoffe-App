@@ -18,10 +18,11 @@ const texto = (pg, s) => pg.textContent(s).then(t => t.replace(/\s+/g, ' ').trim
 const aviso = pg => texto(pg, '.zona-toast-proto').catch(() => '');
 const entrar = async (pg, correo, clave) => { await ir(pg, '#/acceso'); await pg.fill('input[name="correo"]', correo); await pg.fill('input[name="clave"]', clave); await pg.click('button[type="submit"]'); await pg.waitForTimeout(500); };
 
-await caso('Carrusel: flechas, teclado, arrastre y vaso al frente', async pg => {
+await caso('Carrusel: teclado, arrastre y vaso al frente, sin controles añadidos', async pg => {
   await ir(pg, '#/');
   assert.equal(await texto(pg, '.FichaCarrusel .nombre'), 'Frappé Supremo');
-  await pg.click('[data-girar="1"]'); await pg.waitForTimeout(150);
+  assert.equal(await pg.locator('[data-movimiento],[data-auto-carrusel],.Carrusel3D .controles').count(), 0);
+  await pg.focus('[data-escenario]'); await pg.keyboard.press('ArrowRight'); await pg.waitForTimeout(150);
   assert.equal(await texto(pg, '.FichaCarrusel .nombre'), 'Refresher Dúo');
   await pg.focus('[data-escenario]'); await pg.keyboard.press('ArrowLeft'); await pg.waitForTimeout(150);
   assert.equal(await texto(pg, '.FichaCarrusel .nombre'), 'Frappé Supremo');

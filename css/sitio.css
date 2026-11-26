@@ -3,17 +3,17 @@
    para que cada archivo se importe a Figma con el ancho exacto del frame sin depender de la ventana. */
 
 .Frame { position: relative; margin: 0 auto; background: var(--fondo-base); }
-.bp-escritorio .Frame { width: 100%; min-width: 1024px; }
-.bp-tablet .Frame { width: 100%; min-width: 640px; }
-.bp-movil .Frame { width: 100%; min-width: 320px; }
+.bp-escritorio .Frame { width: 100%; min-width: 0; }
+.bp-tablet .Frame { width: 100%; min-width: 0; }
+.bp-movil .Frame { width: 100%; min-width: 0; }
 
 .contenedor { width: 100%; max-width: 1344px; margin: 0 auto; padding: 0 var(--sp-6); }
 .bp-tablet .contenedor { padding: 0 var(--sp-5); }
 .bp-movil .contenedor { padding: 0 var(--sp-4); }
 
 .seccion { padding: var(--sp-9) 0; }
-.seccion[data-fondo="menta"] { background: var(--c-menta); border-block: var(--borde); }
-.seccion[data-fondo="blanco"] { background: var(--fondo-superficie); border-block: var(--borde); }
+.seccion[data-fondo="menta"] { background: var(--c-menta); }
+.seccion[data-fondo="blanco"] { background: var(--fondo-superficie); }
 .bp-tablet .seccion { padding: var(--sp-8) 0; }
 .bp-movil .seccion { padding: var(--sp-7) 0; }
 
@@ -30,11 +30,11 @@
 /* Hero (Inicio) */
 
 /* Rejillas */
-.grid-tarjetas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-8) var(--sp-5); }
+.grid-tarjetas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-5); }
 .bp-tablet .grid-tarjetas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .bp-movil .grid-tarjetas { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6) var(--sp-4); }
 .bp-movil .TarjetaBebida[data-variante="promo"] { grid-column: auto; flex-direction: column; }
-.bp-movil .TarjetaBebida[data-variante="promo"] .imagen { border-right: 0; border-bottom: var(--borde); border-radius: 21px 21px 0 0; }
+.bp-movil .TarjetaBebida[data-variante="promo"] .imagen { border: 0; border-radius: 21px 21px 0 0; }
 .bp-movil .TarjetaBebida[data-variante="promo"] .imagen { min-height: 200px; }
 .mosaico { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-5); }
 .mosaico[data-filas="2"] .MosaicoPromo[data-tam="grande"] { grid-column: span 2; }
@@ -49,11 +49,11 @@
 /* v3 · Menú: categorías con su foto, herramientas a la derecha y apartados como la carta de la barra */
 .barra-menu { display: flex; flex-direction: column; gap: var(--sp-5); margin-bottom: var(--sp-7); }
 .barra-menu .filtros { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
-.barra-menu .herramientas { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-3); padding-top: var(--sp-5); border-top: 1.5px solid var(--c-tostado); }
+.barra-menu .herramientas { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-3); padding-top: var(--sp-5); border-top: var(--borde-panel); }
 .barra-menu .busqueda { flex: 0 1 420px; }
 .ChipCategoria { min-height: 76px; padding: 7px 22px 7px 7px; gap: 0; }
 .ChipCategoria .texto { display: inline-flex; align-items: center; gap: var(--sp-3); }
-.ChipCategoria .portada { display: flex; align-items: flex-end; justify-content: center; width: 60px; height: 60px; border: var(--borde); border-radius: 50%; overflow: hidden; }
+.ChipCategoria .portada { display: flex; align-items: flex-end; justify-content: center; width: 60px; height: 60px; border-radius: 50%; overflow: hidden; }
 .ChipCategoria .portada[data-fondo="limon"] { align-items: center; background: var(--c-limon); }
 .ChipCategoria .foto-cat { max-height: 54px; width: auto; }
 .ChipCategoria .nombre-cat { font-family: var(--font-display); font-weight: 800; font-size: 18px; }
@@ -78,7 +78,7 @@
 .bp-movil .barra-menu .busqueda { flex: none; }
 .bp-movil .apartado-menu .cabeza-apartado h2 { font-size: 28px; }
 .bp-movil .apartado-menu + .apartado-menu, .bp-movil .banda-promo + .apartado-menu, .bp-movil .banda-promo { margin-top: var(--sp-8); }
-.bp-movil .TarjetaBebida .imagen { height: 228px; }
+.bp-movil .TarjetaBebida .imagen { height: 186px; }
 .ver-todo { display: flex; justify-content: center; margin-top: var(--sp-6); }
 
 /* Quiz y pedido en Inicio */
@@ -88,7 +88,7 @@
 
 /* Ficha de producto */
 .ficha { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-7); align-items: start; }
-.ficha .galeria { position: sticky; top: var(--sp-4); display: flex; align-items: center; justify-content: center; height: 640px; border: var(--borde); border-radius: var(--r-tarjeta); }
+.ficha .galeria { position: sticky; top: var(--sp-4); display: flex; align-items: center; justify-content: center; height: 640px; border-radius: var(--r-tarjeta); }
 .ficha .galeria .foto { height: calc(480px * var(--k, 1)); width: auto; max-width: 100%; object-fit: contain; }
 .ficha .galeria .Mascota { position: absolute; right: var(--sp-5); bottom: var(--sp-5); }
 .ficha .galeria .Etiqueta { position: absolute; left: var(--sp-5); top: var(--sp-5); font-size: 15px; padding: 5px 12px; }

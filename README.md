@@ -1,6 +1,6 @@
 # BeanCraft Coffee · Web v2
 
-Sitio de marca para visitantes y panel del personal (SRS v1.3), como app web ejecutable en JavaScript con módulos ES y sin dependencias de ejecución. Sigue la arquitectura del repo móvil (`data/`, `lib/`, CSS por capas, un solo `index.html`) y se puede llevar a Figma capturando cada ruta con html.to.design.
+Sitio de marca para visitantes y panel del personal (SRS v1.3), como app web ejecutable en JavaScript con módulos ES, sin compilación ni instalación de dependencias. Incluye Anime.js 4.5.0 como módulo local con su licencia MIT. Sigue la arquitectura del repo móvil (`data/`, `lib/`, CSS por capas, un solo `index.html`) y se puede llevar a Figma capturando cada ruta con html.to.design.
 
 ## Abrir la app
 
@@ -9,6 +9,15 @@ npm start            # http://localhost:5173/   ·   guía para Figma: http://lo
 ```
 
 Los módulos ES no cargan con doble clic (file://): hace falta `npm start` o cualquier servidor estático. En Figma Make basta con subir la carpeta comprimida.
+
+## Ajustes del 26 nov 2026
+
+- Movimiento con Anime.js local: entrada del inicio, flotación de bebidas y mascotas, respuesta al cursor y giro automático del carrusel cada 4.5 segundos, activo desde la apertura de la página. Se pausa al pasar el cursor, usar el teclado o salir de la vista. Se retiraron los controles añadidos del carrusel y el botón de activación, por indicación del usuario.
+- «Qué es BeanCraft» integra Menta, Miel, Lila y Fresa, las mascotas y los píxeles de marca. Las fuentes se sirven desde `fonts/`.
+- Panel sin tarjetas: cifras en franjas, secciones abiertas, gráficas rotuladas y comandas separadas con líneas discretas; campos y botones conservan sus bordes.
+- Fechas con dos calendarios nativos y validación del intervalo. Resumen, Pedidos, Calificaciones y Notificaciones filtran sus registros; las cifras y gráficas se calculan desde esos mismos registros. Los parámetros `desde`, `hasta`, `sucursal` y `agrupar` conservan la consulta en la URL.
+- Los registros originales sin fecha pertenecen al **20 nov 2026**, indicado en su fuente. La vista inicial abre ese período disponible. Los accesos rápidos «Hoy» y «Ayer» usan el reloj real (o `?ahora=`); un período sin registros muestra un estado vacío, sin generar historial ficticio.
+- Límites de entrada: 50 caracteres para búsquedas, contraseñas y números; 100 para textos breves y correos; 200 para áreas de texto. El teléfono sigue validando diez dígitos. Las áreas de texto muestran un contador.
 
 ## Qué cambió respecto a la v1
 
@@ -60,14 +69,18 @@ Los módulos ES no cargan con doble clic (file://): hace falta `npm start` o cua
 - **Menú:**
   - Categorías con su foto.
   - Búsqueda y orden a la derecha.
-  - Con "Todas" y orden por popularidad, el menú se lee por apartados (Cafés, Bebidas frías, Repostería) con la promoción entre ellos.
-  - Tarjetas de producto más visuales: foto grande que sube al pasar el cursor, calificación sobre la foto, descripción y "Ver ficha".
+  - Con "Todas", el menú muestra una cuadrícula continua de productos, sin apartados por categoría ni promociones intercaladas. Se conservan los filtros, la búsqueda y el orden.
+  - Tarjetas compactas: foto grande y centrada que sobresale del fondo, mascota original, nombre, estrellas y precio discreto. Toda la tarjeta es un enlace nativo a la ficha, con acceso por teclado y foco visible; la descripción y la personalización se conservan en la ficha.
+  - Destellos, corazones, rombos y escalones en SVG pixelado, con los tokens Lila, Fresa, Limón y Miel. "Bebidas de la casa" sigue el cartel de la app móvil: cabecera Tostado o Verde con lista y foto destacada; debajo, tres imágenes libres con sombras y sin marcos individuales.
+  - La ficha incluye "Pedir en la app" como botón inactivo, sin enlace ni acción de pedido. La personalización y el cálculo del precio siguen funcionando.
+  - Animaciones de entrada y al desplazarse en el inicio, flotación del vaso frontal del carrusel y respuestas al pasar el cursor por los productos. Se respeta la preferencia de movimiento reducido.
 - **Acceso:**
   - Formulario abierto sobre crema.
   - Escena con una comanda que cambia sola de estado y las mascotas sobre un mostrador; reaccionan al formulario.
 - **Panel:**
   - Encabezado más grande con línea inferior y tablas con más aire.
-  - El Resumen se agrupa en tres bloques rotulados (Ventas y productos, Pedidos, Clientes y cupones) en lugar de tres columnas apretadas.
+  - El Resumen se agrupa en tres bloques rotulados (Ventas y productos, Pedidos, Clientes y cupones), con superficies claras, cifras separadas y accesos directos. Los pedidos tienen contadores por estado y comandas con separación visual; los contadores también responden a la búsqueda.
+  - Las pantallas del panel y del acceso usan textos de producto, sin referencias a requisitos ni notas de datos de prueba. Se conservan los permisos, las rutas y las operaciones existentes.
 - **Corrección:** el sitio elegía la versión de escritorio con el ancho de la ventana incluida la barra de desplazamiento; entre 1024 y 1040 px eso causaba desplazamiento horizontal en Windows. Ahora usa el ancho útil.
 
 ## v2.2 (24 nov 2026) · panel sin tarjetas

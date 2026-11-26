@@ -18,7 +18,8 @@ test('El sitio público no tiene acciones de pedido en ningún breakpoint', () =
         const partes = clave === 'producto' ? ['producto', 'latte-de-caramelo'] : clave ? [clave] : [];
         const r = armarPantalla(ruta(partes, { estado }), bp);
         assert.ok(r.html, `${clave} ${estado} ${bp}`);
-        assert.doesNotMatch(r.html, PROHIBIDO, `${clave || 'inicio'} · ${estado} · ${bp}`);
+        const sinMarcador = r.html.replace(/<button[^>]*data-pedir-app[^>]*>[\s\S]*?<\/button>/g, '');
+        assert.doesNotMatch(sinMarcador, PROHIBIDO, `${clave || 'inicio'} · ${estado} · ${bp}`);
       }
     }
   }
@@ -43,6 +44,28 @@ test('Cada producto tiene su ficha y un slug que no existe da 404', () => {
   assert.match(armarPantalla(ruta(['pagina-rara']), 'movil').titulo, /^P-10/);
 });
 
+test('Todas muestra una sola cuadrícula continua, sin apartados ni promociones intercaladas', () => {
+  for (const bp of ['escritorio', 'tablet', 'movil']) {
+    const { html } = armarPantalla(ruta(['bebidas']), bp);
+    assert.equal((html.match(/data-menu-grid/g) || []).length, 1);
+    assert.doesNotMatch(html, /apartado-menu|banda-promo|data-variante="promo"/);
+    assert.equal((html.match(/class="enlace-tarjeta"/g) || []).length, PRODUCTOS.filter(p => p.activo && !p.eliminado).length);
+  }
+});
+
+test('Pedir en la app es solo un marcador inactivo y no abre combinaciones', () => {
+  for (const p of PRODUCTOS.filter(p => p.activo)) {
+    const { html } = armarPantalla(ruta(['producto', p.slug]), 'movil');
+    const boton = html.match(/<button[^>]*data-pedir-app[^>]*>[\s\S]*?<\/button>/)?.[0];
+    assert.ok(boton, p.nombre);
+    assert.match(boton, /Pedir en la app/);
+    assert.match(boton, /aria-disabled="true"/);
+    assert.match(boton, / data-pedir-app disabled /);
+    assert.doesNotMatch(boton, /href=|data-ir=|data-toast=/);
+    assert.doesNotMatch(html, /Abrir en el explorador|data-abrir-explorador/);
+  }
+});
+
 test('El panel sin sesión manda al acceso con regreso', () => {
   cerrarSesion();
   assert.equal(armarPantalla(ruta(['panel', 'cupones']), 'escritorio').redirigir, '#/acceso?volver=%23%2Fpanel%2Fcupones');
@@ -54,6 +77,7 @@ test('Todas las pantallas del panel se dibujan para el administrador', () => {
     for (const estado of s.estados) {
       const r = armarPantalla(ruta(['panel', s.slug], { estado }), 'escritorio');
       assert.ok(r.html && !r.redirigir, `${s.id} ${estado}`);
+        assert.doesNotMatch(r.html, /\b(?:RF|RN|RNF)-\d+|datos de (?:prueba|ejemplo)|usuarios de prueba|\bprototipo\b|MySQL|\bSRS\b/i, `${s.id} ${estado}: textos técnicos fuera de la interfaz`);
       assert.doesNotMatch(r.html, /href="[^"#]*\.html/, `${s.id} ${estado}: enlace sin traducir`);
     }
   }
